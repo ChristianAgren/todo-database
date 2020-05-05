@@ -83,9 +83,9 @@ function FilterSection(props) {
         <div className={classes.wrapper}>
             <Button
                 className={classes.getAllBtn}
-                onClick={props.handleSearch}
+            // onClick={props.handleSearch}
             >
-                <RefreshIcon fontSize="small"/>
+                <RefreshIcon fontSize="small" />
                 all
             </Button>
             <div className={classes.searchBar}>
@@ -103,7 +103,9 @@ function FilterSection(props) {
                         inputProps={{ 'aria-label': 'search' }}
                     />
                 </div>
-                <IconButton onClick={() => props.handleSearch(searchInput)} className={classes.searchIcon} edge="end" aria-label="search">
+                <IconButton
+                    // onClick={() => props.handleSearch(searchInput)} 
+                    className={classes.searchIcon} edge="end" aria-label="search">
                     <SearchIcon fontSize="small" />
                 </IconButton>
             </div>
