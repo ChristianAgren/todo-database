@@ -1,9 +1,12 @@
+// @ts-nocheck
 import React, { useEffect } from 'react'
 import { Container, Typography, Paper, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import AssigneeListGeneration from '../Components/AssigneeListGeneration/AssigneeListGeneration';
 import FilterSection from '../Components/FilterSection/FilterSection'
 import AddSection from '../Components/AddSection/AddSection';
+
+import { UserContext } from '../Contexts/UserContext';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -110,7 +113,7 @@ function Layout() {
 
     //Delete subtask from assignment
     async function deleteSubTask(url, target, subTarget) {
-        const response = await fetch(`${url+target}/${subTarget}`, {
+        const response = await fetch(`${url + target}/${subTarget}`, {
             method: 'DELETE',
         });
         return response.json();
@@ -144,10 +147,10 @@ function Layout() {
 
     //Edit subtask in assignment
     async function editSubTask(url, target, subTarget, data) {
-        const response = await fetch(`${url+target}/${subTarget}`, {
+        const response = await fetch(`${url + target}/${subTarget}`, {
             method: 'PUT',
             headers: {
-                'Content-Type' : 'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })
@@ -156,7 +159,7 @@ function Layout() {
 
     const handleEditSubtaskSave = (target, subTarget, data) => {
         // console.log(target, subTarget, data);
-        
+
         editSubTask(apiURL, target, subTarget, data)
             .then((data) => {
                 setAssignments(data)
@@ -165,45 +168,57 @@ function Layout() {
 
 
     return (
-        <div className={classes.mainContainer}>
-            <Container maxWidth="lg">
-                <Typography className={classes.title} variant="h4">
-                    Assignments
-                    </Typography>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={4}>
-                        <Paper className={classes.paper}>New assignment
-                            <AddSection handleSaveClick={handleSaveClick} />
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={12} md={8}>
+
+        <UserContext.Consumer>
+            {user => (
+                <div className={classes.mainContainer}>
+                    <Container maxWidth="lg">
+                        <Typography className={classes.title} variant="h4">
+                            Assignments
+                        </Typography>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} md={12}>
-                                <FilterSection
-                                    handleSearch={getAssignmentsFromJson}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={12}>
-                                <Paper style={{ marginBottom: '2rem' }} className={classes.paper}>
-                                    {(assignments != null) ?
-                                        `Assignments${(assignments.length !== undefined) ? `: ${assignments.length}` : ``}`
-                                        : null
-                                    }
-                                    <AssigneeListGeneration
-                                        editAssignment={handleEditSave}
-                                        removeAssignment={deleteAssignmentFromJson}
-                                        assignments={assignments}
-                                        subTasksSave={handleSubTaskSave}
-                                        subTasksDel={handleSubTaskDelete}
-                                        subTasksEdit={handleEditSubtaskSave}
-                                    />
-                                </Paper>
+                            {user.status === 1 ?
+                                <Grid item xs={12} md={4}>
+                                    <Paper className={classes.paper}>New assignment
+                                    <AddSection handleSaveClick={handleSaveClick} />
+                                    </Paper>
+                                </Grid>
+                                : null
+                            }
+
+
+                            <Grid item xs={12} md={8}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} md={12}>
+                                        <FilterSection
+                                            handleSearch={getAssignmentsFromJson}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <Paper style={{ marginBottom: '2rem' }} className={classes.paper}>
+                                            {(assignments != null) ?
+                                                `Assignments${(assignments.length !== undefined) ? `: ${assignments.length}` : ``}`
+                                                : null
+                                            }
+                                            <AssigneeListGeneration
+                                                editAssignment={handleEditSave}
+                                                removeAssignment={deleteAssignmentFromJson}
+                                                assignments={assignments}
+                                                subTasksSave={handleSubTaskSave}
+                                                subTasksDel={handleSubTaskDelete}
+                                                subTasksEdit={handleEditSubtaskSave}
+                                            />
+                                        </Paper>
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
-                    </Grid>
-                </Grid>
-            </Container>
-        </div>
+                    </Container>
+                </div>
+
+            )}
+        </UserContext.Consumer>
+
     )
 }
 
