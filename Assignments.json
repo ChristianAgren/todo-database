@@ -1,35 +1,11 @@
 {
     "assignments": [
         {
-            "id": "wx3ys",
-            "name": "Christian",
-            "desc": "Dota 2",
-            "date": "2020-04-17",
-            "subtasks": [
-                {
-                    "desc": "Träna på mid?",
-                    "subId": "hvb",
-                    "status": "ongoing"
-                }
-            ]
-        },
-        {
-            "id": "up7nu",
-            "name": "Filip",
-            "desc": "Komplettera Javascript 2 ",
-            "date": "2020-04-14",
-            "subtasks": [
-                {
-                    "desc": "Kom igen nu Filip",
-                    "subId": "n9f",
-                    "status": "done"
-                },
-                {
-                    "desc": "Delegera till Fredrik",
-                    "subId": "w6j",
-                    "status": "ongoing"
-                }
-            ]
+            "id": "3zn41",
+            "name": "Banto",
+            "desc": "Fiska hårdare än Erik",
+            "date": "2020-05-05",
+            "subtasks": []
         }
     ]
 }
