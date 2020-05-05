@@ -1,0 +1,10 @@
+{
+    "users": [
+        {
+            "_id": "user1",
+            "name": "Filip",
+            "password": "trollkaka88",
+            "role": "admin"
+        }
+    ]
+}

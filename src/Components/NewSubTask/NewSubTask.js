@@ -49,7 +49,7 @@ function NewSubTask(props) {
     }
 
     const handleSubTaskSave = () => {
-        props.subTasksSave(props.sectionId, inputValue)
+        // props.subTasksSave(props.sectionId, inputValue)
         handleClick()
     }
 

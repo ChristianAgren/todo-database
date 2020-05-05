@@ -1,0 +1,16 @@
+{
+    "subtasks": [
+        {
+            "id": "sub1",
+            "parentId": "assi1",
+            "desc": "subtask 1",
+            "status": "new"
+        },
+        {
+            "id": "sub2",
+            "parentId": "assi1",
+            "desc": "subtask 2",
+            "status": "new"
+        }
+    ]
+}

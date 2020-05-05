@@ -1,0 +1,16 @@
+{
+    "assignments": [
+        {
+            "_id": "assi1",
+            "parentId": "user1",
+            "title": "Fiska hårdare än Erik",
+            "date": "2020-05-05"
+        },
+        {
+            "_id": "assi2",
+            "parentId": "user1",
+            "title": "Balsam",
+            "date": "2020-05-05"
+        }
+    ]
+}

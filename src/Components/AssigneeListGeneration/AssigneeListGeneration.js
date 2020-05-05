@@ -101,10 +101,10 @@ function AssigneeListGeneration(props) {
 
     const handleClose = (event) => {
         if (event.currentTarget.id === 'delete') {
-            props.removeAssignment(anchorEl.id)
+            // props.removeAssignment(anchorEl.id)
         } else if (event.currentTarget.id === 'edit') {
             handleEdit()
-        } 
+        }
         setAnchorEl(null);
     };
 
@@ -129,6 +129,14 @@ function AssigneeListGeneration(props) {
         manageDate()
     })
 
+    const returnName = (assignment) => {
+        const assignee = props.users.find(user => user._id === assignment.parentId)
+
+        return assignee.name
+    }
+
+
+
     return (
         <div className={classes.removeScrollbar}>
             <List className={classes.root} subheader={<li />}>
@@ -142,17 +150,17 @@ function AssigneeListGeneration(props) {
                                 <img src={SadSmiley}></img>
                             </div>
                             : (props.assignments.length === 0) ?
-                                <div style={{margin: '4rem'}}>
+                                <div style={{ margin: '4rem' }}>
                                     <h4>Seems like there's nothing here...</h4>
                                     <h2>Good job!</h2>
                                 </div>
-                                : props.assignments.map(section => (
-                                    <li key={`section-${section.id}`} className={classes.listSection}>
+                                : props.assignments.map(assignment => (
+                                    <li key={`assignment-${assignment._id}`} className={classes.listSection}>
                                         <ul className={classes.ul}>
                                             <ListSubheader color="primary" className={classes.listTitle}>
-                                                <span>{`${section.desc}`}</span>
+                                                <span>{`${assignment.title}`}</span>
                                                 <IconButton
-                                                    id={section.id}
+                                                    id={assignment._id}
                                                     aria-controls="menu"
                                                     aria-haspopup="true"
                                                     onClick={(event) => handleMenu(event)}
@@ -161,7 +169,7 @@ function AssigneeListGeneration(props) {
                                                     <SettingsIcon edge="end" />
                                                 </IconButton>
                                                 <Menu
-                                                    id={`Menu-${section.id}`}
+                                                    id={`Menu-${assignment._id}`}
                                                     anchorEl={anchorEl}
                                                     anchorOrigin={{
                                                         vertical: 'top',
@@ -178,48 +186,51 @@ function AssigneeListGeneration(props) {
                                                     <MenuItem id="edit" onClick={(event) => handleClose(event)}>Edit</MenuItem>
                                                     {
                                                         (shouldEdit) ?
-                                                        <EditAssignment handleEditClose={handleEdit} handleEditSave={props.editAssignment} open={shouldEdit} section={editSection} />
-                                                        : null
+                                                            <EditAssignment
+                                                                handleEditClose={handleEdit}
+                                                                // handleEditSave={props.editAssignment} 
+                                                                open={shouldEdit}
+                                                                assignment={editSection} />
+                                                            : null
                                                     }
                                                     <MenuItem id="delete" onClick={(event) => handleClose(event)}>Delete</MenuItem>
                                                 </Menu>
                                             </ListSubheader>
                                             <Box className={classes.subInfo}>
                                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                                    <Typography variant="overline">{`Assignee: ${section.name}`}</Typography>
-                                                    <Typography variant="overline">{`ID: ${section.id}`}</Typography>
+                                                    <Typography variant="overline">{`Assignee: ${returnName(assignment)}`}</Typography>
+                                                    <Typography variant="overline">{`ID: ${assignment._id}`}</Typography>
                                                 </div>
-                                                {(section.subtasks && section.subtasks.length > 0) ?
+                                                {/* {(assignment.subtasks && assignment.subtasks.length > 0) ?
                                                     <>
-                                                        <Typography className={classes.subTasks} variant="overline">{`Subtasks: ${section.subtasks.length}`}</Typography>
+                                                        <Typography className={classes.subTasks} variant="overline">{`Subtasks: ${assignment.subtasks.length}`}</Typography>
                                                     </>
-                                                    : (section.subtasks) ?
+                                                    : (assignment.subtasks) ?
                                                         <Typography className={classes.subTasks} variant="overline">All out of subtasks!</Typography>
                                                         : <Typography className={classes.subTasks} variant="overline">Add some subtasks...</Typography>
-                                                }
-                                                <Typography variant="overline">{`Added: ${manageDate(section.date)}`}</Typography>
+                                                } */}
+                                                <Typography variant="overline">{`Added: ${manageDate(assignment.date)}`}</Typography>
                                             </Box>
-                                            {(section.subtasks) ?
-                                                <>
-                                                    {
-                                                        section.subtasks.map(item => (
-                                                            <SubTaskItem
-                                                                key={item.subId}
-                                                                section={section.id}
-                                                                item={item}
-                                                                id={item.subId}
-                                                                subTasksDel={props.subTasksDel}
-                                                                subTasksEdit={props.subTasksEdit}
-                                                            />
-                                                        ))
-                                                    }
-                                                </>
-                                                : null
+
+                                            {
+                                                props.subtasks.map(item => (
+                                                    item.parentId === assignment._id ?
+                                                        <SubTaskItem
+                                                            key={item._Id}
+                                                            assignment={assignment._id}
+                                                            item={item}
+                                                            id={item._Id}
+                                                        // subTasksDel={props.subTasksDel}
+                                                        // subTasksEdit={props.subTasksEdit}
+                                                        />
+                                                        : null
+                                                ))
                                             }
 
-                                            <NewSubTask 
-                                                sectionId={section.id}
-                                                subTasksSave={props.subTasksSave}
+
+                                            <NewSubTask
+                                                sectionId={assignment._id}
+                                            // subTasksSave={props.subTasksSave}
                                             />
 
                                             <Divider

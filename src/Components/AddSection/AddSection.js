@@ -94,7 +94,7 @@ function AddSection(props) {
                     color="default"
                     className={classes.assignmentBtn}
                     disabled={!(inputValues.desc.length >= 3) ? true : false}
-                    onClick={() => props.handleSaveClick(inputValues)}
+                    // onClick={() => props.handleSaveClick(inputValues)}
                 >
                     <SaveIcon fontSize="small" />
                     <Typography variant="overline">Save</Typography>
