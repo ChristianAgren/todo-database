@@ -1,4 +1,4 @@
-# Assignment REST-API
+# Assignment REST-API with MongoDB
 
 Link to [github repo](https://github.com/ChristianAgren/rest-api).
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app),
