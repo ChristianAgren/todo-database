@@ -1,3 +1,14 @@
+const express = require('express')
+const app = express()
+const port = process.env.PORT || 8080;
+const path = require('path');
+
+app.use(express.json());
+
+app.listen(port, () => console.log('Server has started'))
+
+
+
 // // @ts-nocheck
 // const express = require('express');
 // const fs = require('fs');
