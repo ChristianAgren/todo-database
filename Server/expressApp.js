@@ -20,9 +20,9 @@ db.on('error', (error) => console.log(error))
 db.once('open', () => console.log('Connected to Database'))
 
 // Routers
-const usersRouter = require('./routes/users')
-const assignmentsRouter = require('./routes/assignments')
-const subtasksRouter = require('./routes/subtasks')
+const usersRouter = require('./Routes/usersRoute')
+const assignmentsRouter = require('./Routes/assignmentsRoute')
+const subtasksRouter = require('./Routes/subtasksRoute')
 
 // Express use setup, url we use for api endpoints
 app.use(express.json());
