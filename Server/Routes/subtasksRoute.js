@@ -2,15 +2,6 @@ const express = require('express')
 const router = express.Router()
 const Subtask = require('../Models/subtaskModel')
 
-// id: 
-
-// parentId: 
-
-// desc: 
-
-// status:
-
-
 //Getting all 
 router.get('/', async (req, res) => {
     try {

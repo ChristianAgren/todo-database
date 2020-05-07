@@ -195,6 +195,7 @@ function Layout() {
                                 <Grid item xs={12} md={4}>
                                     <Paper className={classes.paper}>New assignment
                                     <AddSection
+                                        name={user.name}
                                         // handleSaveClick={handleSaveClick} 
                                         />
                                     </Paper>
