@@ -9,7 +9,7 @@ const mongoose = require('mongoose')
 const port = process.env.PORT || 8080;
 const path = require('path');
 
-mongoose.connect(process.env.DATABASE_URL, { 
+mongoose.connect(`mongodb://localhost/todo-database`, { 
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
