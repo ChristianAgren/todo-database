@@ -30,7 +30,6 @@ const getUser = require('./Handlers/getUser.js')
 
 // Express use setup, url we use for api endpoints
 app.use(express.json());
-app.set('trust proxy', 1);
 app.use(cookieSession({
     name: 'session',
     secret: 'GuppB4Lyf3-1337',
