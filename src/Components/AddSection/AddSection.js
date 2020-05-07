@@ -62,7 +62,7 @@ function AddSection(props) {
     return (
         <div className={classes.newAssignmentWrapper}>
             <FormControl className={classes.inputWrapper} fullWidth>
-                <TextField
+                {/* <TextField
                     required
                     id="outlined-assignee"
                     label="Assignee"
@@ -70,7 +70,7 @@ function AddSection(props) {
                     variant="outlined"
                     helperText="Who will perform the assignment?"
                     onChange={(event) => handleInputChange(event, 'name')}
-                />
+                /> */}
                 <TextField
                     required
                     id="outlined-assignmentDesc"

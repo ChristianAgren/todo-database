@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AssigneeListGeneration from '../Components/AssigneeListGeneration/AssigneeListGeneration';
 import FilterSection from '../Components/FilterSection/FilterSection'
 import AddSection from '../Components/AddSection/AddSection';
+import Topbar from '../Components/TopBar/Topbar';
 
 import { UserContext } from '../Contexts/UserContext';
 
@@ -182,12 +183,15 @@ function Layout() {
         <UserContext.Consumer>
             {user => (
                 <div className={classes.mainContainer}>
+
+                    <Topbar />
+
                     <Container maxWidth="lg">
                         <Typography className={classes.title} variant="h4">
-                            Assignments
+                            
                         </Typography>
                         <Grid container spacing={2}>
-                            {user.status === 1 ?
+                            {user.loggedIn ?
                                 <Grid item xs={12} md={4}>
                                     <Paper className={classes.paper}>New assignment
                                     <AddSection
