@@ -6,10 +6,8 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 
-
 const port = process.env.PORT || 8080;
 const path = require('path');
-
 
 mongoose.connect(process.env.DATABASE_URL, { 
     useNewUrlParser: true,
@@ -32,14 +30,11 @@ app.use('/api/users', usersRouter)
 app.use('/api/assignments', assignmentsRouter)
 app.use('/api/subtasks', subtasksRouter)
 
-
-
 app.get('/', (req, res) => {
       return res.sendFile(path.join(__dirname, 'build', 'index.html'));
     });
 
 app.listen(port, () => console.log('Server has started'))
-
 
 // // If ERROR, return errormsg
 // app.use(function (err, req, res, next) {
