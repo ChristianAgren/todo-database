@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../Models/userModel')
+const getUser = require('../Handlers/getUser.js')
 
 //Getting all 
 router.get('/', async (req, res) => {
@@ -31,7 +32,7 @@ router.post('/', async (req, res) => {
 
 
 // Change whole object 
-router.put('/:id', getUsers, async (req, res) => {
+router.put('/:name', getUser, async (req, res) => {
     res.user.comparePassword(req.body.password, async function (err, isMatch) {
         if (err) throw err;
 
@@ -53,7 +54,7 @@ router.put('/:id', getUsers, async (req, res) => {
 })
 
 //Deleting One
-router.delete('/:id', getUsers, async (req, res) => {
+router.delete('/:name', getUser, async (req, res) => {
     try {
         await res.user.remove()
         res.json({ message: 'Deleted User' })
@@ -62,21 +63,21 @@ router.delete('/:id', getUsers, async (req, res) => {
     }
 })
 
-// Find specific user
-async function getUsers(req, res, next) {
-    let user
-    try {
-        user = await User.findById(req.params.id)
-        if (user == null) {
-            return res.status(404).json({ message: 'Cannot find user' })
-        }
-    } catch (err) {
-        return res.status(500).json({ message: err.message })
-    }
+// // Find specific user
+// async function getUsers(req, res, next) {
+//     let user
+//     try {
+//         user = await User.findById(req.params.id)
+//         if (user == null) {
+//             return res.status(404).json({ message: 'Cannot find user' })
+//         }
+//     } catch (err) {
+//         return res.status(500).json({ message: err.message })
+//     }
 
-    res.user = user
-    next()
-}
+//     res.user = user
+//     next()
+// }
 
 
 module.exports = router
