@@ -1,0 +1,30 @@
+GET http://localhost:3000/api/assignments/
+
+###
+
+POST http://localhost:3000/api/assignments/
+Content-Type: application/json
+
+{
+    "parentId": "1",
+    "title": "Test title"
+}
+
+###
+
+PUT http://localhost:3000/api/assignments/5eb2a2829199e73930d81118
+Content-Type: application/json
+
+{
+    "parentId": "1",
+    "title": "Testing 1212"
+}
+
+###
+DELETE http://localhost:3000/api/assignments/5eb2a2829199e73930d81118
+
+
+###
+
+
+###
