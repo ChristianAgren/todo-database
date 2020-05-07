@@ -20,11 +20,11 @@ router.post('/', async (req, res) => {
         role: req.body.role
     })
     try {
-
         const newUser = await user.save()
         res.status(201).json(newUser)
     } catch (err) {
-        res.status.apply(400).json({ message: err.message })
+        // res.status.apply(400).json({ message: err.message })
+        res.status(400).json({ message: err.message })
     }
 })
 
@@ -34,17 +34,21 @@ router.post('/', async (req, res) => {
 router.put('/:id', getUsers, async (req, res) => {
     res.user.comparePassword(req.body.password, async function (err, isMatch) {
         if (err) throw err;
+
         if (!isMatch) {
             res.user.password = req.body.password
         }
+
         res.user.name = req.body.name
         res.user.role = req.body.role
+
         try {
             const updatedUser = await res.user.save()
             res.json(updatedUser)
         } catch (err) {
             res.status(400)
         }
+        
     })  
 })
 
