@@ -1,0 +1,28 @@
+// users
+
+GET http://localhost:3000/api/users/
+
+###
+
+POST http://localhost:3000/api/users/
+Content-Type: application/json
+
+{
+    "name": "Ohashat",
+    "password": "123",
+    "role": "Test role"
+}
+
+###
+
+PUT http://localhost:3000/api/users/5eb2c7059c56a03ac8fc525a
+Content-Type: application/json
+
+{
+    "name": "Fredrik",
+    "password": "123",
+    "role": "new"
+}
+
+###
+DELETE http://localhost:3000/api/users/5eb2b83883d68034c0c1c903

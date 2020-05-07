@@ -1,0 +1,29 @@
+// subtasks
+
+GET http://localhost:3000/api/subtasks/
+
+###
+
+POST http://localhost:3000/api/subtasks/
+Content-Type: application/json
+
+{
+    "parentId": "1",
+    "desc": "Test desc",
+    "status": "Test status"
+}
+
+###
+
+PUT http://localhost:3000/api/subtasks/5eb2b74342eac03b8cc3535a
+Content-Type: application/json
+
+{
+    "parentId": "1",
+    "desc": "Test ny",
+    "status": "Test status"
+}
+
+###
+DELETE http://localhost:3000/api/subtasks/5eb2b74342eac03b8cc3535a
+

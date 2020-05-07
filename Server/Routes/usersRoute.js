@@ -32,22 +32,20 @@ router.post('/', async (req, res) => {
 
 // Change whole object 
 router.put('/:id', getUsers, async (req, res) => {
-    let passComparison; 
-    res.user.comparePassword(req.body.password, function (err, isMatch) {
+    res.user.comparePassword(req.body.password, async function (err, isMatch) {
         if (err) throw err;
-        passComparison = isMatch; 
-    })
-    console.log(passComparison);
-    
-    res.user.name = req.body.name
-    res.user.password = req.body.password
-    res.user.role = req.body.role
-    try {
-        const updatedUser = await res.user.save()
-        res.json(updatedUser)
-    } catch (err) {
-        res.status(400)
-    }
+        if (!isMatch) {
+            res.user.password = req.body.password
+        }
+        res.user.name = req.body.name
+        res.user.role = req.body.role
+        try {
+            const updatedUser = await res.user.save()
+            res.json(updatedUser)
+        } catch (err) {
+            res.status(400)
+        }
+    })  
 })
 
 //Deleting One
