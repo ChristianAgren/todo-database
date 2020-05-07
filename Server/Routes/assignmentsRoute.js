@@ -14,15 +14,18 @@ router.get('/', async (req, res) => {
 
 //Creating one
 router.post('/', async (req, res) => {
+
+    console.log(req.session.id);
+    
     const assignment = new Assignment ({
-        parentId: req.body.parentId,
+        parentId: req.session.id,
         title: req.body.title 
     })
     try {
         const newAssignment = await assignment.save()
         res.status(201).json(newAssignment)
     } catch (err) {
-        res.status.apply(400).json( { message: err.message } )
+        res.status(400).json( { message: err.message } )
     }
 })
 
