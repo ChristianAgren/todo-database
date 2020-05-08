@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const Assignment = require('../Models/assignmentModel')
-const User = require('../Models/userModel')
 
 //Getting all 
 router.get('/', async (req, res) => {
@@ -16,19 +15,21 @@ router.get('/', async (req, res) => {
 // Skapa en getUsers för att hitta rätt user och för att få med det i respons så vi kan hitta den usern som är inloggad i res.body.id
 //Creating one
 
-router.post('/', getUsers, async (req, res) => {
-console.log(req.session.id);
-
-    const assignment = new Assignment ({
-        parentId: res.user._id,
-    
-        title: req.body.title 
-    })
-    try {
-        const newAssignment = await assignment.save()
-        res.status(201).json(newAssignment)
-    } catch (err) {
-        res.status(400).json( { message: err.message } )
+router.post('/', async (req, res) => {
+    if (req.session.id) {
+        const assignment = new Assignment ({
+            _id: [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join(''),
+            parentId: req.session.id,
+            title: req.body.title 
+        })
+        try {
+            const newAssignment = await assignment.save()
+            res.status(201).json(newAssignment)
+        } catch (err) {
+            res.status(400).json( { message: err.message } )
+        }
+    } else {
+        res.status(401).json('Unauthorized')
     }
 })
 
@@ -67,22 +68,6 @@ async function getAssignments(req, res, next) {
     }
 
     res.assignment = assignment
-    next()
-}
-
-
-async function getUsers(req, res, next) {
-    let user
-    try {
-        user = await User.findOne({name: req.body.name})
-        if (user == null) {
-            return res.status(404).json({ message: 'Cannot find user' })
-        }
-    } catch (err) {
-        return res.status(500).json({ message: err.message })
-    }
-
-    res.user = user
     next()
 }
 
