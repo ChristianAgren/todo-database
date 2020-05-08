@@ -91,7 +91,7 @@ function NewSubTask(props) {
                                 <Typography variant="overline">Close</Typography>
                             </Button>
                             <Button 
-                            onClick={() => user.subtaskToDb({ desc: inputValue.desc, status: 'new' })}
+                            onClick={() => user.subtaskToDb({ parentId: props.sectionId, desc: inputValue.desc, status: 'new' })}
                                 // onClick={handleSubTaskSave}
                                 color="default" 
                                 className={classes.addAssignmentBtn}
