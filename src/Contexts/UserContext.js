@@ -16,7 +16,7 @@ class UserContextProvider extends Component {
             loginUser: this.loginUser,
             subtaskToDb: this.subtaskToDb,
 
-            assignmentToDb: this.assignmentToDb
+            assignmentToDb: this.assignmentToDb,
         }
 
     }
@@ -62,6 +62,7 @@ class UserContextProvider extends Component {
             .then((response) => response.json())
             .then((data) => console.log(data))
     }
+
 
     async subtaskToDb(data) {
         console.log(data);

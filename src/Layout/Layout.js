@@ -37,6 +37,23 @@ function Layout() {
     const [assignments, setAssignments] = React.useState(null)
     const apiURL = 'http://localhost:3000/api/assignments/'
 
+    async function getAssignments(data)  {
+        fetch(apiURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                        console.log(data);
+                        setAssignments(data)
+                    });
+    }
+
+    getAssignments()
+
     // useEffect(() => {
     //     getAssignmentsFromJson()
     // }, [])
@@ -218,7 +235,7 @@ function Layout() {
                                                 : null
                                             }
                                             <AssigneeListGeneration
-                                                assignments={Assignments.assignments}
+                                                assignments={assignments}
                                                 subtasks={Subtasks.subtasks}
                                                 users={Users.users}
                                             // editAssignment={handleEditSave}
