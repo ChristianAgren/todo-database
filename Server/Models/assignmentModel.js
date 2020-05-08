@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const assignmentSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        required: true
+    },
     parentId: {
         type: String,
         required: true

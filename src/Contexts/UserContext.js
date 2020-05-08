@@ -50,7 +50,6 @@ class UserContextProvider extends Component {
     }
 
     async assignmentToDb(data) {
-        console.log(data);
         
         fetch(apiURL + "assignments", {
             method: "POST",
