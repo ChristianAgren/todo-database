@@ -10,10 +10,6 @@ import {
 } from "@material-ui/core/";
 import { UserContext } from "../../Contexts/UserContext";
 
-function rand() {
-    return Math.round(Math.random() * 20) - 10;
-}
-
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: "absolute",
@@ -47,6 +43,14 @@ function LoginModal() {
             [anchor]: event.target.value,
         });
     };
+
+    const handleLoginClick = (user) => {
+        if (!user.loggedIn) {
+            handleOpen()
+        } else {
+            user.logoutUser()
+        }
+    }
 
     const handleOpen = () => {
         setOpen(true);
@@ -127,6 +131,7 @@ function LoginModal() {
                                         setView("login");
                                     } else {
                                         console.log("logging in");
+                                        user.loginUser({ name: loginInput.username, password: loginInput.password }, handleClose)
                                     }
                                 }}>
                                 Login
@@ -142,7 +147,7 @@ function LoginModal() {
                                         loginInput.password === loginInput.passwordConfirmation
                                     ) {
 
-                                        user.registerUser({ name: loginInput.username, password: loginInput.password })
+                                        user.clientRegisterUser({ name: loginInput.username, password: loginInput.password })
 
                                         setLoginInput({
                                             username: "",
@@ -150,10 +155,10 @@ function LoginModal() {
                                             passwordConfirmation: ""
                                         })
 
-                                        user.loginUser({
-                                            name: loginInput.username,
-                                            admin: false
-                                        })
+                                        // user.loginUser({
+                                        //     name: loginInput.username,
+                                        //     admin: false
+                                        // })
 
                                         handleClose()
                                     } else {
@@ -179,7 +184,7 @@ function LoginModal() {
         <UserContext.Consumer>
             {user => (
                 <div>
-                    <Button onClick={handleOpen}>{user.loggedIn ? "logout" : "login"}</Button>
+                    <Button onClick={() => handleLoginClick(user)}>{user.loggedIn ? "logout" : "login"}</Button>
                     <Modal
                         open={open}
                         onClose={handleClose}
