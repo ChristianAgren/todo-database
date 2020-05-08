@@ -23,8 +23,8 @@ const userSchema = new mongoose.Schema({
 
         required: true,
     },
-    role: {
-        type: String,
+    admin: {
+        type: Boolean,
         required: true,
     }
 })
