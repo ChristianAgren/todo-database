@@ -65,6 +65,11 @@ app.post('/login', getUser, async (req, res) => {
     })
 })
 
+app.delete('/logout', (req, res) => {
+    req.session = null
+    res.json('Logged out!')
+})
+
 app.listen(port, () => console.log('Server has started'))
 
 // // If ERROR, return errormsg
