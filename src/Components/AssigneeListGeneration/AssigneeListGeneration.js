@@ -17,6 +17,7 @@ import SubTaskItem from '../SubTaskItem/SubTaskItem';
 import NewSubTask from '../NewSubTask/NewSubTask'
 import EditAssignment from '../EditAssignment/EditAssignment'
 import DateManager from '../DateManager/DateManager.js'
+import { UserContext } from "../../Contexts/UserContext";
 
 const useStyles = makeStyles((theme) => ({
     removeScrollbar: {
@@ -129,15 +130,16 @@ function AssigneeListGeneration(props) {
         manageDate()
     })
 
-    const returnName = (assignment) => {
-        const assignee = props.users.find(user => user._id === assignment.parentId)
+    // const returnName = (assignment) => {
+    //     const assignee = props.users.find(user => user._id === assignment.parentId)
 
-        return assignee.name
-    }
-
+    //     return assignee.name
+    // }
 
 
     return (
+        <UserContext.Consumer>
+        {user => (
         <div className={classes.removeScrollbar}>
             <List className={classes.root} subheader={<li />}>
                 {(props.assignments === null) ?
@@ -198,7 +200,7 @@ function AssigneeListGeneration(props) {
                                             </ListSubheader>
                                             <Box className={classes.subInfo}>
                                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                                    <Typography variant="overline">{`Assignee: ${returnName(assignment)}`}</Typography>
+                                                    {/* <Typography variant="overline">{`Assignee: ${returnName(assignment)}`}</Typography> */}
                                                     <Typography variant="overline">{`ID: ${assignment._id}`}</Typography>
                                                 </div>
                                                 {/* {(assignment.subtasks && assignment.subtasks.length > 0) ?
@@ -242,6 +244,8 @@ function AssigneeListGeneration(props) {
                                 ))}
             </List>
         </div>
+        )}
+    </UserContext.Consumer>
     );
 }
 
