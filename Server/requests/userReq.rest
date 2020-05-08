@@ -8,21 +8,21 @@ POST http://localhost:3000/api/users/
 Content-Type: application/json
 
 {
-    "name": "Ohashat",
+    "name": "Filip",
     "password": "123",
-    "role": "Test role"
+    "admin": "false"
 }
 
 ###
 
-PUT http://localhost:3000/api/users/5eb2c7059c56a03ac8fc525a
+PUT http://localhost:3000/api/users/Filip
 Content-Type: application/json
 
 {
     "name": "Fredrik",
-    "password": "123",
-    "role": "new"
+    "password": "1234",
+    "admin": "true"
 }
 
 ###
-DELETE http://localhost:3000/api/users/5eb2b83883d68034c0c1c903
+DELETE http://localhost:3000/api/users/Fredrik
