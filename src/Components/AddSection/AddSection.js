@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 import CancelIcon from '@material-ui/icons/Cancel';
 import SaveIcon from '@material-ui/icons/Save';
+import { UserContext } from "../../Contexts/UserContext";
 
 const useStyles = makeStyles((theme) => ({
     newAssignmentWrapper: {
@@ -38,10 +39,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+
 function AddSection(props) {
     const classes = useStyles()
     const [inputValues, setInputValues] = useState({
-        name: '',
+        name: props.name,
         desc: ''
     })
 
@@ -58,11 +60,13 @@ function AddSection(props) {
             desc: ''
         })
     }
-    
+
     return (
-        <div className={classes.newAssignmentWrapper}>
-            <FormControl className={classes.inputWrapper} fullWidth>
-                {/* <TextField
+        <UserContext.Consumer>
+            {user => (
+                <div className={classes.newAssignmentWrapper}>
+                    <FormControl className={classes.inputWrapper} fullWidth>
+                        {/* <TextField
                     required
                     id="outlined-assignee"
                     label="Assignee"
@@ -71,36 +75,39 @@ function AddSection(props) {
                     helperText="Who will perform the assignment?"
                     onChange={(event) => handleInputChange(event, 'name')}
                 /> */}
-                <TextField
-                    required
-                    id="outlined-assignmentDesc"
-                    label="Assignment description"
-                    value={inputValues.desc}
-                    variant="outlined"
-                    helperText="Keep it short and sweet"
-                    onChange={(event) => handleInputChange(event, 'desc')}
-                />
-            </FormControl>
-            <div className={classes.newAssignmentBtnWrapper}>
-                <Button
-                    color="default"
-                    className={classes.assignmentBtn}
-                    onClick={handleClearClick}
-                >
-                    <CancelIcon fontSize="small" style={{ color: 'rgb(245,84,72)' }} />
-                    <Typography variant="overline">Clear</Typography>
-                </Button>
-                <Button
-                    color="default"
-                    className={classes.assignmentBtn}
-                    disabled={!(inputValues.desc.length >= 3) ? true : false}
-                    // onClick={() => props.handleSaveClick(inputValues)}
-                >
-                    <SaveIcon fontSize="small" />
-                    <Typography variant="overline">Save</Typography>
-                </Button>
-            </div>
-        </div>
+                        <TextField
+                            required
+                            id="outlined-assignmentDesc"
+                            label="Assignment description"
+                            value={inputValues.desc}
+                            variant="outlined"
+                            helperText="Keep it short and sweet"
+                            onChange={(event) => handleInputChange(event, 'desc')}
+                        />
+                    </FormControl>
+                    <div className={classes.newAssignmentBtnWrapper}>
+                        <Button
+                            color="default"
+                            className={classes.assignmentBtn}
+                            onClick={handleClearClick}
+                        >
+                            <CancelIcon fontSize="small" style={{ color: 'rgb(245,84,72)' }} />
+                            <Typography variant="overline">Clear</Typography>
+                        </Button>
+                        <Button
+                            color="default"
+                            className={classes.assignmentBtn}
+                            disabled={!(inputValues.desc.length >= 3) ? true : false}
+                            onClick={() => user.assignmentToDb({name: user.name, title: inputValues.desc})}
+                        // onClick={() => props.handleSaveClick(inputValues)}
+                        >
+                            <SaveIcon fontSize="small" />
+                            <Typography variant="overline">Save</Typography>
+                        </Button>
+                    </div>
+                </div>
+            )}
+        </UserContext.Consumer>
     )
 }
 

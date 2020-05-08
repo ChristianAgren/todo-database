@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Assignment = require('../Models/assignmentModel')
+const User = require('../Models/userModel')
 
 //Getting all 
 router.get('/', async (req, res) => {
@@ -12,13 +13,15 @@ router.get('/', async (req, res) => {
     }
 })
 
+// Skapa en getUsers för att hitta rätt user och för att få med det i respons så vi kan hitta den usern som är inloggad i res.body.id
 //Creating one
-router.post('/', async (req, res) => {
 
-    console.log(req.session.id);
-    
+router.post('/', getUsers, async (req, res) => {
+console.log(req.session.id);
+
     const assignment = new Assignment ({
-        parentId: req.session.id,
+        parentId: res.user._id,
+    
         title: req.body.title 
     })
     try {
@@ -67,5 +70,20 @@ async function getAssignments(req, res, next) {
     next()
 }
 
+
+async function getUsers(req, res, next) {
+    let user
+    try {
+        user = await User.findOne({name: req.body.name})
+        if (user == null) {
+            return res.status(404).json({ message: 'Cannot find user' })
+        }
+    } catch (err) {
+        return res.status(500).json({ message: err.message })
+    }
+
+    res.user = user
+    next()
+}
 
 module.exports = router
