@@ -13,6 +13,7 @@ import {
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
+import { UserContext } from "../../Contexts/UserContext";
 
 const useStyles = makeStyles((theme) => ({
     inputWrapper: {
@@ -57,48 +58,53 @@ function NewSubTask(props) {
         setOpen(!open)
     }
     return (
-        <>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-                <List className={classes.inputWrapper} component="div">
-                    <ListItem className={classes.nested}>
-                        <FormControl fullWidth>
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Add subtask" 
-                                value={inputValue.desc}
-                                onChange={(event) => handleInputChange(event)}
-                            />
-                        </FormControl>
-                    </ListItem>
-                </List>
-            </Collapse>
-            {(!open) ?
-                <Button onClick={handleClick} color="default" className={classes.addAssignmentBtn}>
-                    <AddCircleIcon fontSize="small" />
-                    <Typography variant="overline">Add subtask</Typography>
-                </Button>
-                :
-                <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                    <Button 
-                        onClick={handleClick} 
-                        color="default" 
-                        className={classes.addAssignmentBtn}
-                    >
-                        <CancelIcon fontSize="small" style={{ color: 'rgb(245,84,72)' }} />
-                        <Typography variant="overline">Close</Typography>
-                    </Button>
-                    <Button 
-                        onClick={handleSubTaskSave}
-                        color="default" 
-                        className={classes.addAssignmentBtn}
-                        disabled={inputValue.desc < 3}
-                    >
-                        <SaveIcon fontSize="small" />
-                        <Typography variant="overline">Save</Typography>
-                    </Button>
-                </div>
-            }
-        </>
+        <UserContext.Consumer>
+            {user => (
+                <>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <List className={classes.inputWrapper} component="div">
+                            <ListItem className={classes.nested}>
+                                <FormControl fullWidth>
+                                    <TextField 
+                                        id="outlined-basic" 
+                                        label="Add subtask" 
+                                        value={inputValue.desc}
+                                        onChange={(event) => handleInputChange(event)}
+                                    />
+                                </FormControl>
+                            </ListItem>
+                        </List>
+                    </Collapse>
+                    {(!open) ?
+                        <Button onClick={handleClick} color="default" className={classes.addAssignmentBtn}>
+                            <AddCircleIcon fontSize="small" />
+                            <Typography variant="overline">Add subtask</Typography>
+                        </Button>
+                        :
+                        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                            <Button 
+                                onClick={handleClick} 
+                                color="default" 
+                                className={classes.addAssignmentBtn}
+                            >
+                                <CancelIcon fontSize="small" style={{ color: 'rgb(245,84,72)' }} />
+                                <Typography variant="overline">Close</Typography>
+                            </Button>
+                            <Button 
+                            onClick={() => user.subtaskToDb({ desc: inputValue.desc, status: 'new' })}
+                                // onClick={handleSubTaskSave}
+                                color="default" 
+                                className={classes.addAssignmentBtn}
+                                disabled={inputValue.desc < 3}
+                            >
+                                <SaveIcon fontSize="small" />
+                                <Typography variant="overline">Save</Typography>
+                            </Button>
+                        </div>
+                    }
+                </>
+            )}
+        </UserContext.Consumer>
     )
 }
 
