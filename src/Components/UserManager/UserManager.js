@@ -11,18 +11,23 @@ import Users from "../../database/Users.json"
 // - - - - - - 
 
 const useStyles = makeStyles((theme) => ({
-    mainContainer: {
-        padding: 0,
 
-        // minHeight: "100vh",
+    paper: {
+        margin: theme.spacing(2),
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    },
+
+    mainContainer: {
+
         height: "100%",
+
         '& .MuiList-padding': {
             padding: 0
         }
     },
     userList: {
-        margin: '.5rem',
-        // padding: ".5rem",
 
         width: "100%",
         background: "#0004"
@@ -30,10 +35,9 @@ const useStyles = makeStyles((theme) => ({
     user: {
         position: "relative",
 
-
         '& > *:not(.MuiListItemIcon-root)': {
             width: "calc(100% / 4)",
-            padding: ".5rem"
+            padding: theme.spacing(1)
         },
         '&:nth-child(2n)': {
             background: "#fff8"
@@ -45,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
             // background: "#fff5"
         },
         '&:first-child': {
-            paddingBottom: "1rem",
             background: "#3f51b5",
             color: "#e7e7e7",
             textDecoration: "underline"
@@ -54,14 +57,6 @@ const useStyles = makeStyles((theme) => ({
     editBtn: {
         position: 'absolute',
         right: 0,
-
-
-    },
-    
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
     },
 }));
 
