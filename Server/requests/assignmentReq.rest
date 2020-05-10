@@ -6,7 +6,6 @@ POST http://localhost:3000/api/assignments/
 Content-Type: application/json
 
 {
-    "parentId": "1",
     "title": "Test title"
 }
 
@@ -21,7 +20,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/api/assignments/5eb2a2829199e73930d81118
+DELETE http://localhost:3000/api/assignments/5eb47041304b0032acb9340b
 
 
 ###

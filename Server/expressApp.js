@@ -49,24 +49,29 @@ app.get('/', (req, res) => {
 
 // If post '/login', process login attempt
 app.post('/login', getUser, async (req, res) => {
-    if (!res.user) return res.status(401).json('Wrong username or password')
+    if (!res.user) return res.status(401).json({ err: 'Wrong username or password' })
     res.user.comparePassword(req.body.password, async function (err, isMatch) {
         if (err) throw err;
-        if (!isMatch) return res.status(401).json('Wrong username or password')
+        if (!isMatch) return res.status(401).json({ err: 'Wrong username or password' })
 
         // Create a session
         req.session.username = res.user.name
         req.session.id = res.user._id
-        req.session.role = res.user.role
+        req.session.admin = res.user.admin
         // We can now check role with if (req.session.role === 'admin') in requests
 
+        console.log('Created client session');
+        
+
         // Returns successful login
-        res.json('Successful login!')
+        res.json({name: res.user.name, admin: res.user.admin})
     })
 })
 
 app.delete('/logout', (req, res) => {
     req.session = null
+    console.log('Destroyed client session');
+    
     res.json('Logged out!')
 })
 
