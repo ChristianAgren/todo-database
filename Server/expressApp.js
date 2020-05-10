@@ -26,18 +26,20 @@ const assignmentsRouter = require('./Routes/assignmentsRoute')
 const subtasksRouter = require('./Routes/subtasksRoute')
 
 // Middleware
-const getUser = require('./Handlers/getUser.js')
+const getUser = require('./Middlewares/getUser.js')
+const checkLoginSession = require('./Middlewares/checkLoginSession')
 
 // Express use setup, url we use for api endpoints
 app.use(express.json());
 app.use(cookieSession({
-    name: 'session',
+    name: 'LoginSession',
     secret: 'GuppB4Lyf3-1337',
-    maxAge: 3000000, // 5min
+    maxAge: 1000 /* millisekunder */ * 60 /* minut */ * 60, // 1 timme
     sameSite: 'strict',
     httpOnly: true,
     secure: false,
 }))
+app.use(checkLoginSession)
 app.use('/api/users', usersRouter)
 app.use('/api/assignments', assignmentsRouter)
 app.use('/api/subtasks', subtasksRouter)
