@@ -6,14 +6,17 @@ import AssigneeListGeneration from '../Components/AssigneeListGeneration/Assigne
 import FilterSection from '../Components/FilterSection/FilterSection'
 import AddSection from '../Components/AddSection/AddSection';
 import Topbar from '../Components/TopBar/Topbar';
+import UserManager from "../Components/UserManager/UserManager"
 
 import { UserContext } from '../Contexts/UserContext';
+import Main from '../Components/Main/Main'
 
 
 // temp database
 import Users from "../database/Users.json"
 import Assignments from "../database/Assignments.json"
 import Subtasks from "../database/Subtasks.json"
+import { set } from 'mongoose';
 // - - - - - - 
 
 const useStyles = makeStyles((theme) => ({
@@ -175,6 +178,11 @@ function Layout() {
     //         })
     // }
 
+    const [view, setView] = React.useState('main')
+
+    const handleChangeView = () => {
+        view === 'main' ? setView('manage users') : setView('main')
+    }
 
 
 
@@ -184,55 +192,15 @@ function Layout() {
             {user => (
                 <div className={classes.mainContainer}>
 
-                    <Topbar />
-
-                    <Container maxWidth="lg">
-                        <Typography className={classes.title} variant="h4">
-                            
-                        </Typography>
-                        <Grid container spacing={2}>
-                            {user.loggedIn ?
-                                <Grid item xs={12} md={4}>
-                                    <Paper className={classes.paper}>New assignment
-                                    <AddSection
-                                        name={user.name}
-                                        // handleSaveClick={handleSaveClick} 
-                                        />
-                                    </Paper>
-                                </Grid>
-                                : null
-                            }
+                    <Topbar changeView={handleChangeView} />
 
 
-                            <Grid item xs={12} md={8}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} md={12}>
-                                        <FilterSection
-                                        // handleSearch={getAssignmentsFromJson}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} md={12}>
-                                        <Paper style={{ marginBottom: '2rem' }} className={classes.paper}>
-                                            {(assignments != null) ?
-                                                `Assignments${(assignments.length !== undefined) ? `: ${assignments.length}` : ``}`
-                                                : null
-                                            }
-                                            <AssigneeListGeneration
-                                                assignments={Assignments.assignments}
-                                                subtasks={Subtasks.subtasks}
-                                                users={Users.users}
-                                            // editAssignment={handleEditSave}
-                                            // removeAssignment={deleteAssignmentFromJson}
-                                            // subTasksSave={handleSubTaskSave}
-                                            // subTasksDel={handleSubTaskDelete}
-                                            // subTasksEdit={handleEditSubtaskSave}
-                                            />
-                                        </Paper>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Container>
+                    {view === 'main' ?
+                        <Main /> : <UserManager />
+                    }
+
+
+
                 </div>
 
             )}

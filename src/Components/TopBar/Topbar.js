@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Topbar() {
+function Topbar(props) {
     const classes = useStyles();
 
     return (
@@ -31,7 +31,7 @@ function Topbar() {
                 <div className={classes.root}>
                     <AppBar position="static">
                         <Toolbar>
-                            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={() => props.changeView('manage users')} >
                                 <MenuIcon />
                             </IconButton>
                             <Typography variant="h6" className={classes.title}>
