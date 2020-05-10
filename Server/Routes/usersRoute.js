@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../Models/userModel')
-const getUser = require('../Handlers/getUser.js')
+const getUser = require('../Middlewares/getUser.js')
 
 //Getting all 
 router.get('/', async (req, res) => {
