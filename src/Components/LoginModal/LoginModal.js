@@ -5,6 +5,8 @@ import {
     FormControl,
     Grid,
     makeStyles,
+    Menu,
+    MenuItem,
     Modal,
     TextField,
     Typography,
@@ -12,8 +14,23 @@ import {
 import { UserContext } from "../../Contexts/UserContext";
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import AddBoxIcon from '@material-ui/icons/AddBox';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const useStyles = makeStyles((theme) => ({
+    loginContainer: {
+        '& .MuiButton-label': {
+            color: 'white'
+        }
+    },
+    userMenu: {
+        '& .MuiButton-label': {
+            fontSize: '.9rem',
+            '& .MuiSvgIcon-root': {
+                margin: theme.spacing(0, 0, 0, 1)
+            }
+
+        }
+    },
     paper: {
         position: "absolute",
         top: "52%",
@@ -34,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
             borderRadius: 0,
         },
     },
-    loginContainer: {
+    loginModal: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -97,19 +114,13 @@ function LoginModal() {
         });
     };
 
-    const handleLoginClick = (user) => {
-        if (!user.loggedIn) {
-            handleOpen()
-        } else {
-            user.logoutUser()
-        }
-    }
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
-    const handleOpen = () => {
+    const handleOpenModal = () => {
         setOpen(true);
     };
 
-    const handleClose = () => {
+    const handleCloseModal = () => {
         setOpen(false);
 
         setView("login");
@@ -119,9 +130,17 @@ function LoginModal() {
         });
     };
 
+    const handleClickMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
+
     const handlePrimaryClick = (user) => {
         if (view === 'login') {
-            user.loginUser({ name: loginInput.username, password: loginInput.password }, handleClose)
+            user.loginUser({ name: loginInput.username, password: loginInput.password }, handleCloseModal)
         } else {
             if (loginInput.password === loginInput.passwordConfirmation) {
                 user.clientRegisterUser({ name: loginInput.username, password: loginInput.password })
@@ -130,7 +149,7 @@ function LoginModal() {
                     password: "",
                     passwordConfirmation: ""
                 })
-                handleClose()
+                handleCloseModal()
             } else {
                 console.log('no match', loginInput);
             }
@@ -153,11 +172,42 @@ function LoginModal() {
         }
     }
 
+    const userMenu = (user) => {
+        return (
+            <div className={classes.userMenu}>
+                <Button
+                    aria-controls="simple-menu"
+                    aria-haspopup="true"
+                    onClick={handleClickMenu}
+                >
+                    {user.name}
+                    <AccountCircleIcon />
+                </Button>
+                <Menu
+                    id="user-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleCloseMenu}
+                >
+                    <MenuItem onClick={handleCloseMenu}>My Tasks</MenuItem>
+                    <MenuItem onClick={() => {
+                        handleCloseMenu()
+                        user.logoutUser()
+                    }
+                    }>
+                        Logout
+                    </MenuItem>
+                </Menu>
+            </div>
+        )
+    }
+
     const body = (
         <UserContext.Consumer>
             {user => (
                 <div className={classes.paper}>
-                    <Grid container className={classes.loginContainer}>
+                    <Grid container className={classes.loginModal}>
                         <Grid item xs={12}>
                             {view === 'login'
                                 ? <AccountBoxIcon />
@@ -248,13 +298,16 @@ function LoginModal() {
     return (
         <UserContext.Consumer>
             {user => (
-                <div>
-                    <Button onClick={() => handleLoginClick(user)}>{user.loggedIn ? "logout" : "login"}</Button>
+                <div className={classes.loginContainer}>
+                    {user.loggedIn
+                        ? userMenu(user)
+                        : <Button onClick={() => handleOpenModal()}> Login / Register </Button>
+                    }
                     <Modal
                         open={open}
-                        onClose={handleClose}
-                        aria-labelledby="simple-modal-title"
-                        aria-describedby="simple-modal-description">
+                        onClose={handleCloseModal}
+                        aria-labelledby="login-modal"
+                        aria-describedby="a-login-modal">
                         {body}
                     </Modal>
                 </div>
