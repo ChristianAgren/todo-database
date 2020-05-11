@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../Models/userModel')
-const getUser = require('../Handlers/getUser.js')
+const getUser = require('../Middlewares/getUser.js')
 
 //Getting all 
 router.get('/', async (req, res) => {
@@ -18,11 +18,11 @@ router.post('/', async (req, res) => {
     const user = new User({
         name: req.body.name,
         password: req.body.password,
-        role: req.body.role
+        admin: req.body.admin
     })
     try {
         const newUser = await user.save()
-        res.status(201).json(newUser)
+        res.status(201).json({ name: newUser.name, admin: newUser.admin })
     } catch (err) {
         // res.status.apply(400).json({ message: err.message })
         res.status(400).json({ message: err.message })
@@ -33,6 +33,8 @@ router.post('/', async (req, res) => {
 
 // Change whole object 
 router.put('/:name', getUser, async (req, res) => {
+    console.log(res.user);
+    
     res.user.comparePassword(req.body.password, async function (err, isMatch) {
         if (err) throw err;
 
@@ -41,7 +43,7 @@ router.put('/:name', getUser, async (req, res) => {
         }
 
         res.user.name = req.body.name
-        res.user.role = req.body.role
+        res.user.admin = req.body.admin
 
         try {
             const updatedUser = await res.user.save()
@@ -54,9 +56,10 @@ router.put('/:name', getUser, async (req, res) => {
 })
 
 //Deleting One
-router.delete('/:name', getUser, async (req, res) => {
+router.delete('/:name', async (req, res) => {
     try {
-        await res.user.remove()
+        await User.deleteOne({ name: req.param.name })
+        // await res.user.remove()
         res.json({ message: 'Deleted User' })
     } catch (err) {
         res.status(500).json({ message: err.message })
