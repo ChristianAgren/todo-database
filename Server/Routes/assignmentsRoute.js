@@ -12,6 +12,8 @@ router.get('/', async (req, res) => {
     }
 })
 
+
+
 // Skapa en getUsers för att hitta rätt user och för att få med det i respons så vi kan hitta den usern som är inloggad i res.body.id
 //Creating one
 
