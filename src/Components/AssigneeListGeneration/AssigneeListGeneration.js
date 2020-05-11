@@ -86,6 +86,7 @@ function AssigneeListGeneration(props) {
     const [shouldEdit, setShouldEdit] = React.useState(false)
     const [editSection, setEditSection] = React.useState(null)
     const open = Boolean(anchorEl);
+    const apiURL = 'http://localhost:3000/api/'
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -101,12 +102,12 @@ function AssigneeListGeneration(props) {
         setShouldEdit(!shouldEdit)
     }
 
+
     const handleClose = (event) => {
-        console.log(anchorEl.id);
-        
+
+
         if (event.currentTarget.id === 'delete') {
-            props.deleteAssignment(anchorEl.id)
-            // props.removeAssignment(anchorEl.id)
+            props.deleteAssignment(anchorEl.id, props.subtasks)
         } else if (event.currentTarget.id === 'edit') {
             handleEdit()
         }
@@ -122,7 +123,7 @@ function AssigneeListGeneration(props) {
     }
 
     const manageDate = (date) => {
-       
+
         const currentDate = DateManager()
 
         if (date === currentDate) {
@@ -146,71 +147,71 @@ function AssigneeListGeneration(props) {
 
     return (
         <UserContext.Consumer>
-        {user => (
-        <div className={classes.removeScrollbar}>
-            <List className={classes.root} subheader={<li />}>
-                {(props.assignments === null) ?
-                    <h3>Loading</h3>
-                    : (props.assignments === undefined) ?
-                        <h3>Something went wrong, try reloading the page</h3>
-                        : (props.assignments.error) ?
-                            <div className={classes.error}>
-                                <h3>{props.assignments.error.message}</h3>
-                                <img src={SadSmiley}></img>
-                            </div>
-                            : (props.assignments.length === 0) ?
-                                <div style={{ margin: '4rem' }}>
-                                    <h4>Seems like there's nothing here...</h4>
-                                    <h2>Good job!</h2>
-                                </div>
-                                : props.assignments.map(assignment => (
-                                    <li key={`assignment-${assignment._id}`} className={classes.listSection}>
-                                        <ul className={classes.ul}>
-                                            <ListSubheader color="primary" className={classes.listTitle}>
-                                                <span>{`${assignment.title}`}</span>
-                                                <IconButton
-                                                    id={assignment._id}
-                                                    aria-controls="menu"
-                                                    aria-haspopup="true"
-                                                    onClick={(event) => handleMenu(event)}
-                                                    color="inherit"
-                                                >
-                                                    <SettingsIcon edge="end" />
-                                                </IconButton>
-                                                <Menu
-                                                    id={`Menu-${assignment._id}`}
-                                                    anchorEl={anchorEl}
-                                                    anchorOrigin={{
-                                                        vertical: 'top',
-                                                        horizontal: 'right',
-                                                    }}
-                                                    keepMounted
-                                                    transformOrigin={{
-                                                        vertical: 'top',
-                                                        horizontal: 'right',
-                                                    }}
-                                                    open={open}
-                                                    onClose={handleClose}
-                                                >
-                                                    <MenuItem id="edit" onClick={(event) => handleClose(event)}>Edit</MenuItem>
-                                                    {
-                                                        (shouldEdit) ?
-                                                            <EditAssignment
-                                                                handleEditClose={handleEdit}
-                                                                // handleEditSave={props.editAssignment} 
-                                                                open={shouldEdit}
-                                                                assignment={editSection} />
-                                                            : null
-                                                    }
-                                                    <MenuItem id="delete" onClick={(event) => handleClose(event)}>Delete</MenuItem>
-                                                </Menu>
-                                            </ListSubheader>
-                                            <Box className={classes.subInfo}>
-                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                                    {/* <Typography variant="overline">{`Assignee: ${returnName(assignment)}`}</Typography> */}
-                                                    <Typography variant="overline">{`ID: ${assignment._id}`}</Typography>
-                                                </div>
-                                                {/* {(assignment.subtasks && assignment.subtasks.length > 0) ?
+            {user => (
+                <div className={classes.removeScrollbar}>
+                    <List className={classes.root} subheader={<li />}>
+                        {(props.assignments === null) ?
+                            <h3>Loading</h3>
+                            : (props.assignments === undefined) ?
+                                <h3>Something went wrong, try reloading the page</h3>
+                                : (props.assignments.error) ?
+                                    <div className={classes.error}>
+                                        <h3>{props.assignments.error.message}</h3>
+                                        <img src={SadSmiley}></img>
+                                    </div>
+                                    : (props.assignments.length === 0) ?
+                                        <div style={{ margin: '4rem' }}>
+                                            <h4>Seems like there's nothing here...</h4>
+                                            <h2>Good job!</h2>
+                                        </div>
+                                        : props.assignments.map(assignment => (
+                                            <li key={`assignment-${assignment._id}`} className={classes.listSection}>
+                                                <ul className={classes.ul}>
+                                                    <ListSubheader color="primary" className={classes.listTitle}>
+                                                        <span>{`${assignment.title}`}</span>
+                                                        <IconButton
+                                                            id={assignment._id}
+                                                            aria-controls="menu"
+                                                            aria-haspopup="true"
+                                                            onClick={(event) => handleMenu(event)}
+                                                            color="inherit"
+                                                        >
+                                                            <SettingsIcon edge="end" />
+                                                        </IconButton>
+                                                        <Menu
+                                                            id={`Menu-${assignment._id}`}
+                                                            anchorEl={anchorEl}
+                                                            anchorOrigin={{
+                                                                vertical: 'top',
+                                                                horizontal: 'right',
+                                                            }}
+                                                            keepMounted
+                                                            transformOrigin={{
+                                                                vertical: 'top',
+                                                                horizontal: 'right',
+                                                            }}
+                                                            open={open}
+                                                            onClose={handleClose}
+                                                        >
+                                                            <MenuItem id="edit" onClick={(event) => handleClose(event)}>Edit</MenuItem>
+                                                            {
+                                                                (shouldEdit) ?
+                                                                    <EditAssignment
+                                                                        handleEditClose={handleEdit}
+                                                                        // handleEditSave={props.editAssignment} 
+                                                                        open={shouldEdit}
+                                                                        assignment={editSection} />
+                                                                    : null
+                                                            }
+                                                            <MenuItem id="delete" onClick={(event) => handleClose(event)}>Delete</MenuItem>
+                                                        </Menu>
+                                                    </ListSubheader>
+                                                    <Box className={classes.subInfo}>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                                            {/* <Typography variant="overline">{`Assignee: ${returnName(assignment)}`}</Typography> */}
+                                                            <Typography variant="overline">{`ID: ${assignment._id}`}</Typography>
+                                                        </div>
+                                                        {/* {(assignment.subtasks && assignment.subtasks.length > 0) ?
                                                     <>
                                                         <Typography className={classes.subTasks} variant="overline">{`Subtasks: ${assignment.subtasks.length}`}</Typography>
                                                     </>
@@ -218,44 +219,44 @@ function AssigneeListGeneration(props) {
                                                         <Typography className={classes.subTasks} variant="overline">All out of subtasks!</Typography>
                                                         : <Typography className={classes.subTasks} variant="overline">Add some subtasks...</Typography>
                                                 } */}
-                                                
-                                                <Typography variant="overline">{`Added: ${manageDate(assignment.assignmentDate.substring(0,10))}`}</Typography>
-                                            </Box>
-                                           
-                                            { (props.subtasks !== null) ?
-                                                props.subtasks.map(subtask => (
-                                                    subtask.parentId === assignment._id ?
-                                                        <SubTaskItem
-                                                            key={subtask._id}
-                                                            assignment={assignment._id}
-                                                            item={subtask}
-                                                            id={subtask._Id}
-                                                            subtask={subtask}
-                                                        // subTasksDel={props.subTasksDel}
-                                                        // subTasksEdit={props.subTasksEdit}
-                                                        />
-                                                        : null
-                                                )) : null
-                                            } 
+
+                                                        <Typography variant="overline">{`Added: ${manageDate(assignment.assignmentDate.substring(0, 10))}`}</Typography>
+                                                    </Box>
+
+                                                    {(props.subtasks !== null) ?
+                                                        props.subtasks.map(subtask => (
+                                                            subtask.parentId === assignment._id ?
+                                                                <SubTaskItem
+                                                                    key={subtask._id}
+                                                                    assignment={assignment._id}
+                                                                    item={subtask}
+                                                                    id={subtask._Id}
+                                                                    subtask={subtask}
+                                                                // subTasksDel={props.subTasksDel}
+                                                                // subTasksEdit={props.subTasksEdit}
+                                                                />
+                                                                : null
+                                                        )) : null
+                                                    }
 
 
-                                            <NewSubTask
-                                                sectionId={assignment._id}
-                                                subtaskToDb={props.subtaskToDb}
-                                            // subTasksSave={props.subTasksSave}
-                                            />
+                                                    <NewSubTask
+                                                        sectionId={assignment._id}
+                                                        subtaskToDb={props.subtaskToDb}
+                                                    // subTasksSave={props.subTasksSave}
+                                                    />
 
-                                            <Divider
-                                                light
-                                                style={{ margin: '.2rem' }}
-                                                component="li" />
-                                        </ul>
-                                    </li>
-                                ))}
-            </List>
-        </div>
-        )}
-    </UserContext.Consumer>
+                                                    <Divider
+                                                        light
+                                                        style={{ margin: '.2rem' }}
+                                                        component="li" />
+                                                </ul>
+                                            </li>
+                                        ))}
+                    </List>
+                </div>
+            )}
+        </UserContext.Consumer>
     );
 }
 
