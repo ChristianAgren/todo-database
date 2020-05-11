@@ -18,9 +18,6 @@ class UserContextProvider extends Component {
             // registerUser: this.registerUser,
             loginUser: this.loginUser,
             logoutUser: this.logoutUser,
-            subtaskToDb: this.subtaskToDb,
-
-            assignmentToDb: this.assignmentToDb,
         }
 
     }
@@ -106,34 +103,6 @@ class UserContextProvider extends Component {
                 }, () => console.log(data)
                 )
             })
-    }
-
-    async assignmentToDb(data) {
-
-        fetch(apiURL + "assignments", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data)
-        })
-            .then((response) => response.json())
-            .then((data) => console.log(data))
-    }
-
-
-    async subtaskToDb(data) {
-        console.log(data);
-        
-        fetch(apiURL + "subtasks", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data)
-        })
-            .then((response) => response.json())
-            .then((data) => console.log(data))
     }
 
     render() {
