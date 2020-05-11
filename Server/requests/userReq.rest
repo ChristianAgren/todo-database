@@ -8,9 +8,9 @@ POST http://localhost:3000/api/users/
 Content-Type: application/json
 
 {
-    "name": "Ohashat",
+    "name": "Christian",
     "password": "123",
-    "role": "Test role"
+    "admin": true
 }
 
 ###
@@ -21,7 +21,7 @@ Content-Type: application/json
 {
     "name": "Fredrik",
     "password": "123",
-    "role": "new"
+    "admin": true
 }
 
 ###
