@@ -24,14 +24,16 @@ class UserContextProvider extends Component {
 
     }
 
-    clientRegisterUser = async (user, closeModal) => {
+    clientRegisterUser = async (user, closeModal, cbErr) => {
         const newUser = await this.registerUser(user)
-        this.loginUser(newUser, closeModal)
+        if (!newUser.message) {
+            this.loginUser(newUser, closeModal)
+        } else {
+            cbErr('user')
+        }
     }
 
     async registerUser(user) {
-        console.log("register", user);
-
         // POST
         const newUser = await fetch(apiURL + "users", {
             method: "POST",
@@ -47,7 +49,9 @@ class UserContextProvider extends Component {
                 console.log(`Logged in: ${response.headers.get('userLoggedIn')}`);
                 return response.json()
             })
-            .then((data) => { return data })
+            .then((data) => {
+                return data
+            })
         return { ...newUser, password: user.password }
     }
 
@@ -69,10 +73,8 @@ class UserContextProvider extends Component {
                 return response.json()
             })
             .then((data) => {
-                console.log(data);
                 if (data.err) {
-                    console.log(data.err);
-                    cbErr(data.err)
+                    cbErr('login')
                 } else {
                     this.setState({
                         loggedIn: true,
@@ -98,8 +100,7 @@ class UserContextProvider extends Component {
                     loggedIn: false,
                     admin: false,
                     name: ""
-                }, () => console.log(data)
-                )
+                })
             })
     }
 
