@@ -12,6 +12,8 @@ router.get('/', async (req, res) => {
     }
 })
 
+
+
 //Creating one
 router.post('/', async (req, res) => {
     const subtask = new Subtask ({
@@ -28,7 +30,7 @@ router.post('/', async (req, res) => {
 })
 
 // Change whole object 
-router.put('/:id', getSubtasks, async (req, res) => {
+router.put('/:id', getSubtask, async (req, res) => {
         res.subtask.parentId = req.body.parentId
         res.subtask.desc = req.body.desc
         res.subtask.status = req.body.status
@@ -41,7 +43,7 @@ router.put('/:id', getSubtasks, async (req, res) => {
 })
 
 //Deleting One
-router.delete('/:id', getSubtasks, async (req, res) => {
+router.delete('/:id', getSubtask, async (req, res) => {
     try {
         await res.subtask.remove()
         res.json({ message: 'Deleted User'})
@@ -50,8 +52,8 @@ router.delete('/:id', getSubtasks, async (req, res) => {
     }
 })
 
-// Find specific user
-async function getSubtasks(req, res, next) {
+// Find specific subtask
+async function getSubtask(req, res, next) {
     let subtask
     try {
         subtask = await Subtask.findById(req.params.id)
