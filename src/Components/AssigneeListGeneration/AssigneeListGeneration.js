@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+// @ts-nocheck
+import React, { useEffect } from 'react';
 import {
     Box,
     Divider,
@@ -18,63 +19,63 @@ import EditAssignment from '../EditAssignment/EditAssignment'
 import DateManager from '../DateManager/DateManager.js'
 
 const useStyles = makeStyles((theme) => ({
-  removeScrollbar: {
-    width: "100%",
-    overflowX: "hidden",
-  },
-  error: {
-    width: "100%",
-    margin: "3rem 0 3rem 0",
-    display: "flex",
-    flexDirection: "column",
-  },
-  root: {
-    width: "calc(100% + 34px)",
-    backgroundColor: theme.palette.background.paper,
-    position: "relative",
-    left: "50%",
-    transform: "translateX(calc(-50% + 8px))",
-    overflowY: "scroll",
-    maxHeight: "calc(100vh - 18rem)",
-  },
-  listSection: {
-    backgroundColor: "inherit",
-  },
-  listTitle: {
-    fontSize: "1.1rem",
-    "& > button": {
-      position: "absolute",
-      right: "1rem",
-      color: "rgba(0, 0, 0, 0.26)",
+    removeScrollbar: {
+        width: '100%',
+        overflowX: 'hidden'
     },
-  },
-  editAssignment: {
-    margin: theme.spacing(1, 6),
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-  ul: {
-    display: "flex",
-    flexDirection: "column",
-    backgroundColor: "inherit",
-    padding: 0,
-  },
-  subInfo: {
-    position: "relative",
-    margin: theme.spacing(1, 5),
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    [theme.breakpoints.down("xs")]: {
-      display: "none",
+    error: {
+        width: '100%',
+        margin: '3rem 0 3rem 0',
+        display: 'flex',
+        flexDirection: 'column'
     },
-  },
-  subTasks: {
-    position: "absolute",
-    left: "50%",
-    transform: "translateX(-50%)",
-  },
+    root: {
+        width: 'calc(100% + 34px)',
+        backgroundColor: theme.palette.background.paper,
+        position: 'relative',
+        left: '50%',
+        transform: 'translateX(calc(-50% + 8px))',
+        overflowY: 'scroll',
+        maxHeight: 'calc(100vh - 18rem)',
+    },
+    listSection: {
+        backgroundColor: 'inherit',
+    },
+    listTitle: {
+        fontSize: '1.1rem',
+        '& > button': {
+            position: 'absolute',
+            right: '1rem',
+            color: 'rgba(0, 0, 0, 0.26)'
+        }
+    },
+    editAssignment: {
+        margin: theme.spacing(1, 6),
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly'
+    },
+    ul: {
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: 'inherit',
+        padding: 0,
+    },
+    subInfo: {
+        position: 'relative',
+        margin: theme.spacing(1, 5),
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        [theme.breakpoints.down('xs')]: {
+            display: 'none'
+        }
+    },
+    subTasks: {
+        position: 'absolute',
+        left: '50%',
+        transform: 'translateX(-50%)'
+    }
 }));
 
 function AssigneeListGeneration(props) {
@@ -84,19 +85,19 @@ function AssigneeListGeneration(props) {
     const [editSection, setEditSection] = React.useState(null)
     const open = Boolean(anchorEl);
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
 
-  const handleEdit = () => {
-    const editThis = getAssignment();
-    if (editThis) {
-      setEditSection(editThis);
-    } else {
-      setEditSection(null);
+    const handleEdit = () => {
+        const editThis = getAssignment()
+        if (editThis) {
+            setEditSection(editThis)
+        } else {
+            setEditSection(null)
+        }
+        setShouldEdit(!shouldEdit)
     }
-    setShouldEdit(!shouldEdit);
-  };
 
 
     const handleClose = (event) => {
@@ -115,8 +116,6 @@ function AssigneeListGeneration(props) {
             return undefined
         }
     }
-    setAnchorEl(null);
-  };
 
     const manageDate = (date) => {
         const currentDate = DateManager()
@@ -126,7 +125,10 @@ function AssigneeListGeneration(props) {
             return date
         }
     }
-  };
+
+    useEffect(() => {
+        manageDate()
+    }, [])
 
     return (
         <div className={classes.removeScrollbar}>
@@ -227,4 +229,4 @@ function AssigneeListGeneration(props) {
     );
 }
 
-export default AssigneeListGeneration;
+export default AssigneeListGeneration
