@@ -17,6 +17,8 @@ import SubTaskItem from '../SubTaskItem/SubTaskItem';
 import NewSubTask from '../NewSubTask/NewSubTask'
 import EditAssignment from '../EditAssignment/EditAssignment'
 import DateManager from '../DateManager/DateManager.js'
+import { UserContext } from "../../Contexts/UserContext";
+import { v4 as uuidv4 } from 'uuid';
 
 const useStyles = makeStyles((theme) => ({
     removeScrollbar: {
@@ -117,7 +119,9 @@ function AssigneeListGeneration(props) {
     }
 
     const manageDate = (date) => {
+       
         const currentDate = DateManager()
+
         if (date === currentDate) {
             return "Today"
         } else {
@@ -127,17 +131,19 @@ function AssigneeListGeneration(props) {
 
     useEffect(() => {
         manageDate()
-    })
+    }, [])
 
-    const returnName = (assignment) => {
-        const assignee = props.users.find(user => user._id === assignment.parentId)
 
-        return assignee.name
-    }
+    // const returnName = (assignment) => {
+    //     const assignee = props.users.find(user => user._id === assignment.parentId)
 
+    //     return assignee.name
+    // }
 
 
     return (
+        <UserContext.Consumer>
+        {user => (
         <div className={classes.removeScrollbar}>
             <List className={classes.root} subheader={<li />}>
                 {(props.assignments === null) ?
@@ -198,7 +204,7 @@ function AssigneeListGeneration(props) {
                                             </ListSubheader>
                                             <Box className={classes.subInfo}>
                                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                                    <Typography variant="overline">{`Assignee: ${returnName(assignment)}`}</Typography>
+                                                    {/* <Typography variant="overline">{`Assignee: ${returnName(assignment)}`}</Typography> */}
                                                     <Typography variant="overline">{`ID: ${assignment._id}`}</Typography>
                                                 </div>
                                                 {/* {(assignment.subtasks && assignment.subtasks.length > 0) ?
@@ -209,27 +215,30 @@ function AssigneeListGeneration(props) {
                                                         <Typography className={classes.subTasks} variant="overline">All out of subtasks!</Typography>
                                                         : <Typography className={classes.subTasks} variant="overline">Add some subtasks...</Typography>
                                                 } */}
-                                                <Typography variant="overline">{`Added: ${manageDate(assignment.date)}`}</Typography>
+                                                
+                                                <Typography variant="overline">{`Added: ${manageDate(assignment.assignmentDate.substring(0,10))}`}</Typography>
                                             </Box>
-
-                                            {
-                                                props.subtasks.map(item => (
-                                                    item.parentId === assignment._id ?
+                                           
+                                            { (props.subtasks !== null) ?
+                                                props.subtasks.map(subtask => (
+                                                    subtask.parentId === assignment._id ?
                                                         <SubTaskItem
-                                                            key={item._Id}
+                                                            key={uuidv4}
                                                             assignment={assignment._id}
-                                                            item={item}
-                                                            id={item._Id}
+                                                            item={subtask}
+                                                            id={subtask._Id}
+                                                            subtask={subtask}
                                                         // subTasksDel={props.subTasksDel}
                                                         // subTasksEdit={props.subTasksEdit}
                                                         />
                                                         : null
-                                                ))
-                                            }
+                                                )) : null
+                                            } 
 
 
                                             <NewSubTask
                                                 sectionId={assignment._id}
+                                                subtaskToDb={props.subtaskToDb}
                                             // subTasksSave={props.subTasksSave}
                                             />
 
@@ -242,6 +251,8 @@ function AssigneeListGeneration(props) {
                                 ))}
             </List>
         </div>
+        )}
+    </UserContext.Consumer>
     );
 }
 

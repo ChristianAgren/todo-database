@@ -32,8 +32,8 @@ function SubTaskItem(props) {
     const classes = useStyles()
     const [shouldEdit, setShouldEdit] = React.useState(false)
     const [inputValues, setInputValues] = React.useState({
-        desc: props.item.desc,
-        status: props.item.status
+        desc: props.subtask.desc,
+        status: props.subtask.status
     })
 
     const handleInputChange = (event, anchor) => {
@@ -99,7 +99,7 @@ function SubTaskItem(props) {
                             component="h4"
                             className={classes.inline}
                         >
-                            {props.item.desc}
+                            {props.subtask.desc}
                         </Typography>
                     }
                     secondary={
