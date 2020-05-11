@@ -94,7 +94,7 @@ function Layout() {
             .then(getAssignments)
     }
 
-    async function  subtaskToDb(data) {
+    async function subtaskToDb(data) {
         
         fetch(apiURL + "subtasks", {
             method: "POST",
@@ -107,6 +107,50 @@ function Layout() {
             .then((data) => console.log(data))
             .then(getSubtasks)
     }
+
+    async function deleteAssignment(data, subtasks) {
+        console.log("subtasks", subtasks);
+        
+            
+            subtasks.map( subtask => {if (subtask.parentId === data )  
+                    fetch(apiURL + "subtasks/" + subtask._id, {
+                        method: "DELETE",
+                    }
+            )})
+        
+        fetch(apiURL + "assignments/" + data, {
+            method: "DELETE",
+        })
+            .then((response) => response.json())
+            .then((data) => console.log(data))
+            .then(getAssignments)
+            .then(getSubtasks)
+    }
+
+    // async function deleteSubtasks(subtasksToRemove) {
+    //     console.log(subtasksToRemove);
+        
+    //     fetch(apiURL + "subtasks/" + subtasksToRemove, {
+    //         method: "DELETE",
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => console.log(data))
+    // }
+
+     // //Delete assignment
+    // async function deleteAssignment(url, target) {
+    //     const response = await fetch(url + target, {
+    //         method: 'DELETE',
+    //     });
+    //     return response.json();
+    // }
+
+    // const deleteAssignmentFromJson = (target) => {
+    //     deleteAssignment(apiURL, target)
+    //         .then((data) => {
+    //             setAssignments(data)
+    //         });
+    // }
 
     //Get assignments
     // async function getAssignment(url, target) {
@@ -167,20 +211,7 @@ function Layout() {
     //         });
     // }
 
-    // //Delete assignment
-    // async function deleteAssignment(url, target) {
-    //     const response = await fetch(url + target, {
-    //         method: 'DELETE',
-    //     });
-    //     return response.json();
-    // }
-
-    // const deleteAssignmentFromJson = (target) => {
-    //     deleteAssignment(apiURL, target)
-    //         .then((data) => {
-    //             setAssignments(data)
-    //         });
-    // }
+   
 
     // //Delete subtask from assignment
     // async function deleteSubTask(url, target, subTarget) {

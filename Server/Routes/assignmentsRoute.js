@@ -12,6 +12,8 @@ router.get('/', async (req, res) => {
     }
 })
 
+
+
 // Skapa en getUsers för att hitta rätt user och för att få med det i respons så vi kan hitta den usern som är inloggad i res.body.id
 //Creating one
 
@@ -58,8 +60,14 @@ router.delete('/:id', getAssignment, async (req, res) => {
 // Find specific assignment
 async function getAssignment(req, res, next) {
     let assignment
+    console.log(req.params.id);
+    
     try {
-        assignment = await Assignment.findById(req.params.id)
+        if(req.params.id) {
+            assignment = await Assignment.findById(req.params.id)
+        } else {
+            assignment = await Assignment.findById(req.body.id)
+        }
         if(assignment == null) {
             return res.status(404).json({ message: 'Cannot find assignment' })
         }
