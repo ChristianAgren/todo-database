@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import EditUserModal from "./EditUserModal/EditUserModal"
 
 import { Container, Typography, Paper, Grid, List, ListItem, ListItemText, ListItemIcon, IconButton } from '@material-ui/core'
@@ -69,7 +69,45 @@ const useStyles = makeStyles((theme) => ({
 function UserManager() {
     const classes = useStyles()
     const [assignments, setAssignments] = React.useState(null)
-    const apiURL = 'http://localhost:3000/api/assignments/'
+    const apiURL = 'http://localhost:3000/api/users/'
+    const [users, setUsers] = React.useState([])
+
+
+    // async function getUsers() {
+    //     fetch(apiURL, {
+    //         method: "GET",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //     })
+    //         .then(response => {
+    //             console.log(response)
+
+    //             return response.json()
+    //         }
+    //         )
+    //         .then(data => {
+    //             console.log(data);
+
+    //             setUsers(data)
+    //         })
+    // }
+
+    // useEffect( () => getUsers())
+    useEffect(async () => {
+        const result = await
+            fetch(apiURL, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+                .then(response => response.json())
+                .then(data => { return data })
+        console.log(result);
+        setUsers(result)
+
+    }, [])
 
     return (
         // <UserContext.Consumer>
@@ -93,7 +131,7 @@ function UserManager() {
                         primary='ID'
                     />
                 </ListItem>
-                {Users.users.map(user =>
+                {users.map(user =>
                     <ListItem className={classes.user} key={user._id}>
                         <ListItemText
                             primary={user.name}
