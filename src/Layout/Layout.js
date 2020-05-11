@@ -14,6 +14,7 @@ import { UserContext } from '../Contexts/UserContext';
 import Users from "../database/Users.json"
 import Assignments from "../database/Assignments.json"
 import Subtasks from "../database/Subtasks.json"
+import { findAllByAltText } from '@testing-library/react';
 // - - - - - - 
 
 const useStyles = makeStyles((theme) => ({
@@ -105,8 +106,15 @@ function Layout() {
             .then(getSubtasks)
     }
 
-    async function deleteAssignment(data) {
-        console.log(data);
+    async function deleteAssignment(data, subtasks) {
+        console.log("subtasks", subtasks);
+        
+            
+            subtasks.map( subtask => {if (subtask.parentId === data )  
+                    fetch(apiURL + "subtasks/" + subtask._id, {
+                        method: "DELETE",
+                    }
+            )})
         
         fetch(apiURL + "assignments/" + data, {
             method: "DELETE",
@@ -114,7 +122,18 @@ function Layout() {
             .then((response) => response.json())
             .then((data) => console.log(data))
             .then(getAssignments)
+            .then(getSubtasks)
     }
+
+    // async function deleteSubtasks(subtasksToRemove) {
+    //     console.log(subtasksToRemove);
+        
+    //     fetch(apiURL + "subtasks/" + subtasksToRemove, {
+    //         method: "DELETE",
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => console.log(data))
+    // }
 
      // //Delete assignment
     // async function deleteAssignment(url, target) {
