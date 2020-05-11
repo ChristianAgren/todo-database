@@ -18,7 +18,7 @@ class UserContextProvider extends Component {
             // registerUser: this.registerUser,
             loginUser: this.loginUser,
             logoutUser: this.logoutUser,
-            
+
             assignmentToDb: this.assignmentToDb
         }
 
@@ -43,10 +43,14 @@ class UserContextProvider extends Component {
                 admin: false
             }),
         })
-            .then((response) => response.json())
+            .then((response) => {
+                console.log(`Logged in: ${response.headers.get('userLoggedIn')}`);
+                return response.json()
+            })
             .then((data) => { return data })
         return { ...newUser, password: user.password }
     }
+
 
     loginUser = async (user, closeModal) => {
         //Create a session
@@ -60,10 +64,13 @@ class UserContextProvider extends Component {
                 password: user.password
             }),
         })
-            .then((response) => response.json())
+            .then((response) => {
+                console.log(`Logged in: ${response.headers.get('userLoggedIn')}`);
+                return response.json()
+            })
             .then((data) => {
                 console.log(data);
-                
+
                 if (data.err) {
                     console.log(data.err);
                 } else {
@@ -71,7 +78,11 @@ class UserContextProvider extends Component {
                         loggedIn: true,
                         admin: data.admin,
                         name: data.name
-                    }, () => closeModal())
+                    }, () => {
+                        if (closeModal) {
+                            closeModal()
+                        }
+                    })
                 }
             })
     }
@@ -82,7 +93,10 @@ class UserContextProvider extends Component {
         await fetch(logoutURL, {
             method: "DELETE",
         })
-            .then((response) => response.json())
+            .then((response) => {
+                console.log(`Logged in: ${response.headers.get('userLoggedIn')}`);
+                return response.json()
+            })
             .then((data) => {
                 this.setState({
                     loggedIn: false,

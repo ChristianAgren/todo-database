@@ -8,21 +8,22 @@ POST http://localhost:3000/api/users/
 Content-Type: application/json
 
 {
-    "name": "Christian",
+    "name": "Filip",
     "password": "123",
-    "admin": true
+    "admin": "false"
 }
 
 ###
 
-PUT http://localhost:3000/api/users/5eb2c7059c56a03ac8fc525a
+PUT http://localhost:3000/api/users/Filip
 Content-Type: application/json
 
 {
     "name": "Fredrik",
-    "password": "123",
-    "admin": true
+    "password": "1234",
+    "admin": "true"
 }
 
 ###
-DELETE http://localhost:3000/api/users/5eb53b997eb17632a4fe667c
+DELETE http://localhost:3000/api/users/Fredrik
+DELETE http://localhost:3000/api/users/Fredrik
