@@ -2,9 +2,39 @@
     "users": [
         {
             "_id": "user1",
+            "admin": true,
             "name": "Filip",
-            "password": "trollkaka88",
-            "role": "admin"
+            "password": "trollkaka88"
+        },
+        {
+            "_id": "user2",
+            "admin": false,
+            "name": "Fredrik",
+            "password": "123admon"
+        },
+        {
+            "_id": "user3",
+            "admin": false,
+            "name": "Christian",
+            "password": "jeoperdyXX"
+        },
+        {
+            "_id": "user4",
+            "admin": false,
+            "name": "David",
+            "password": "123"
+        },
+        {
+            "_id": "user5",
+            "admin": false,
+            "name": "Victor",
+            "password": "321"
+        },
+        {
+            "_id": "user6",
+            "admin": false,
+            "name": "SATAN",
+            "password": "666"
         }
     ]
 }

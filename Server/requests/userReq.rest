@@ -26,3 +26,4 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:3000/api/users/Fredrik
+DELETE http://localhost:3000/api/users/Fredrik
