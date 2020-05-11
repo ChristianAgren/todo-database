@@ -18,7 +18,7 @@ import NewSubTask from '../NewSubTask/NewSubTask'
 import EditAssignment from '../EditAssignment/EditAssignment'
 import DateManager from '../DateManager/DateManager.js'
 import { UserContext } from "../../Contexts/UserContext";
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 
 const useStyles = makeStyles((theme) => ({
     removeScrollbar: {
@@ -102,7 +102,10 @@ function AssigneeListGeneration(props) {
     }
 
     const handleClose = (event) => {
+        console.log(anchorEl.id);
+        
         if (event.currentTarget.id === 'delete') {
+            props.deleteAssignment(anchorEl.id)
             // props.removeAssignment(anchorEl.id)
         } else if (event.currentTarget.id === 'edit') {
             handleEdit()
@@ -223,7 +226,7 @@ function AssigneeListGeneration(props) {
                                                 props.subtasks.map(subtask => (
                                                     subtask.parentId === assignment._id ?
                                                         <SubTaskItem
-                                                            key={uuidv4}
+                                                            key={subtask._id}
                                                             assignment={assignment._id}
                                                             item={subtask}
                                                             id={subtask._Id}

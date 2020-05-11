@@ -91,7 +91,7 @@ function Layout() {
             .then(getAssignments)
     }
 
-    async function  subtaskToDb(data) {
+    async function subtaskToDb(data) {
         
         fetch(apiURL + "subtasks", {
             method: "POST",
@@ -104,6 +104,32 @@ function Layout() {
             .then((data) => console.log(data))
             .then(getSubtasks)
     }
+
+    async function deleteAssignment(data) {
+        console.log(data);
+        
+        fetch(apiURL + "assignments/" + data, {
+            method: "DELETE",
+        })
+            .then((response) => response.json())
+            .then((data) => console.log(data))
+            .then(getAssignments)
+    }
+
+     // //Delete assignment
+    // async function deleteAssignment(url, target) {
+    //     const response = await fetch(url + target, {
+    //         method: 'DELETE',
+    //     });
+    //     return response.json();
+    // }
+
+    // const deleteAssignmentFromJson = (target) => {
+    //     deleteAssignment(apiURL, target)
+    //         .then((data) => {
+    //             setAssignments(data)
+    //         });
+    // }
 
     //Get assignments
     // async function getAssignment(url, target) {
@@ -164,20 +190,7 @@ function Layout() {
     //         });
     // }
 
-    // //Delete assignment
-    // async function deleteAssignment(url, target) {
-    //     const response = await fetch(url + target, {
-    //         method: 'DELETE',
-    //     });
-    //     return response.json();
-    // }
-
-    // const deleteAssignmentFromJson = (target) => {
-    //     deleteAssignment(apiURL, target)
-    //         .then((data) => {
-    //             setAssignments(data)
-    //         });
-    // }
+   
 
     // //Delete subtask from assignment
     // async function deleteSubTask(url, target, subTarget) {
@@ -282,6 +295,7 @@ function Layout() {
                                                 subtasks={subtasks}
                                                 users={Users.users}
                                                 subtaskToDb={subtaskToDb}
+                                                deleteAssignment={deleteAssignment}
                                             // editAssignment={handleEditSave}
                                             // removeAssignment={deleteAssignmentFromJson}
                                             // subTasksSave={handleSubTaskSave}
