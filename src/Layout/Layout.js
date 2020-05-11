@@ -35,15 +35,16 @@ const useStyles = makeStyles((theme) => ({
 function Layout() {
     const classes = useStyles()
     const [assignments, setAssignments] = React.useState(null)
-    const apiURL = 'http://localhost:3000/api/assignments/'
+    const [subtasks, setSubtasks] = React.useState(null)
+    const apiURL = 'http://localhost:3000/api/'
 
-    async function getAssignments(data)  {
-        fetch(apiURL, {
+    async function getAssignments()  {
+        fetch(apiURL + "assignments", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(data)
+            // body: JSON.stringify(data)
         })
             .then((response) => response.json())
             .then((data) => {
@@ -52,11 +53,57 @@ function Layout() {
                     });
     }
 
-    getAssignments()
+    
 
-    // useEffect(() => {
-    //     getAssignmentsFromJson()
-    // }, [])
+    async function getSubtasks()  {
+        fetch(apiURL + "subtasks", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            // body: JSON.stringify(data)
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                        // console.log(data);
+                        setSubtasks(data)
+                    });
+    }
+
+    
+    useEffect(() => {
+        getAssignments()
+        getSubtasks()
+    }, [])
+
+
+    async function assignmentToDb(data) {
+
+        fetch(apiURL + "assignments", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+            .then((response) => response.json())
+            .then((data) => console.log(data))
+            .then(getAssignments)
+    }
+
+    async function  subtaskToDb(data) {
+        
+        fetch(apiURL + "subtasks", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+            .then((response) => response.json())
+            .then((data) => console.log(data))
+            .then(getSubtasks)
+    }
 
     //Get assignments
     // async function getAssignment(url, target) {
@@ -96,12 +143,7 @@ function Layout() {
     //     return response.json();
     // }
 
-    // const handleSaveClick = (inputValues) => {
-    //     postAssignment(apiURL, inputValues)
-    //         .then((data) => {
-    //             setAssignments(data)
-    //         });
-    // }
+       
 
     // //Post subtask to assignment
     // async function postSubTask(url, target, data) {
@@ -213,6 +255,7 @@ function Layout() {
                                     <Paper className={classes.paper}>New assignment
                                     <AddSection
                                         name={user.name}
+                                        assignmentToDb={assignmentToDb}
                                         // handleSaveClick={handleSaveClick} 
                                         />
                                     </Paper>
@@ -236,8 +279,9 @@ function Layout() {
                                             }
                                             <AssigneeListGeneration
                                                 assignments={assignments}
-                                                subtasks={Subtasks.subtasks}
+                                                subtasks={subtasks}
                                                 users={Users.users}
+                                                subtaskToDb={subtaskToDb}
                                             // editAssignment={handleEditSave}
                                             // removeAssignment={deleteAssignmentFromJson}
                                             // subTasksSave={handleSubTaskSave}
