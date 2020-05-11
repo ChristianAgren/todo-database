@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
 })
 
 // Change whole object 
-router.put('/:id', getAssignments, async (req, res) => {
+router.put('/:id', getAssignment, async (req, res) => {
         res.assignment.parentId = req.body.parentId
         res.assignment.title = req.body.title
     try {
@@ -46,7 +46,7 @@ router.put('/:id', getAssignments, async (req, res) => {
 })
 
 //Deleting One
-router.delete('/:id', getAssignments, async (req, res) => {
+router.delete('/:id', getAssignment, async (req, res) => {
     try {
         await res.assignment.remove()
         res.json({ message: 'Deleted Assignment'})
@@ -56,7 +56,7 @@ router.delete('/:id', getAssignments, async (req, res) => {
 })
 
 // Find specific assignment
-async function getAssignments(req, res, next) {
+async function getAssignment(req, res, next) {
     let assignment
     try {
         assignment = await Assignment.findById(req.params.id)
