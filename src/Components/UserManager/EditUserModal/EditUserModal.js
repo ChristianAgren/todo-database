@@ -1,7 +1,6 @@
 import React from "react";
 import {
     Button,
-    FormControl,
     FormControlLabel,
     Switch,
     Grid,
@@ -23,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
         left: "50%",
         transform: "translateX(-50%) translateY(-50%)",
 
-        width: '40%',
-        minWidth: '20rem',
+        width: '100%',
+        maxWidth: '40rem',
         height: 'auto',
 
         backgroundColor: theme.palette.background.paper,
@@ -45,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
     editUserContainer: {
         position: "relative",
+        width:"100%",
 
         '& > *': {
             display: "flex",
@@ -64,20 +64,19 @@ const useStyles = makeStyles((theme) => ({
     },
 
     btnWrapper: {
-
         display: "flex",
         flexDirection: "row",
-        // margin: theme.spacing(3),
+        justifyContent:"center",
+
         margin: "1rem auto .5rem",
-        width: '100%',
+        width: '70%',
 
         '& > *': {
-            // margin: theme.spacing(1)
             margin: ".2rem"
         },
 
         '& .MuiButton-outlinedPrimary': {
-            width: '100%'
+            width: '50%'
         }
     }
 }));
@@ -87,9 +86,9 @@ function EditUserModal() {
 
 
     const [open, setOpen] = React.useState(false);
-    const [admin, setAdmin] = React.useState(true)
 
     const handleOpen = () => {
+
         setOpen(true);
     };
 
