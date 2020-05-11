@@ -106,6 +106,11 @@ function LoginModal() {
         passwordConfirmation: "",
     });
 
+    const [inputError, setInputError] = React.useState({
+        error: false,
+        errMsg: ""
+    })
+
 
     const changeLoginInput = (event, anchor) => {
         setLoginInput({
@@ -124,11 +129,16 @@ function LoginModal() {
         setOpen(false);
 
         setView("login");
+        clearPasswordField()
+        clearInputErrors()
+    };
+
+    const clearPasswordField = () => {
         setLoginInput({
             ...loginInput,
-            password: "",
-        });
-    };
+            password: ""
+        })
+    }
 
     const handleClickMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -138,12 +148,27 @@ function LoginModal() {
         setAnchorEl(null);
     };
 
+    const handleSetError = (err) => {
+        setInputError({
+            error: true,
+            errMsg: "Username or password was incorrect"
+        })
+        clearPasswordField()
+    }
+
+    const clearInputErrors = () => {
+        setInputError({
+            error: false,
+            errMsg: ""
+        })
+    }
+
     const handlePrimaryClick = (user) => {
         if (view === 'login') {
-            user.loginUser({ name: loginInput.username, password: loginInput.password }, handleCloseModal)
+            user.loginUser({ name: loginInput.username, password: loginInput.password }, handleCloseModal, handleSetError)
         } else {
             if (loginInput.password === loginInput.passwordConfirmation) {
-                user.clientRegisterUser({ name: loginInput.username, password: loginInput.password })
+                user.clientRegisterUser({ name: loginInput.username, password: loginInput.password }, handleCloseModal)
                 setLoginInput({
                     username: "",
                     password: "",
@@ -167,8 +192,10 @@ function LoginModal() {
     const handleSecondaryClick = () => {
         if (view === 'login') {
             setView('register')
+            clearInputErrors()
         } else {
             setView('login')
+            clearInputErrors()
         }
     }
 
@@ -226,15 +253,19 @@ function LoginModal() {
                             <FormControl fullWidth>
                                 <TextField
                                     id="outlined-basic"
+                                    error={inputError.error}
+                                    helperText={inputError.errMsg}
                                     label="Username"
                                     variant="outlined"
                                     value={loginInput.username}
                                     onChange={(e) => changeLoginInput(e, "username")}
-                                />
+                                    />
                             </FormControl>
                             <FormControl fullWidth>
                                 <TextField
                                     id="outlined-basic"
+                                    error={inputError.error}
+                                    helperText={inputError.errMsg}
                                     label="Password"
                                     variant="outlined"
                                     value={loginInput.password}
