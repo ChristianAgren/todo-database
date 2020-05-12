@@ -43,13 +43,11 @@ const useStyles = makeStyles((theme) => ({
 
 function EditAssignment(props) {
     const classes = useStyles()
-    const [inputValues, setInputValues] = React.useState({
-        desc: props.section.desc,
-        name: props.section.name
-    })
+    const [inputValues, setInputValues] = React.useState(props.assignment)
 
     const shouldSaveEdit = () => {
-        props.handleEditSave(props.section.id, inputValues)
+        console.log(props.assignment)
+        props.editAssignment(props.assignment._id, inputValues)
         props.handleEditClose()
     }
 
@@ -75,24 +73,24 @@ function EditAssignment(props) {
         >
             <Fade in={props.open}>
                 <div className={classes.paper}>
-                    <h2 id="transition-modal-title">{`Edit: ${props.section.desc}`}</h2>
-                    <p id="transition-modal-id">{`ID: ${props.section.id}`}</p>
-                    <p id="transition-modal-assignee">{`Assigned to: ${props.section.name}`}</p>
-                    {(props.section.subtasks && props.section.subtasks.length > 0) ?
+                    <h2 id="transition-modal-title">{`Edit: ${props.assignment.title}`}</h2>
+                    <p id="transition-modal-id">{`ID: ${props.assignment._id}`}</p>
+                    {/* <p id="transition-modal-assignee">{`Assigned to: ${props.section.name}`}</p> */}
+                    {/* {(props.section.subtasks && props.section.subtasks.length > 0) ?
                         <p id="transition-modal-subtasks">{`There are ${props.section.subtasks.length} subtasks`}</p>
                         : null
-                    }
+                    } */}
                     <FormControl fullWidth>
                         <TextField 
-                            onChange={(event) => handleInputChange(event, 'desc')}
+                            onChange={(event) => handleInputChange(event, 'title')}
                             style={{ margin: '1rem 0' }} 
-                            value={inputValues.desc} 
+                            value={inputValues.title} 
                             />
-                        <TextField 
+                        {/* <TextField 
                             onChange={(event) => handleInputChange(event, 'name')}
                             style={{ margin: '1rem 0' }} 
                             value={inputValues.name} 
-                        />
+                        /> */}
                     </FormControl>
                     <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                         <Button 
@@ -107,7 +105,7 @@ function EditAssignment(props) {
                             onClick={() => shouldSaveEdit()}
                             color="default" 
                             className={classes.addAssignmentBtn}
-                            disabled={(inputValues.name.length < 2) || (inputValues.desc.length < 4)}
+                            disabled={inputValues.title.length < 3}
                         >
                             <SaveIcon fontSize="small" />
                             <Typography variant="overline">Save</Typography>

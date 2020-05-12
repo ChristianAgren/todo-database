@@ -9,6 +9,7 @@ import {
     Menu,
     MenuItem,
     Typography,
+    useScrollTrigger,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SadSmiley from '../../Assets/sadsmiley.svg'
@@ -17,6 +18,7 @@ import SubTaskItem from '../SubTaskItem/SubTaskItem';
 import NewSubTask from '../NewSubTask/NewSubTask'
 import EditAssignment from '../EditAssignment/EditAssignment'
 import DateManager from '../DateManager/DateManager.js'
+const apiURL = "http://localhost:3000/api/";
 
 const useStyles = makeStyles((theme) => ({
     removeScrollbar: {
@@ -48,6 +50,23 @@ const useStyles = makeStyles((theme) => ({
             right: '1rem',
             color: 'rgba(0, 0, 0, 0.26)'
         }
+    },
+    userName: {
+        fontSize: '0.9rem',
+        position: 'absolute',
+        left: '1rem',
+        [theme.breakpoints.down(510)]: {
+            display: "none",
+        },
+
+    },
+    userNameMobile: {
+        fontSize: '0.9rem',
+        position: 'absolute',
+        left: '1rem',
+        [theme.breakpoints.up(510)]: {
+            display: "none",
+        },
     },
     editAssignment: {
         margin: theme.spacing(1, 6),
@@ -130,6 +149,20 @@ function AssigneeListGeneration(props) {
         manageDate()
     }, [])
 
+    const findAssignee = (assignment) => {
+        let userName;
+        console.log(props.users);
+        if(props.users !== null) {
+            props.users.map(user => {
+                if(assignment.parentId === user._id) {
+                    userName = user.name
+                    
+                }
+            })
+        }  
+        return userName            
+    }
+
     return (
         <div className={classes.removeScrollbar}>
             <List className={classes.root} subheader={<li />}>
@@ -151,7 +184,10 @@ function AssigneeListGeneration(props) {
                                     <li key={`assignment-${assignment._id}`} className={classes.listSection}>
                                         <ul className={classes.ul}>
                                             <ListSubheader color="primary" className={classes.listTitle}>
+                                                <span className={classes.userName}>{`Assignee: ${findAssignee(assignment)}`}</span>
+                                                <span className={classes.userNameMobile}>{`${findAssignee(assignment)}`}</span>
                                                 <span>{`${assignment.title}`}</span>
+                                                
                                                 <IconButton
                                                     id={assignment._id}
                                                     aria-controls="menu"
@@ -181,9 +217,12 @@ function AssigneeListGeneration(props) {
                                                         (shouldEdit) ?
                                                             <EditAssignment
                                                                 handleEditClose={handleEdit}
-                                                                // handleEditSave={props.editAssignment} 
+                                                                editAssignment={props.editAssignment} 
                                                                 open={shouldEdit}
-                                                                assignment={editSection} />
+                                                                editSection={editSection}
+                                                                assignment={assignment}
+                                                                
+                                                                />
                                                             : null
                                                     }
                                                     <MenuItem id="delete" onClick={(event) => handleClose(event)}>Delete</MenuItem>
@@ -201,9 +240,11 @@ function AssigneeListGeneration(props) {
                                                         <SubTaskItem
                                                             key={subtask._id}
                                                             assignment={assignment._id}
-                                                            item={subtask}
+                                                            // item={subtask}
                                                             id={subtask._Id}
                                                             subtask={subtask}
+                                                            deleteSubtasks={props.deleteSubtasks}
+                                                            editSubtask={props.editSubtask}
                                                         // subTasksDel={props.subTasksDel}
                                                         // subTasksEdit={props.subTasksEdit}
                                                         />

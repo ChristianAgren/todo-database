@@ -29,7 +29,23 @@ function Main() {
   const classes = useStyles();
   const [assignments, setAssignments] = React.useState(null);
   const [subtasks, setSubtasks] = React.useState(null);
+  const [users, setUsers] = React.useState(null);
   const apiURL = "http://localhost:3000/api/";
+
+
+  async function getUsers() {
+    fetch(apiURL + "users", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setUsers(data);
+        });
+  }
   async function getAssignments() {
     fetch(apiURL + "assignments", {
       method: "GET",
@@ -61,6 +77,7 @@ function Main() {
   useEffect(() => {
     getAssignments();
     getSubtasks();
+    getUsers();
   }, []);
   
   async function assignmentToDb(data) {
@@ -103,6 +120,65 @@ function Main() {
       .then(getAssignments)
       .then(getSubtasks);
   }
+
+  async function deleteSubtasks(subtask) {
+        console.log(subtask);
+        fetch(apiURL + "subtasks/" + subtask._id, {
+            method: "DELETE",
+        })
+            .then((response) => response.json())
+            .then((data) => console.log(data))
+            .then(getSubtasks);
+    }
+
+    async function editSubtask(subtask, data) {
+      console.log(data);
+      
+      fetch(apiURL + "subtasks/" + subtask._id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .then(getSubtasks)
+    }
+
+    async function editAssignment(assignment, data) {
+      console.log(assignment);
+      
+      fetch(apiURL + "assignments/" + assignment, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .then(getAssignments)
+    }
+
+  //   async function editSubTask(url, target, subTarget, data) {
+  //     const response = await fetch(`${url + target}/${subTarget}`, {
+  //         method: 'PUT',
+  //         headers: {
+  //             'Content-Type': 'application/json'
+  //         },
+  //         body: JSON.stringify(data)
+  //     })
+  //     return response.json();
+  // }
+  // const handleEditSubtaskSave = (target, subTarget, data) => {
+  //     // console.log(target, subTarget, data);
+  //     editSubTask(apiURL, target, subTarget, data)
+  //         .then((data) => {
+  //             setAssignments(data)
+  //         })
+  // }
+
   // async function deleteSubtasks(subtasksToRemove) {
   //     console.log(subtasksToRemove);
   //     fetch(apiURL + "subtasks/" + subtasksToRemove, {
@@ -263,10 +339,14 @@ function Main() {
                         : null}
                       <AssigneeListGeneration
                         assignments={assignments}
+                        editAssignment={editAssignment}
+                        deleteAssignment={deleteAssignment}
+                        users={users}
                         subtasks={subtasks}
                         // users={Users.users}
                         subtaskToDb={subtaskToDb}
-                        deleteAssignment={deleteAssignment}
+                        editSubtask={editSubtask}
+                        deleteSubtasks={deleteSubtasks}
                       />
                     </Paper>
                   </Grid>
