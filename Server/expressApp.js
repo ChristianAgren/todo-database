@@ -24,10 +24,10 @@ db.once('open', () => console.log('Connected to Database'))
 const usersRouter = require('./Routes/usersRoute')
 const assignmentsRouter = require('./Routes/assignmentsRoute')
 const subtasksRouter = require('./Routes/subtasksRoute')
+const sessionRouter = require('./Routes/sessionRouter')
 
 // Middleware
-const getUser = require('./Middlewares/getUser.js')
-const checkLoginSession = require('./Middlewares/checkLoginSession')
+// const checkLoginSession = require('./Middlewares/checkLoginSession')
 
 // Express use setup, url we use for api endpoints
 app.use(express.json());
@@ -39,43 +39,16 @@ app.use(cookieSession({
     httpOnly: true,
     secure: false,
 }))
-app.use(checkLoginSession)
+// app.use(checkLoginSession)
 app.use('/api/users', usersRouter)
 app.use('/api/assignments', assignmentsRouter)
 app.use('/api/subtasks', subtasksRouter)
+app.use('/session', sessionRouter)
 
 // If '/', send home
 app.get('/', (req, res) => {
     return res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
-
-// If post '/login', process login attempt
-app.post('/login', getUser, async (req, res) => {
-    if (!res.user) return res.status(401).json({ err: 'Wrong username or password' })
-    res.user.comparePassword(req.body.password, async function (err, isMatch) {
-        if (err) throw err;
-        if (!isMatch) return res.status(401).json({ err: 'Wrong username or password' })
-
-        // Create a session
-        req.session.username = res.user.name
-        req.session.id = res.user._id
-        req.session.admin = res.user.admin
-        // We can now check role with if (req.session.role === 'admin') in requests
-
-        console.log('Created client session');
-        
-
-        // Returns successful login
-        res.json({name: res.user.name, admin: res.user.admin})
-    })
-})
-
-app.delete('/logout', (req, res) => {
-    req.session = null
-    console.log('Destroyed client session');
-    
-    res.json('Logged out!')
-})
 
 app.listen(port, () => console.log('Server has started'))
 
