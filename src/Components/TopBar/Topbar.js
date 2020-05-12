@@ -30,13 +30,13 @@ function Topbar(props) {
                 <div className={classes.root}>
                     <AppBar position="static">
                         <Toolbar>
-                            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={() => props.changeView('manage users')} >
+                            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                                 <MenuIcon />
                             </IconButton>
                             <Typography variant="h6" className={classes.title}>
-                                {user.name}
+                                Taskmaster
                             </Typography>
-                            <LoginModal />
+                            <LoginModal changeView={props.changeView} />
                         </Toolbar>
                     </AppBar>
                 </div>

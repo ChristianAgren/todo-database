@@ -41,8 +41,6 @@ router.post("/", async (req, res) => {
 
 // Change whole object
 router.put("/:name", getUser, async (req, res) => {
-  console.log(res.user);
-
   if (req.body.password === "") {
     req.body.password = res.user.password;
   }
@@ -58,6 +56,10 @@ router.put("/:name", getUser, async (req, res) => {
 
     try {
       const updatedUser = await res.user.save();
+      if (res.user._id == req.session.id) {
+        req.session.admin = req.body.admin
+        req.session.username = req.body.name
+      }
       res.json(updatedUser);
     } catch (err) {
       res.status(400);

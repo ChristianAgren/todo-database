@@ -14,12 +14,24 @@ class UserContextProvider extends Component {
             loggedIn: false,
             admin: false,
             name: "",
+            getUsers: this.getUsers,
+            setUserInState: this.setUserInState,
             clientRegisterUser: this.clientRegisterUser,
-            // registerUser: this.registerUser,
             loginUser: this.loginUser,
             logoutUser: this.logoutUser,
         }
 
+    }
+
+    getUsers = (setUsers) => {
+        fetch(`${apiURL}users`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => setUsers(data));
     }
 
     clientRegisterUser = async (user, closeModal, cbErr) => {
@@ -97,7 +109,6 @@ class UserContextProvider extends Component {
     }
 
     logoutUser = async () => {
-
         // destroy session
         await fetch(`${sessionURL}logout`, {
             method: "DELETE",

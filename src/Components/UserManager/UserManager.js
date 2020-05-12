@@ -4,16 +4,12 @@ import EditUserModal from "./EditUserModal/EditUserModal";
 import {
   Container,
   Typography,
-  Paper,
-  Grid,
   List,
   ListItem,
   ListItemText,
   ListItemIcon,
-  IconButton,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { UserContext } from "../../Contexts/UserContext";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -90,31 +86,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function UserManager() {
+function UserManager(props) {
   const classes = useStyles();
-  const apiURL = "http://localhost:3000/api/users/";
   const [users, setUsers] = React.useState([]);
 
-  function getUsers() {
-    fetch(apiURL, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        console.log(response);
-
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-
-        setUsers(data);
-      });
-  }
-
-  useEffect(() => getUsers(), []);
+  useEffect(() => props.user.getUsers(setUsers), []);
 
   const updateUsersInState = (user, newUser) => {
     const state = [...users];
@@ -123,48 +99,50 @@ function UserManager() {
     if (newUser) state.splice(userIndex, 1, newUser);
     if (!newUser) state.splice(userIndex, 1);
 
-    console.log(state);
-    console.log(userIndex);
-
     setUsers(state);
   };
 
   return (
-    <Container maxWidth="md" className={classes.mainContainer}>
-      <Typography variant="h4" className={classes.header}>
-        Manage users
-      </Typography>
+    // <UserContext.Consumer>
+    //   {user => (
+        <Container maxWidth="md" className={classes.mainContainer}>
+          <Typography variant="h4" className={classes.header}>
+            Manage users
+          </Typography>
 
-      <List dense className={classes.userList}>
-        <ListItem className={classes.user}>
-          <ListItemText primary="name" />
-          <ListItemText primary="role" />
-          <ListItemText primary="ID" />
-        </ListItem>
-        {users.length === 0 ? (
-          <ListItem className={classes.user}>
-            <Typography variant="h6" className={classes.loading}>
-              Users loading...
-            </Typography>
-          </ListItem>
-        ) : (
-          users.map((user) => (
-            <ListItem className={classes.user} key={user._id}>
-              <ListItemText primary={user.name} />
-              <ListItemText primary={user.admin ? "admin" : "user"} />
-              <ListItemText primary={user._id} />
-
-              <ListItemIcon className={classes.editBtn}>
-                <EditUserModal
-                  name={user.name}
-                  updateUsers={updateUsersInState}
-                />
-              </ListItemIcon>
+          <List dense className={classes.userList}>
+            <ListItem className={classes.user}>
+              <ListItemText primary="name" />
+              <ListItemText primary="role" />
+              <ListItemText primary="ID" />
             </ListItem>
-          ))
-        )}
-      </List>
-    </Container>
+            {users.length === 0 ? (
+              <ListItem className={classes.user}>
+                <Typography variant="h6" className={classes.loading}>
+                  Users loading...
+            </Typography>
+              </ListItem>
+            ) : (
+                users.map((user) => (
+                  <ListItem className={classes.user} key={user._id}>
+                    <ListItemText primary={user.name} />
+                    <ListItemText primary={user.admin ? "admin" : "user"} />
+                    <ListItemText primary={user._id} />
+
+                    <ListItemIcon className={classes.editBtn}>
+                      <EditUserModal
+                        name={user.name}
+                        updateUsers={updateUsersInState}
+                        userContext={props.user}
+                      />
+                    </ListItemIcon>
+                  </ListItem>
+                ))
+              )}
+          </List>
+        </Container>
+    //   )}
+    // </UserContext.Consumer>
   );
 }
 
