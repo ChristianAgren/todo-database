@@ -31,9 +31,11 @@ router.post('/', async (req, res) => {
 
 // Change whole object 
 router.put('/:id', getSubtask, async (req, res) => {
-        res.subtask.parentId = req.body.parentId
         res.subtask.desc = req.body.desc
         res.subtask.status = req.body.status
+        if (req.body.parentId) {
+            res.subtask.parentId = req.body.parentId
+        }
     try {
         const updatedSubtask = await res.subtask.save()
         res.json(updatedSubtask)
