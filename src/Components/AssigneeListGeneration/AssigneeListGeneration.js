@@ -55,7 +55,18 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '0.9rem',
         position: 'absolute',
         left: '1rem',
+        [theme.breakpoints.down(510)]: {
+            display: "none",
+        },
 
+    },
+    userNameMobile: {
+        fontSize: '0.9rem',
+        position: 'absolute',
+        left: '1rem',
+        [theme.breakpoints.up(510)]: {
+            display: "none",
+        },
     },
     editAssignment: {
         margin: theme.spacing(1, 6),
@@ -173,8 +184,8 @@ function AssigneeListGeneration(props) {
                                     <li key={`assignment-${assignment._id}`} className={classes.listSection}>
                                         <ul className={classes.ul}>
                                             <ListSubheader color="primary" className={classes.listTitle}>
-
                                                 <span className={classes.userName}>{`Assignee: ${findAssignee(assignment)}`}</span>
+                                                <span className={classes.userNameMobile}>{`${findAssignee(assignment)}`}</span>
                                                 <span>{`${assignment.title}`}</span>
                                                 
                                                 <IconButton
