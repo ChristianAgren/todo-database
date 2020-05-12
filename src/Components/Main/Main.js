@@ -103,6 +103,17 @@ function Main() {
       .then(getAssignments)
       .then(getSubtasks);
   }
+
+  async function deleteSubtasks(subtask) {
+        console.log(subtask);
+        fetch(apiURL + "subtasks/" + subtask._id, {
+            method: "DELETE",
+        })
+            .then((response) => response.json())
+            .then((data) => console.log(data))
+            .then(getSubtasks);
+    }
+
   // async function deleteSubtasks(subtasksToRemove) {
   //     console.log(subtasksToRemove);
   //     fetch(apiURL + "subtasks/" + subtasksToRemove, {
@@ -262,6 +273,7 @@ function Main() {
                           }`
                         : null}
                       <AssigneeListGeneration
+                        deleteSubtasks={deleteSubtasks}
                         assignments={assignments}
                         subtasks={subtasks}
                         // users={Users.users}
