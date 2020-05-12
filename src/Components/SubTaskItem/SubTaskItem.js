@@ -62,8 +62,10 @@ function SubTaskItem(props) {
 
     const handleUpdateSubTaskValues = (newStatus) => {
         if(newStatus) {
+            props.editSubtask(props.subtask, { desc: inputValues.desc, status: newStatus })
             // props.subTasksEdit(props.section, props.item.subId, { desc: inputValues.desc, status: newStatus })
         } else {
+            props.editSubtask(props.subtask, inputValues)
             // props.subTasksEdit(props.section, props.item.subId, inputValues)
         }
         // console.log(inputValues);
@@ -71,13 +73,16 @@ function SubTaskItem(props) {
     }
 
     const handleEditClick = () => {
+        
         if(shouldEdit) {
             handleUpdateSubTaskValues()
         }
         setShouldEdit(!shouldEdit)
+        
     }
 
     const handleDeleteClick = () => {
+        props.deleteSubtasks(props.subtask)
         // props.subTasksDel(props.section, props.item.subId)
     }
 

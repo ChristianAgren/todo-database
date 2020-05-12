@@ -181,9 +181,12 @@ function AssigneeListGeneration(props) {
                                                         (shouldEdit) ?
                                                             <EditAssignment
                                                                 handleEditClose={handleEdit}
-                                                                // handleEditSave={props.editAssignment} 
+                                                                editAssignment={props.editAssignment} 
                                                                 open={shouldEdit}
-                                                                assignment={editSection} />
+                                                                editSection={editSection}
+                                                                assignment={assignment}
+                                                                
+                                                                />
                                                             : null
                                                     }
                                                     <MenuItem id="delete" onClick={(event) => handleClose(event)}>Delete</MenuItem>
@@ -201,9 +204,11 @@ function AssigneeListGeneration(props) {
                                                         <SubTaskItem
                                                             key={subtask._id}
                                                             assignment={assignment._id}
-                                                            item={subtask}
+                                                            // item={subtask}
                                                             id={subtask._Id}
                                                             subtask={subtask}
+                                                            deleteSubtasks={props.deleteSubtasks}
+                                                            editSubtask={props.editSubtask}
                                                         // subTasksDel={props.subTasksDel}
                                                         // subTasksEdit={props.subTasksEdit}
                                                         />
