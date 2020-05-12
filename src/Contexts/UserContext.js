@@ -4,8 +4,8 @@ import React, { createContext, Component } from "react";
 export const UserContext = createContext();
 
 const apiURL = "http://localhost:3000/api/";
-const loginURL = "http://localhost:3000/login";
-const logoutURL = "http://localhost:3000/logout";
+const sessionURL = "http://localhost:3000/session/";
+// const logoutURL = "http://localhost:3000/logout";
 
 class UserContextProvider extends Component {
     constructor(props) {
@@ -56,7 +56,7 @@ class UserContextProvider extends Component {
 
     loginUser = async (user, closeModal, cbErr) => {
         //Create a session
-        await fetch(loginURL, {
+        await fetch(`${sessionURL}login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -74,19 +74,32 @@ class UserContextProvider extends Component {
                 if (data.err) {
                     cbErr('login')
                 } else {
-                    this.setState({
-                        loggedIn: true,
-                        admin: data.admin,
-                        name: data.name
-                    }, () => closeModal())
+                    this.setUserInState(data)
+                    closeModal()
                 }
             })
+    }
+
+    setUserInState = (user) => {
+        if (user && !user.err) {
+            this.setState({
+                loggedIn: true,
+                admin: user.admin,
+                name: user.name
+            })
+        } else {
+            this.setState({
+                loggedIn: false,
+                admin: false,
+                name: ""
+            })
+        }
     }
 
     logoutUser = async () => {
 
         // destroy session
-        await fetch(logoutURL, {
+        await fetch(`${sessionURL}logout`, {
             method: "DELETE",
         })
             .then((response) => {
@@ -94,12 +107,19 @@ class UserContextProvider extends Component {
                 return response.json()
             })
             .then((data) => {
-                this.setState({
-                    loggedIn: false,
-                    admin: false,
-                    name: ""
-                })
+                this.setUserInState()
             })
+    }
+
+    async componentDidMount() {
+        let user = await fetch(sessionURL, {
+            method: 'GET',
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                return data
+            })
+        this.setUserInState(user)
     }
 
     render() {
