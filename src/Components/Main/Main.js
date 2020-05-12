@@ -129,6 +129,21 @@ function Main() {
         .then(getSubtasks)
     }
 
+    async function editAssignment(assignment, data) {
+      console.log(assignment);
+      
+      fetch(apiURL + "assignments/" + assignment, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .then(getAssignments)
+    }
+
   //   async function editSubTask(url, target, subTarget, data) {
   //     const response = await fetch(`${url + target}/${subTarget}`, {
   //         method: 'PUT',
@@ -306,13 +321,15 @@ function Main() {
                           }`
                         : null}
                       <AssigneeListGeneration
-                        deleteSubtasks={deleteSubtasks}
                         assignments={assignments}
+                        editAssignment={editAssignment}
+                        deleteAssignment={deleteAssignment}
+                        
                         subtasks={subtasks}
                         // users={Users.users}
                         subtaskToDb={subtaskToDb}
-                        deleteAssignment={deleteAssignment}
                         editSubtask={editSubtask}
+                        deleteSubtasks={deleteSubtasks}
                       />
                     </Paper>
                   </Grid>
