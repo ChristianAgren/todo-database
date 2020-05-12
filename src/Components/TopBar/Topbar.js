@@ -108,7 +108,7 @@ function Topbar(props) {
               <Typography variant="h6" className={classes.title}>
                 {user.name}
               </Typography>
-              <LoginModal />
+              <LoginModal changeView={props.changeView} />
             </Toolbar>
           </AppBar>
         </div>

@@ -88,7 +88,6 @@ function EditUserModal(props) {
 
   const handleOpen = (event) => {
     getUser();
-
     setOpen(true);
   };
 
@@ -178,8 +177,14 @@ function EditUserModal(props) {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
-
+        console.log(prevSettings);
+        
+        if (prevSettings.name === props.userContext.name) {
+          props.userContext.setUserInState({
+            name: data.name,
+            admin: data.admin
+          })
+        }
         props.updateUsers(prevSettings, data);
         handleClose();
       });
@@ -280,24 +285,24 @@ function EditUserModal(props) {
               </Button>
             </>
           ) : (
-            <>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={() => setDeleting(true)}
-              >
-                delete
+              <>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => setDeleting(true)}
+                >
+                  delete
               </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                disabled={disableSaveBtn()}
-                onClick={() => handleSaveClick()}
-              >
-                save
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  disabled={disableSaveBtn()}
+                  onClick={() => handleSaveClick()}
+                >
+                  save
               </Button>
-            </>
-          )}
+              </>
+            )}
         </Grid>
       </Grid>
     </div>

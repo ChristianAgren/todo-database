@@ -10,16 +10,14 @@ import {
     InputLabel,
     IconButton,
     makeStyles,
-    Menu,
-    MenuItem,
     Modal,
     TextField,
     Typography,
 } from "@material-ui/core/";
 import { UserContext } from "../../Contexts/UserContext";
+import UserMenu from './UserMenu/UserMenu'
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
@@ -27,14 +25,6 @@ const useStyles = makeStyles((theme) => ({
     loginContainer: {
         '& .MuiButton-label': {
             color: 'white'
-        }
-    },
-    userMenu: {
-        '& .MuiButton-label': {
-            fontSize: '.9rem',
-            '& .MuiSvgIcon-root': {
-                margin: theme.spacing(0, 0, 0, 1)
-            }
         }
     },
     paper: {
@@ -101,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function LoginModal() {
+function LoginModal(props) {
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
@@ -119,8 +109,6 @@ function LoginModal() {
         register: false,
         user: false
     })
-
-    const [anchorEl, setAnchorEl] = React.useState(null);
 
     const changeLoginInput = (event, anchor) => {
         if (anchor === 'username') {
@@ -152,14 +140,6 @@ function LoginModal() {
         setView("login");
         clearPasswordField()
         clearInputErrors()
-    };
-
-    const handleClickMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleCloseMenu = () => {
-        setAnchorEl(null);
     };
 
     const handleSetError = (anchor) => {
@@ -246,37 +226,6 @@ function LoginModal() {
             setView('login')
         }
         clearInputErrors()
-    }
-
-    const userMenu = (user) => {
-        return (
-            <div className={classes.userMenu}>
-                <Button
-                    aria-controls="simple-menu"
-                    aria-haspopup="true"
-                    onClick={handleClickMenu}
-                >
-                    {user.name}
-                    <AccountCircleIcon />
-                </Button>
-                <Menu
-                    id="user-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleCloseMenu}
-                >
-                    <MenuItem onClick={handleCloseMenu}>My Tasks</MenuItem>
-                    <MenuItem onClick={() => {
-                        handleCloseMenu()
-                        user.logoutUser()
-                    }
-                    }>
-                        Logout
-                    </MenuItem>
-                </Menu>
-            </div>
-        )
     }
 
     const body = (
@@ -376,17 +325,6 @@ function LoginModal() {
                                         {inputError.register ? "Passwords didn't match" : ""}
                                     </FormHelperText>
                                 </FormControl>
-                                // <FormControl fullWidth>
-                                //     <TextField
-                                //         id="outlined-passwordConfirm"
-                                //         error={inputError.register}
-                                //         helperText={inputError.register ? "Passwords didn't match" : ""}
-                                //         label="Confirm password"
-                                //         variant="outlined"
-                                //         value={loginInput.passwordConfirmation}
-                                //         onChange={(e) => changeLoginInput(e, "passwordConfirmation")}
-                                //     />
-                                // </FormControl>
                             }
                         </Grid>
                         <Grid item
@@ -423,10 +361,7 @@ function LoginModal() {
                         </Grid>
                     </Grid>
                 </div >
-
-            )
-            }
-
+            )}
         </UserContext.Consumer >
 
     );
@@ -436,7 +371,7 @@ function LoginModal() {
             {user => (
                 <div className={classes.loginContainer}>
                     {user.loggedIn
-                        ? userMenu(user)
+                        ? <UserMenu user={user} changeView={props.changeView} />
                         : <Button onClick={() => handleOpenModal()}> Login / Register </Button>
                     }
                     <Modal
