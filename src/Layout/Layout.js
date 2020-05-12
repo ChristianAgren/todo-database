@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Topbar from '../Components/TopBar/Topbar';
 import UserManager from "../Components/UserManager/UserManager"
 import Main from '../Components/Main/Main'
+import { UserContext } from '../Contexts/UserContext';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -16,17 +17,21 @@ const useStyles = makeStyles((theme) => ({
 function Layout() {
     const classes = useStyles()
     const [view, setView] = React.useState('main')
-    const handleChangeView = () => {
-        view === 'main' ? setView('manage users') : setView('main')
+    const handleChangeView = (view) => {
+        setView(view)
     }
 
     return (
-        <div className={classes.mainContainer}>
-            <Topbar changeView={handleChangeView} />
-            {view === 'main' ?
-                <Main /> : <UserManager />
-            }
-        </div>
+        <UserContext.Consumer>
+            {user => (
+                <div className={classes.mainContainer}>
+                    <Topbar changeView={handleChangeView} />
+                    {view === 'main' ?
+                        <Main /> : <UserManager user={user} />
+                    }
+                </div>
+            )}
+        </UserContext.Consumer>
     )
 }
 
