@@ -78,6 +78,7 @@ function SubTaskItem(props) {
     }
 
     const handleDeleteClick = () => {
+        props.deleteSubtasks(props.subtask)
         // props.subTasksDel(props.section, props.item.subId)
     }
 
