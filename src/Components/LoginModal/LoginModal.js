@@ -3,6 +3,7 @@ import React from "react";
 import {
     Button,
     FormControl,
+    FormHelperText,
     Grid,
     OutlinedInput,
     InputAdornment,
@@ -109,7 +110,8 @@ function LoginModal() {
         username: "",
         password: "",
         passwordConfirmation: "",
-        showPassword: false
+        showPassword: false,
+        showPasswordConf: false
     });
 
     const [inputError, setInputError] = React.useState({
@@ -133,10 +135,10 @@ function LoginModal() {
         });
     };
 
-    const handleClickShowPassword = () => {
+    const handleClickShowPassword = (anchor) => {
         setLoginInput({
             ...loginInput,
-            showPassword: !loginInput.showPassword
+            [anchor]: !loginInput[anchor]
         })
     }
 
@@ -309,8 +311,9 @@ function LoginModal() {
                                 />
                             </FormControl>
                             <FormControl fullWidth variant="outlined">
-                                <InputLabel 
+                                <InputLabel
                                     htmlFor="outlined-password"
+                                    error={view === 'login' ? inputError.login : inputError.register}
                                 >
                                     Password
                                 </InputLabel>
@@ -318,34 +321,72 @@ function LoginModal() {
                                     id="outlined-password"
                                     type={loginInput.showPassword ? 'text' : 'password'}
                                     error={view === 'login' ? inputError.login : inputError.register}
-                                    helperText={handlePasswordHelperText()}
                                     value={loginInput.password}
                                     onChange={(e) => changeLoginInput(e, "password")}
-                                    labelWidth={70}
+                                    labelWidth={75}
                                     endAdornment={
                                         <InputAdornment position="end">
                                             <IconButton
                                                 aria-label="toggle password visibility"
-                                                onClick={handleClickShowPassword}
+                                                onClick={() => handleClickShowPassword('showPassword')}
                                             >
                                                 {loginInput.showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                                             </IconButton>
                                         </InputAdornment>
                                     }
                                 />
+                                <FormHelperText
+                                    variant='outlined'
+                                    error={view === 'login' ? inputError.login : inputError.register}
+                                >
+                                    {handlePasswordHelperText()}
+                                </FormHelperText>
                             </FormControl>
                             {view === "register" &&
-                                <FormControl fullWidth>
-                                    <TextField
-                                        id="outlined-passwordConfirm"
-                                        error={inputError.register}
-                                        helperText={inputError.register ? "Passwords didn't match" : ""}
-                                        label="Confirm password"
+                                <FormControl fullWidth variant="outlined">
+                                    <InputLabel
                                         variant="outlined"
+                                        htmlFor="outlined-passwordConfirm"
+                                        error={view === 'login' ? inputError.login : inputError.register}
+                                    >
+                                        Confirm password
+                                </InputLabel>
+                                    <OutlinedInput
+                                        id="outlined-passwordConfirm"
+                                        type={loginInput.showPasswordConf ? 'text' : 'password'}
+                                        error={inputError.register}
                                         value={loginInput.passwordConfirmation}
                                         onChange={(e) => changeLoginInput(e, "passwordConfirmation")}
+                                        labelWidth={135}
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={() => handleClickShowPassword('showPasswordConf')}
+                                                >
+                                                    {loginInput.showPasswordConf ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
                                     />
+                                    <FormHelperText
+                                        variant='outlined'
+                                        error={inputError.register}
+                                    >
+                                        {inputError.register ? "Passwords didn't match" : ""}
+                                    </FormHelperText>
                                 </FormControl>
+                                // <FormControl fullWidth>
+                                //     <TextField
+                                //         id="outlined-passwordConfirm"
+                                //         error={inputError.register}
+                                //         helperText={inputError.register ? "Passwords didn't match" : ""}
+                                //         label="Confirm password"
+                                //         variant="outlined"
+                                //         value={loginInput.passwordConfirmation}
+                                //         onChange={(e) => changeLoginInput(e, "passwordConfirmation")}
+                                //     />
+                                // </FormControl>
                             }
                         </Grid>
                         <Grid item
