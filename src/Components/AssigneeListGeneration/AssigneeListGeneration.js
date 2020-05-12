@@ -181,9 +181,12 @@ function AssigneeListGeneration(props) {
                                                         (shouldEdit) ?
                                                             <EditAssignment
                                                                 handleEditClose={handleEdit}
-                                                                // handleEditSave={props.editAssignment} 
+                                                                editAssignment={props.editAssignment} 
                                                                 open={shouldEdit}
-                                                                assignment={editSection} />
+                                                                editSection={editSection}
+                                                                assignment={assignment}
+                                                                
+                                                                />
                                                             : null
                                                     }
                                                     <MenuItem id="delete" onClick={(event) => handleClose(event)}>Delete</MenuItem>
