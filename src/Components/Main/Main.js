@@ -29,7 +29,23 @@ function Main() {
   const classes = useStyles();
   const [assignments, setAssignments] = React.useState(null);
   const [subtasks, setSubtasks] = React.useState(null);
+  const [users, setUsers] = React.useState(null);
   const apiURL = "http://localhost:3000/api/";
+
+
+  async function getUsers() {
+    fetch(apiURL + "users", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setUsers(data);
+        });
+  }
   async function getAssignments() {
     fetch(apiURL + "assignments", {
       method: "GET",
@@ -61,6 +77,7 @@ function Main() {
   useEffect(() => {
     getAssignments();
     getSubtasks();
+    getUsers();
   }, []);
   
   async function assignmentToDb(data) {
@@ -324,7 +341,7 @@ function Main() {
                         assignments={assignments}
                         editAssignment={editAssignment}
                         deleteAssignment={deleteAssignment}
-                        
+                        users={users}
                         subtasks={subtasks}
                         // users={Users.users}
                         subtaskToDb={subtaskToDb}
