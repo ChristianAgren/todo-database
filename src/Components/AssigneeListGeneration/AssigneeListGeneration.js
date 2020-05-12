@@ -205,6 +205,7 @@ function AssigneeListGeneration(props) {
                                                             id={subtask._Id}
                                                             subtask={subtask}
                                                             deleteSubtasks={props.deleteSubtasks}
+                                                            editSubtask={props.editSubtask}
                                                         // subTasksDel={props.subTasksDel}
                                                         // subTasksEdit={props.subTasksEdit}
                                                         />
