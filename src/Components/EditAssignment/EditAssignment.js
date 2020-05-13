@@ -43,11 +43,10 @@ const useStyles = makeStyles((theme) => ({
 
 function EditAssignment(props) {
     const classes = useStyles()
-    const [inputValues, setInputValues] = React.useState(props.assignment)
+    const [inputValues, setInputValues] = React.useState(props.editSection)
 
     const shouldSaveEdit = () => {
-        console.log(props.assignment)
-        props.editAssignment(props.assignment._id, inputValues)
+        props.editAssignment(props.editSection._id, inputValues)
         props.handleEditClose()
     }
 
@@ -73,8 +72,8 @@ function EditAssignment(props) {
         >
             <Fade in={props.open}>
                 <div className={classes.paper}>
-                    <h2 id="transition-modal-title">{`Edit: ${props.assignment.title}`}</h2>
-                    <p id="transition-modal-id">{`ID: ${props.assignment._id}`}</p>
+                    <h2 id="transition-modal-title">{`Edit: ${props.editSection.title}`}</h2>
+                    <p id="transition-modal-id">{`ID: ${props.editSection._id}`}</p>
                     {/* <p id="transition-modal-assignee">{`Assigned to: ${props.section.name}`}</p> */}
                     {/* {(props.section.subtasks && props.section.subtasks.length > 0) ?
                         <p id="transition-modal-subtasks">{`There are ${props.section.subtasks.length} subtasks`}</p>

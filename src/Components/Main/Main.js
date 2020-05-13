@@ -48,10 +48,6 @@ function Main() {
   async function getAssignments() {
     fetch(apiURL + "assignments", {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // body: JSON.stringify(data)
     })
       .then((response) => response.json())
       .then((data) => {
@@ -61,10 +57,6 @@ function Main() {
   async function getSubtasks() {
     fetch(apiURL + "subtasks", {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // body: JSON.stringify(data)
     })
       .then((response) => response.json())
       .then((data) => {
@@ -114,10 +106,15 @@ function Main() {
       .then(getSubtasks);
   }
 
-  async function deleteSubtasks(subtask) {
+  async function deleteSubtasks(subtask, data) {
+        
         fetch(apiURL + "subtasks/" + subtask._id, {
             method: "DELETE",
-        })
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+          })
             .then((response) => response.json())
             .then(getSubtasks);
     }
@@ -136,7 +133,6 @@ function Main() {
     }
 
     async function editAssignment(assignment, data) {
-      
       fetch(apiURL + "assignments/" + assignment, {
         method: "PUT",
         headers: {
