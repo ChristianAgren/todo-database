@@ -37,8 +37,12 @@ router.post('/', async (req, res) => {
 
 // Change whole object 
 router.put('/:id', getAssignment, async (req, res) => {
+    if(res.assignment.parentId !== req.session.id && !req.session.admin) {
+        return res.status(401).json({ message: 'Unauthorized' })
+    } else {
         res.assignment.parentId = req.body.parentId
         res.assignment.title = req.body.title
+    }
     try {
         const updatedAssignment = await res.assignment.save()
         res.json(updatedAssignment)
@@ -49,6 +53,9 @@ router.put('/:id', getAssignment, async (req, res) => {
 
 //Deleting One
 router.delete('/:id', getAssignment, async (req, res) => {
+    if(res.assignment.parentId !== req.session.id && !req.session.admin) {
+        return res.status(401).json({ message: 'Unauthorized' })
+    }
     try {
         await res.assignment.remove()
         res.json({ message: 'Deleted Assignment'})
@@ -60,7 +67,6 @@ router.delete('/:id', getAssignment, async (req, res) => {
 // Find specific assignment
 async function getAssignment(req, res, next) {
     let assignment
-    console.log(req.params.id);
     
     try {
         if(req.params.id) {
