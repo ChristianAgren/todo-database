@@ -2,6 +2,9 @@ const express = require('express')
 const router = express.Router()
 const Assignment = require('../Models/assignmentModel')
 
+//Middleware
+const validateAuthor = require('../Middlewares/validateAuthor')
+
 //Getting all 
 router.get('/', async (req, res) => {
     try {
@@ -36,13 +39,13 @@ router.post('/', async (req, res) => {
 })
 
 // Change whole object 
-router.put('/:id', getAssignment, async (req, res) => {
-    if(res.assignment.parentId !== req.session.id && !req.session.admin) {
-        return res.status(401).json({ message: 'Unauthorized' })
-    } else {
+router.put('/:id', getAssignment, validateAuthor, async (req, res) => {
+    // if(res.assignment.parentId !== req.session.id && !req.session.admin) {
+        // res.status(401).json({ message: 'Unauthorized' })
+    // } else {
         res.assignment.parentId = req.body.parentId
         res.assignment.title = req.body.title
-    }
+    // }
     try {
         const updatedAssignment = await res.assignment.save()
         res.json(updatedAssignment)
