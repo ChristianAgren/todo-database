@@ -1,30 +1,21 @@
 import React, { useEffect } from "react";
-import { Container, Typography, Paper, Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+
+//COMPONENTS
 import AssigneeListGeneration from "../AssigneeListGeneration/AssigneeListGeneration";
 import FilterSection from "../FilterSection/FilterSection";
 import AddSection from "../AddSection/AddSection";
+
+// MATERIAL UI
+import { Container, Typography, Paper, Grid } from "@material-ui/core";
+
+// CONTEXTS
 import { UserContext } from "../../Contexts/UserContext";
-// temp database
-// import Users from "../database/Users.json"
-// import Assignments from "../database/Assignments.json"
-// import Subtasks from "../database/Subtasks.json"
-// - - - - - -
-const useStyles = makeStyles((theme) => ({
-  mainContainer: {
-    minHeight: "100vh",
-    height: "100%",
-    backgroundColor: "#F5F5F5",
-  },
-  title: {
-    padding: theme.spacing(2),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-}));
+
+// STYLES
+import useStyles from "./MainStyles";
+
+// -- -- --
+
 function Main() {
   const classes = useStyles();
   const [assignments, setAssignments] = React.useState(null);
@@ -32,18 +23,17 @@ function Main() {
   const [users, setUsers] = React.useState(null);
   const apiURL = "http://localhost:3000/api/";
 
-
   async function getUsers() {
     fetch(apiURL + "users", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setUsers(data);
-        });
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setUsers(data);
+      });
   }
   async function getAssignments() {
     fetch(apiURL + "assignments", {
@@ -68,7 +58,7 @@ function Main() {
     getSubtasks();
     getUsers();
   }, []);
-  
+
   async function assignmentToDb(data) {
     fetch(apiURL + "assignments", {
       method: "POST",
@@ -107,42 +97,40 @@ function Main() {
   }
 
   async function deleteSubtasks(subtask, data) {
-        
-        fetch(apiURL + "subtasks/" + subtask._id, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data)
-          })
-            .then((response) => response.json())
-            .then(getSubtasks);
-    }
+    fetch(apiURL + "subtasks/" + subtask._id, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then(getSubtasks);
+  }
 
-    async function editSubtask(subtask, data) {
-      
-      fetch(apiURL + "subtasks/" + subtask._id, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then(getSubtasks)
-    }
+  async function editSubtask(subtask, data) {
+    fetch(apiURL + "subtasks/" + subtask._id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then(getSubtasks);
+  }
 
-    async function editAssignment(assignment, data) {
-      fetch(apiURL + "assignments/" + assignment, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then(getAssignments)
-    }
+  async function editAssignment(assignment, data) {
+    fetch(apiURL + "assignments/" + assignment, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then(getAssignments);
+  }
 
   //   async function editSubTask(url, target, subTarget, data) {
   //     const response = await fetch(`${url + target}/${subTarget}`, {
