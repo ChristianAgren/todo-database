@@ -110,6 +110,7 @@ function AssigneeListGeneration(props) {
 
     const handleEdit = () => {
         const editThis = getAssignment()
+        
         if (editThis) {
             setEditSection(editThis)
         } else {
@@ -129,8 +130,8 @@ function AssigneeListGeneration(props) {
     };
 
     const getAssignment = () => {
-        if (anchorEl != null) {
-            return props.assignments.find(i => i.id === anchorEl.id)
+        if (anchorEl != null) {          
+            return props.assignments.find(assignment => assignment._id === anchorEl.id)
         } else {
             return undefined
         }
@@ -151,7 +152,6 @@ function AssigneeListGeneration(props) {
 
     const findAssignee = (assignment) => {
         let userName;
-        console.log(props.users);
         if(props.users !== null) {
             props.users.map(user => {
                 if(assignment.parentId === user._id) {
@@ -220,8 +220,6 @@ function AssigneeListGeneration(props) {
                                                                 editAssignment={props.editAssignment} 
                                                                 open={shouldEdit}
                                                                 editSection={editSection}
-                                                                assignment={assignment}
-                                                                
                                                                 />
                                                             : null
                                                     }
@@ -240,6 +238,7 @@ function AssigneeListGeneration(props) {
                                                         <SubTaskItem
                                                             key={subtask._id}
                                                             assignment={assignment._id}
+                                                            assignmentParentId={assignment.parentId}
                                                             // item={subtask}
                                                             id={subtask._Id}
                                                             subtask={subtask}
@@ -253,6 +252,7 @@ function AssigneeListGeneration(props) {
                                             }
                                             <NewSubTask
                                                 sectionId={assignment._id}
+                                                assignment={assignment}
                                                 subtaskToDb={props.subtaskToDb}
                                             // subTasksSave={props.subTasksSave}
                                             />
