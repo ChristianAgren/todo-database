@@ -42,35 +42,26 @@ function Main() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           setUsers(data);
         });
   }
   async function getAssignments() {
     fetch(apiURL + "assignments", {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // body: JSON.stringify(data)
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setAssignments(data);
       });
   }
   async function getSubtasks() {
     fetch(apiURL + "subtasks", {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // body: JSON.stringify(data)
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
         setSubtasks(data);
       });
   }
@@ -105,7 +96,6 @@ function Main() {
       .then(getSubtasks);
   }
   async function deleteAssignment(data, subtasks) {
-    console.log("subtasks", subtasks);
     subtasks.map((subtask) => {
       if (subtask.parentId === data)
         fetch(apiURL + "subtasks/" + subtask._id, {
@@ -121,18 +111,21 @@ function Main() {
       .then(getSubtasks);
   }
 
-  async function deleteSubtasks(subtask) {
-        console.log(subtask);
+  async function deleteSubtasks(subtask, data) {
+        
         fetch(apiURL + "subtasks/" + subtask._id, {
             method: "DELETE",
-        })
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+          })
             .then((response) => response.json())
             .then((data) => console.log(data))
             .then(getSubtasks);
     }
 
     async function editSubtask(subtask, data) {
-      console.log(data);
       
       fetch(apiURL + "subtasks/" + subtask._id, {
         method: "PUT",
@@ -147,8 +140,6 @@ function Main() {
     }
 
     async function editAssignment(assignment, data) {
-      console.log(assignment);
-      
       fetch(apiURL + "assignments/" + assignment, {
         method: "PUT",
         headers: {
