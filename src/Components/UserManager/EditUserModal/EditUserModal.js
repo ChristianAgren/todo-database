@@ -5,12 +5,12 @@ import {
   Switch,
   Grid,
   makeStyles,
-  MenuItem,
   Modal,
   TextField,
   Typography,
   IconButton,
 } from "@material-ui/core/";
+import { UserContext } from "../../../Contexts/UserContext";
 import SettingsIcon from "@material-ui/icons/Settings";
 
 const useStyles = makeStyles((theme) => ({
@@ -86,16 +86,14 @@ function EditUserModal(props) {
 
   const [open, setOpen] = React.useState(false);
 
-  const handleOpen = () => {
-    if (props.closeUserMenu) {
-      props.closeUserMenu()
-    }
+  const handleOpen = (event) => {
     getUser();
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setInputError(false);
   };
 
   const [userInfo, setUserInfo] = React.useState({
@@ -105,7 +103,13 @@ function EditUserModal(props) {
     confirmNewPassword: "",
     admin: true,
   });
-  const [prevSettings, setPrevSettings] = React.useState(null);
+  const [prevSettings, setPrevSettings] = React.useState({
+    name: "",
+    password: "",
+    admin: null,
+  });
+  const [inputError, setInputError] = React.useState(false);
+
   const [deleting, setDeleting] = React.useState(null);
 
   async function getUser() {
@@ -120,12 +124,11 @@ function EditUserModal(props) {
       })
       .then((data) => {
         setPrevSettings({
-          _id: data._id,
           name: data.name,
-          newPassword: data.password,
-          confirmNewPassword: "",
+          password: data.password,
           admin: data.admin,
         });
+
         setUserInfo({
           _id: data._id,
           name: data.name,
@@ -137,17 +140,23 @@ function EditUserModal(props) {
   }
 
   const changeUserInfo = (event, anchor) => {
+    if (anchor === "name") {
+      setInputError(false);
+    }
     setUserInfo({
       ...userInfo,
-      [anchor]: event.target.value,
+      [anchor]: event.target.value.trim(),
     });
   };
 
   const disableSaveBtn = () => {
+    // return FALSE if changes were made
     return (
-      JSON.stringify(prevSettings) === JSON.stringify(userInfo) ||
+      (prevSettings.name === userInfo.name &&
+        prevSettings.admin === userInfo.admin &&
+        (userInfo.newPassword.length === 0 ||
+          userInfo.newPassword.length < 3)) ||
       userInfo.newPassword !== userInfo.confirmNewPassword ||
-      userInfo._id.length < 3 ||
       userInfo.name.length < 3
     );
   };
@@ -155,10 +164,10 @@ function EditUserModal(props) {
   const handleSaveClick = async () => {
     let password;
 
-    if (userInfo.newPassword != prevSettings.newPassword) {
+    if (userInfo.newPassword !== prevSettings.password) {
       password = userInfo.newPassword;
     } else {
-      password = prevSettings.newPassword;
+      password = prevSettings.password;
     }
 
     await fetch(apiURL + props.name, {
@@ -177,16 +186,18 @@ function EditUserModal(props) {
         return response.json();
       })
       .then((data) => {
-        if (prevSettings.name === props.userContext.name) {
-          props.userContext.setUserInState({
-            name: data.name,
-            admin: data.admin
-          })
-        }
-        if (props.updateUsers) {
+        if (data.err) {
+          setInputError(true);
+        } else {
+          if (prevSettings.name === props.userContext.name) {
+            props.userContext.setUserInState({
+              name: data.name,
+              admin: data.admin,
+            });
+          }
           props.updateUsers(prevSettings, data);
+          handleClose();
         }
-        handleClose();
       });
   };
 
@@ -201,11 +212,7 @@ function EditUserModal(props) {
         return response.json();
       })
       .then((data) => {
-        if (props.updateUsers) {
-          props.updateUsers(data);
-        } else {
-          props.userContext.logoutUser()
-        }
+        props.updateUsers(data);
         handleClose();
       });
   };
@@ -222,15 +229,14 @@ function EditUserModal(props) {
       <Grid container className={classes.editUserContainer} spacing={1}>
         <Grid item xs={12}>
           <Typography variant="h5" className={classes.header}>
-            {props.userContext.admin
-              ? 'Manage user'
-              : 'Change settings'
-            }
+            Manage user
           </Typography>
         </Grid>
         <Grid item xs={12}>
           <Typography variant="overline">name</Typography>
           <TextField
+            error={inputError}
+            helperText={inputError ? "Username is unavailable" : null}
             value={userInfo.name}
             onChange={(e) => changeUserInfo(e, "name")}
           />
@@ -257,21 +263,18 @@ function EditUserModal(props) {
           <Typography variant="overline">ID</Typography>
           <TextField disabled value={userInfo._id} />
         </Grid>
-        {props.userContext.admin ?
-          <Grid item xs={12} className={classes.role}>
-            <Typography variant="overline">user</Typography>
+        <Grid item xs={12} className={classes.role}>
+          <Typography variant="overline">user</Typography>
 
-            <FormControlLabel
-              onClick={() => toggleAdmin()}
-              control={<Switch color="primary" checked={userInfo.admin} />}
-              label={<Typography variant="overline">role</Typography>}
-              labelPlacement="top"
-            />
+          <FormControlLabel
+            onClick={() => toggleAdmin()}
+            control={<Switch color="primary" checked={userInfo.admin} />}
+            label={<Typography variant="overline">role</Typography>}
+            labelPlacement="top"
+          />
 
-            <Typography variant="overline">admin</Typography>
-          </Grid>
-          : null
-        }
+          <Typography variant="overline">admin</Typography>
+        </Grid>
         <Grid item xs={12} className={classes.btnWrapper}>
           {deleting ? (
             <>
@@ -294,48 +297,47 @@ function EditUserModal(props) {
               </Button>
             </>
           ) : (
-              <>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => setDeleting(true)}
-                >
-                  delete
+            <>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => setDeleting(true)}
+              >
+                delete
               </Button>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  disabled={disableSaveBtn()}
-                  onClick={() => handleSaveClick()}
-                >
-                  save
+              <Button
+                variant="outlined"
+                color="primary"
+                disabled={disableSaveBtn()}
+                onClick={() => handleSaveClick()}
+              >
+                save
               </Button>
-              </>
-            )}
+            </>
+          )}
         </Grid>
       </Grid>
     </div>
   );
 
   return (
-    <>
-      {props.userContext.admin
-        ? <IconButton onClick={() => handleOpen()}>
-          <SettingsIcon />
-        </IconButton>
-        : <MenuItem onClick={() => handleOpen()}>
-          Settings
-        </MenuItem>
-      }
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        {body}
-      </Modal>
-    </>
+    <UserContext.Consumer>
+      {(user) => (
+        <div>
+          <IconButton onClick={(e) => handleOpen(e)}>
+            <SettingsIcon />
+          </IconButton>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+          >
+            {body}
+          </Modal>
+        </div>
+      )}
+    </UserContext.Consumer>
   );
 }
 
