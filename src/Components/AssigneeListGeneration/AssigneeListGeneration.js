@@ -151,7 +151,6 @@ function AssigneeListGeneration(props) {
 
     const findAssignee = (assignment) => {
         let userName;
-        console.log(props.users);
         if(props.users !== null) {
             props.users.map(user => {
                 if(assignment.parentId === user._id) {
