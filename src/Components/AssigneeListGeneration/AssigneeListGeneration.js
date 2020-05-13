@@ -10,6 +10,7 @@ import {
     MenuItem,
     Typography,
     useScrollTrigger,
+    Snackbar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SadSmiley from '../../Assets/sadsmiley.svg'
@@ -18,6 +19,7 @@ import SubTaskItem from '../SubTaskItem/SubTaskItem';
 import NewSubTask from '../NewSubTask/NewSubTask'
 import EditAssignment from '../EditAssignment/EditAssignment'
 import DateManager from '../DateManager/DateManager.js'
+import Alert from "@material-ui/lab/Alert";
 const apiURL = "http://localhost:3000/api/";
 
 const useStyles = makeStyles((theme) => ({
@@ -109,6 +111,8 @@ function AssigneeListGeneration(props) {
     };
 
     const handleEdit = () => {
+        
+        
         const editThis = getAssignment()
         
         if (editThis) {
@@ -163,8 +167,16 @@ function AssigneeListGeneration(props) {
         return userName            
     }
 
+    const vertical = 'top'
+    const horizontal = 'center'
+
     return (
         <div className={classes.removeScrollbar}>
+            <Snackbar style={{ marginTop: '3rem' }} anchorOrigin={{ vertical, horizontal }} open={props.openAlert} autoHideDuration={1250} onClose={props.handleAlertClose}>
+                <Alert style={{ minWidth: '15rem' }} color="error" onClose={props.handleAlertClose} severity="error">
+                    You can't edit other users assignments!
+                </Alert>
+            </Snackbar>
             <List className={classes.root} subheader={<li />}>
                 {(props.assignments === null) ?
                     <h3>Loading</h3>
@@ -220,6 +232,9 @@ function AssigneeListGeneration(props) {
                                                                 editAssignment={props.editAssignment} 
                                                                 open={shouldEdit}
                                                                 editSection={editSection}
+                                                                handleAlertClose={props.handleAlertClose}
+                                                                handleAlertClick={props.handleAlertClick}
+                                                                openAlert={props.openAlert}
                                                                 />
                                                             : null
                                                     }
