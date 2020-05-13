@@ -88,7 +88,6 @@ class UserContextProvider extends Component {
   };
 
   deleteUser = (name, updateUsers, closeModal) => {
-    console.log(0);
 
     fetch(apiURL + "users/" + name, {
       method: "DELETE",
