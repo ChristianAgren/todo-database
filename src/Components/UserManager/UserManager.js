@@ -25,8 +25,14 @@ function UserManager(props) {
   useEffect(() => props.user.getUsers(setUsers), []);
 
   const updateUsersInState = (user, newUser) => {
+    console.log(user);
+    console.log(newUser);
+
     const state = [...users];
     const userIndex = state.findIndex((u) => u._id === user._id);
+
+    console.log(state);
+    console.log(userIndex);
 
     if (newUser) state.splice(userIndex, 1, newUser);
     if (!newUser) state.splice(userIndex, 1);
