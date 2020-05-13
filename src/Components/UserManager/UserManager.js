@@ -103,46 +103,42 @@ function UserManager(props) {
   };
 
   return (
-    // <UserContext.Consumer>
-    //   {user => (
-        <Container maxWidth="md" className={classes.mainContainer}>
-          <Typography variant="h4" className={classes.header}>
-            Manage users
+    <Container maxWidth="md" className={classes.mainContainer}>
+      <Typography variant="h4" className={classes.header}>
+        Manage users
           </Typography>
 
-          <List dense className={classes.userList}>
-            <ListItem className={classes.user}>
-              <ListItemText primary="name" />
-              <ListItemText primary="role" />
-              <ListItemText primary="ID" />
-            </ListItem>
-            {users.length === 0 ? (
-              <ListItem className={classes.user}>
-                <Typography variant="h6" className={classes.loading}>
-                  Users loading...
+      <List dense className={classes.userList}>
+        <ListItem className={classes.user}>
+          <ListItemText primary="name" />
+          <ListItemText primary="role" />
+          <ListItemText primary="ID" />
+        </ListItem>
+        {users.length === 0 ? (
+          <ListItem className={classes.user}>
+            <Typography variant="h6" className={classes.loading}>
+              Users loading...
             </Typography>
-              </ListItem>
-            ) : (
-                users.map((user) => (
-                  <ListItem className={classes.user} key={user._id}>
-                    <ListItemText primary={user.name} />
-                    <ListItemText primary={user.admin ? "admin" : "user"} />
-                    <ListItemText primary={user._id} />
+          </ListItem>
+        ) : (
+            users.map((user) => (
+              <ListItem className={classes.user} key={user._id}>
+                <ListItemText primary={user.name} />
+                <ListItemText primary={user.admin ? "admin" : "user"} />
+                <ListItemText primary={user._id} />
 
-                    <ListItemIcon className={classes.editBtn}>
-                      <EditUserModal
-                        name={user.name}
-                        updateUsers={updateUsersInState}
-                        userContext={props.user}
-                      />
-                    </ListItemIcon>
-                  </ListItem>
-                ))
-              )}
-          </List>
-        </Container>
-    //   )}
-    // </UserContext.Consumer>
+                <ListItemIcon className={classes.editBtn}>
+                  <EditUserModal
+                    name={user.name}
+                    updateUsers={updateUsersInState}
+                    userContext={props.user}
+                  />
+                </ListItemIcon>
+              </ListItem>
+            ))
+          )}
+      </List>
+    </Container>
   );
 }
 
