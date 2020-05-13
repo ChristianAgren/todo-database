@@ -57,12 +57,12 @@ router.put("/:name", getUser, async (req, res) => {
     try {
       const updatedUser = await res.user.save();
       if (res.user._id == req.session.id) {
-        req.session.admin = req.body.admin
-        req.session.username = req.body.name
+        req.session.admin = req.body.admin;
+        req.session.username = req.body.name;
       }
       res.json(updatedUser);
     } catch (err) {
-      res.status(400);
+      res.status(400).json({ err: "username is unavailable" });
     }
   });
 });
