@@ -5,7 +5,6 @@ export const UserContext = createContext();
 
 const apiURL = "http://localhost:3000/api/";
 const sessionURL = "http://localhost:3000/session/";
-// const logoutURL = "http://localhost:3000/logout";
 
 class UserContextProvider extends Component {
     constructor(props) {
@@ -56,7 +55,6 @@ class UserContextProvider extends Component {
             }),
         })
             .then((response) => {
-                console.log(`Logged in: ${response.headers.get('userLoggedIn')}`);
                 return response.json()
             })
             .then((data) => {
@@ -79,7 +77,6 @@ class UserContextProvider extends Component {
             }),
         })
             .then((response) => {
-                console.log(`Logged in: ${response.headers.get('userLoggedIn')}`);
                 return response.json()
             })
             .then((data) => {
@@ -114,7 +111,6 @@ class UserContextProvider extends Component {
             method: "DELETE",
         })
             .then((response) => {
-                console.log(`Logged in: ${response.headers.get('userLoggedIn')}`);
                 return response.json()
             })
             .then((data) => {

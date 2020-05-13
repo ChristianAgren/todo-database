@@ -5,6 +5,7 @@ import {
     MenuItem,
     makeStyles,
 } from '@material-ui/core'
+import EditUserModal from '../../UserManager/EditUserModal/EditUserModal'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const useStyles = makeStyles((theme) => ({
@@ -71,9 +72,16 @@ function UserMenu(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleCloseMenu}
             >
-                <p style={{textAlign: 'center'}}>{`Role: ${returnUserRole(props.user.admin)}`}</p>
-                <MenuItem onClick={handleCloseMenu}>My Tasks</MenuItem>
-                <MenuItem onClick={() => handleSettingsClick(props)}>{props.user.admin ? 'Manage users' : 'Settings'}</MenuItem>
+                <p style={{ textAlign: 'center' }}>{`Role: ${returnUserRole(props.user.admin)}`}</p>
+                {/* <MenuItem onClick={handleCloseMenu}>My Tasks</MenuItem> */}
+                {props.user.admin
+                    ? <MenuItem onClick={() => handleSettingsClick(props)}>Manage users</MenuItem>
+                    : <EditUserModal
+                        name={props.user.name}
+                        closeUserMenu={handleCloseMenu}
+                        userContext={props.user}
+                    />
+                }
                 <MenuItem onClick={() => handleLogoutClick(props)}> Logout </MenuItem>
             </Menu>
         </div>

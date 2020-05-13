@@ -42,7 +42,6 @@ function Main() {
       })
         .then((response) => response.json())
         .then((data) => {
-          // console.log(data);
           setUsers(data);
         });
   }
@@ -52,7 +51,6 @@ function Main() {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
         setAssignments(data);
       });
   }
@@ -80,7 +78,6 @@ function Main() {
       body: JSON.stringify(data),
     })
       .then((response) => response.json())
-      .then((data) => console.log(data))
       .then(getAssignments);
   }
   async function subtaskToDb(data) {
@@ -92,7 +89,6 @@ function Main() {
       body: JSON.stringify(data),
     })
       .then((response) => response.json())
-      .then((data) => console.log(data))
       .then(getSubtasks);
   }
   async function deleteAssignment(data, subtasks) {
@@ -106,7 +102,6 @@ function Main() {
       method: "DELETE",
     })
       .then((response) => response.json())
-      .then((data) => console.log(data))
       .then(getAssignments)
       .then(getSubtasks);
   }
@@ -121,7 +116,6 @@ function Main() {
             body: JSON.stringify(data)
           })
             .then((response) => response.json())
-            .then((data) => console.log(data))
             .then(getSubtasks);
     }
 
@@ -135,7 +129,6 @@ function Main() {
         body: JSON.stringify(data),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data))
         .then(getSubtasks)
     }
 
@@ -148,7 +141,6 @@ function Main() {
         body: JSON.stringify(data),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data))
         .then(getAssignments)
     }
 
