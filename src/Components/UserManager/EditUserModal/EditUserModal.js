@@ -181,6 +181,7 @@ function EditUserModal(props) {
             <Grid item xs={12}>
               <Typography variant="overline">name</Typography>
               <TextField
+                tabIndex="1"
                 error={inputError}
                 helperText={
                   inputError
@@ -196,6 +197,7 @@ function EditUserModal(props) {
             <Grid item xs={12}>
               <Typography variant="overline">new password</Typography>
               <TextField
+                tabIndex="2"
                 type="password"
                 helperText={
                   userInfo.newPassword.length > 20
@@ -210,6 +212,7 @@ function EditUserModal(props) {
               <Grid item xs={12}>
                 <Typography variant="overline">confirm new password</Typography>
                 <TextField
+                  tabIndex="3"
                   type="password"
                   value={userInfo.confirmNewPassword}
                   onChange={(e) => changeUserInfo(e, "confirmNewPassword")}
@@ -224,6 +227,7 @@ function EditUserModal(props) {
               <Typography variant="overline">user</Typography>
 
               <FormControlLabel
+                tabIndex="4"
                 onClick={() => toggleAdmin()}
                 control={<Switch color="primary" checked={userInfo.admin} />}
                 label={<Typography variant="overline">role</Typography>}
@@ -241,7 +245,13 @@ function EditUserModal(props) {
                   <Button
                     variant="outlined"
                     color="secondary"
-                    onClick={() => handleDeleteClick()}
+                    onClick={() =>
+                      user.deleteUser(
+                        props.name,
+                        props.updateUsers,
+                        handleClose
+                      )
+                    }
                   >
                     yes
                   </Button>
@@ -256,6 +266,7 @@ function EditUserModal(props) {
               ) : (
                 <>
                   <Button
+                    tabIndex="6"
                     variant="outlined"
                     color="secondary"
                     onClick={() => setDeleting(true)}
@@ -263,6 +274,7 @@ function EditUserModal(props) {
                     delete
                   </Button>
                   <Button
+                    tabIndex="5"
                     variant="outlined"
                     color="primary"
                     disabled={disableSaveBtn()}

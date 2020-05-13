@@ -17,9 +17,11 @@ class UserContextProvider extends Component {
       getUsers: this.getUsers,
       getUser: this.getUser,
       updateUserInformation: this.updateUserInformation,
+      deleteUser: this.deleteUser,
 
       setUserInState: this.setUserInState,
       clientRegisterUser: this.clientRegisterUser,
+
       loginUser: this.loginUser,
       logoutUser: this.logoutUser,
     };
@@ -53,16 +55,14 @@ class UserContextProvider extends Component {
     return data;
   };
 
-  updateUserInformation = async (
+  updateUserInformation = (
     userToBeUpdated,
     user,
     updateUsers,
     closeModal,
     errCb
   ) => {
-    console.log("update user", user);
-
-    await fetch(apiURL + "users/" + userToBeUpdated, {
+    fetch(apiURL + "users/" + userToBeUpdated, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -79,15 +79,29 @@ class UserContextProvider extends Component {
       })
       .then((data) => {
         if (data.err) {
-          console.log("error :", data.err);
-
-            errCb(true);
+          errCb(true);
         } else {
-          console.log(data);
-
           updateUsers(user, data);
           closeModal();
         }
+      });
+  };
+
+  deleteUser = (name, updateUsers, closeModal) => {
+    console.log(0);
+
+    fetch(apiURL + "users/" + name, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        updateUsers(data);
+        closeModal();
       });
   };
 
