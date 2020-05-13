@@ -143,6 +143,13 @@ function EditUserModal(props) {
       handleClose,
       setInputError
     );
+
+    if (prevSettings.name === props.userContext.name) {
+      props.userContext.setUserInState({
+        name: userInfo.name,
+        admin: userInfo.admin,
+      });
+    }
   };
 
   const handleDeleteClick = async () => {
