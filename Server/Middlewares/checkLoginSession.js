@@ -1,5 +1,4 @@
 
-
 module.exports = function (req, res, next) {
     let user
     if(req.session.id) {
@@ -10,6 +9,6 @@ module.exports = function (req, res, next) {
         res.session = user
         next()
     } else {
-        res.json({err: "user is not logged in"})
+        res.status(401).json({err: "user is not logged in"})
     }
 }
