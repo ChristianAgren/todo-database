@@ -125,7 +125,7 @@ function Main() {
     })
   }
   async function deleteAssignment(data, subtasks) {
-    subtasks.map((subtask) => {
+    subtasks.forEach((subtask) => {
       if (subtask.parentId === data)
         fetch(apiURL + "subtasks/" + subtask._id, {
           method: "DELETE",

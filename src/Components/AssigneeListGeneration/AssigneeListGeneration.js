@@ -9,7 +9,6 @@ import {
     Menu,
     MenuItem,
     Typography,
-    useScrollTrigger,
     Snackbar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,7 +19,6 @@ import NewSubTask from '../NewSubTask/NewSubTask'
 import EditAssignment from '../EditAssignment/EditAssignment'
 import DateManager from '../DateManager/DateManager.js'
 import Alert from "@material-ui/lab/Alert";
-const apiURL = "http://localhost:3000/api/";
 
 const useStyles = makeStyles((theme) => ({
     removeScrollbar: {
@@ -157,7 +155,7 @@ function AssigneeListGeneration(props) {
     const findAssignee = (assignment) => {
         let userName;
         if(props.users !== null) {
-            props.users.map(user => {
+            props.users.forEach(user => {
                 if(assignment.parentId === user._id) {
                     userName = user.name
                     
@@ -185,7 +183,7 @@ function AssigneeListGeneration(props) {
                         : (props.assignments.error) ?
                             <div className={classes.error}>
                                 <h3>{props.assignments.error.message}</h3>
-                                <img src={SadSmiley}></img>
+                                <img src={SadSmiley} alt="Sad smiley"></img>
                             </div>
                             : (props.assignments.length === 0) ?
                                 <div style={{ margin: '4rem' }}>
