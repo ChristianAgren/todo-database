@@ -9,6 +9,6 @@ module.exports = function (req, res, next) {
         res.session = user
         next()
     } else {
-        res.status(401).json({err: "user is not logged in"})
+        res.status(401).json({err: { login: "user is not logged in" }})
     }
 }
