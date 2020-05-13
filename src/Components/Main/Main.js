@@ -32,6 +32,21 @@ function Main() {
   const [users, setUsers] = React.useState(null);
   const apiURL = "http://localhost:3000/api/";
 
+  //State for alert
+	const [openAlert, setopenAlert] = React.useState(false);
+
+	const handleAlertClick = () => {
+		setopenAlert(true);
+	};
+
+	const handleAlertClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setopenAlert(false);
+	};
+
 
   async function getUsers() {
     fetch(apiURL + "users", {
@@ -77,8 +92,17 @@ function Main() {
       },
       body: JSON.stringify(data),
     })
-      .then((response) => response.json())
-      .then(getAssignments);
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data)
+        if (data.message === "Unauthorized") {
+          handleAlertClick()
+        } else {
+          getAssignments()
+        }
+    })
   }
   async function subtaskToDb(data) {
     fetch(apiURL + "subtasks", {
@@ -88,8 +112,17 @@ function Main() {
       },
       body: JSON.stringify(data),
     })
-      .then((response) => response.json())
-      .then(getSubtasks);
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data)
+        if (data.message === "Unauthorized") {
+          handleAlertClick()
+        } else {
+          getSubtasks()
+        }
+    })
   }
   async function deleteAssignment(data, subtasks) {
     subtasks.map((subtask) => {
@@ -101,9 +134,18 @@ function Main() {
     fetch(apiURL + "assignments/" + data, {
       method: "DELETE",
     })
-      .then((response) => response.json())
-      .then(getAssignments)
-      .then(getSubtasks);
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data)
+        if (data.message === "Unauthorized") {
+          handleAlertClick()
+        } else {
+          getAssignments()
+          getSubtasks()
+        }
+    })
   }
 
   async function deleteSubtasks(subtask, data) {
@@ -115,8 +157,17 @@ function Main() {
             },
             body: JSON.stringify(data)
           })
-            .then((response) => response.json())
-            .then(getSubtasks);
+          .then((response) => {
+            return response.json()
+          })
+          .then((data) => {
+            console.log(data)
+            if (data.message === "Unauthorized") {
+              handleAlertClick()
+            } else {
+              getAssignments()
+            }
+        })
     }
 
     async function editSubtask(subtask, data) {
@@ -128,8 +179,17 @@ function Main() {
         },
         body: JSON.stringify(data),
       })
-        .then((response) => response.json())
-        .then(getSubtasks)
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data)
+        if (data.message === "Unauthorized") {
+          handleAlertClick()
+        } else {
+          getSubtasks()
+        }
+    })
     }
 
     async function editAssignment(assignment, data) {
@@ -140,9 +200,20 @@ function Main() {
         },
         body: JSON.stringify(data),
       })
-        .then((response) => response.json())
-        .then(getAssignments)
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          console.log(data)
+          if (data.message === "Unauthorized") {
+            handleAlertClick()
+          } else {
+            getAssignments()
+          }
+      })
+        
     }
+
 
   //   async function editSubTask(url, target, subTarget, data) {
   //     const response = await fetch(`${url + target}/${subTarget}`, {
@@ -330,6 +401,9 @@ function Main() {
                         subtaskToDb={subtaskToDb}
                         editSubtask={editSubtask}
                         deleteSubtasks={deleteSubtasks}
+                        handleAlertClose={handleAlertClose}
+                        handleAlertClick={handleAlertClick}
+                        openAlert={openAlert}
                       />
                     </Paper>
                   </Grid>
