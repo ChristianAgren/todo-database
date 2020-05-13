@@ -155,7 +155,7 @@ function AssigneeListGeneration(props) {
     const findAssignee = (assignment) => {
         let userName;
         if(props.users !== null) {
-            props.users.map(user => {
+            props.users.forEach(user => {
                 if(assignment.parentId === user._id) {
                     userName = user.name
                     
@@ -183,7 +183,7 @@ function AssigneeListGeneration(props) {
                         : (props.assignments.error) ?
                             <div className={classes.error}>
                                 <h3>{props.assignments.error.message}</h3>
-                                <img src={SadSmiley}></img>
+                                <img src={SadSmiley} alt="Sad smiley"></img>
                             </div>
                             : (props.assignments.length === 0) ?
                                 <div style={{ margin: '4rem' }}>
