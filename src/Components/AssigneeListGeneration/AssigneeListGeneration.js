@@ -9,7 +9,6 @@ import {
     Menu,
     MenuItem,
     Typography,
-    useScrollTrigger,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SadSmiley from '../../Assets/sadsmiley.svg'
@@ -18,7 +17,6 @@ import SubTaskItem from '../SubTaskItem/SubTaskItem';
 import NewSubTask from '../NewSubTask/NewSubTask'
 import EditAssignment from '../EditAssignment/EditAssignment'
 import DateManager from '../DateManager/DateManager.js'
-const apiURL = "http://localhost:3000/api/";
 
 const useStyles = makeStyles((theme) => ({
     removeScrollbar: {
