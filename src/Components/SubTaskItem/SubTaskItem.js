@@ -62,10 +62,10 @@ function SubTaskItem(props) {
 
     const handleUpdateSubTaskValues = (newStatus) => {
         if(newStatus) {
-            props.editSubtask(props.subtask, { desc: inputValues.desc, status: newStatus, assignmentparentId: props.assignmentParentId })
+            props.editSubtask(props.subtask, { desc: inputValues.desc, status: newStatus, assignmentParentId: props.assignmentParentId })
             // props.subTasksEdit(props.section, props.item.subId, { desc: inputValues.desc, status: newStatus })
         } else {
-            props.editSubtask(props.subtask, {desc: inputValues.desc, status: inputValues.status, assignmentparentId: props.assignmentParentId})
+            props.editSubtask(props.subtask, {desc: inputValues.desc, status: inputValues.status, assignmentParentId: props.assignmentParentId})
             // props.subTasksEdit(props.section, props.item.subId, inputValues)
         }
         // console.log(inputValues);
