@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Assignment = require('../Models/assignmentModel')
+const Subtask = require('../Models/subtaskModel')
 
 //Middleware
 const checkLoginSession = require('../Middlewares/checkLoginSession')
@@ -50,12 +51,21 @@ router.put('/:id', checkLoginSession, getAssignment, validateAuthor, async (req,
 
 //Deleting One
 router.delete('/:id', checkLoginSession, getAssignment, validateAuthor, async (req, res) => {
-    try {
-        await res.assignment.remove()
-        res.json({ message: 'Deleted Assignment' })
-    } catch (err) {
-        res.status(500).json({ message: err.message })
-    }
+
+    Subtask.deleteMany({parentId: req.params.id}, async (err) => {
+        if (err) {
+            return res.status(500).json({ message: err.message })
+        } else {
+            try {
+                await res.assignment.remove()
+                res.json(res.assignment)
+            } catch (err) {
+                res.status(500).json({ message: err.message })
+            }
+        }
+      })
+    
+    
 })
 
 module.exports = router
