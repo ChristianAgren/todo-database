@@ -32,24 +32,26 @@ export async function deleteSubtask(apiURL, subtask, authorId) {
         },
         body: JSON.stringify(authorId)
     }) 
-        .then((response) => response.json)
+        .then((response) => response.json())
         .then((data) => {
             return data
         })
+        
     return delSubtask
 }
 
 export async function editSubtask(apiURL, subtask, authorId) {
-    const editSubtask = await fetch(apiURL + "subtasks/" + subtask._id, {
+    const editedSubtask = await fetch(apiURL + "subtasks/" + subtask._id, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(authorId)
     })
-        .then((response) => response.json)
+        .then((response) => response.json())
         .then((data) => {
             return data
         })
-    return editSubtask
+    
+    return editedSubtask
 }
