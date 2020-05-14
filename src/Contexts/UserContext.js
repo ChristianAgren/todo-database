@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { createContext, Component } from "react";
-import {getAssignments, postAssignment, editAssignment, deleteAssignment} from './fetchAssignments'
+import { getAssignments, postAssignment, editAssignment, deleteAssignment } from './fetchAssignments'
 import { getSubtasks, postSubtask, deleteSubtask, editSubtask } from './fetchSubtasks'
 
 export const UserContext = createContext();
@@ -9,35 +9,35 @@ const apiURL = "http://localhost:3000/api/";
 const sessionURL = "http://localhost:3000/session/";
 
 class UserContextProvider extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            loggedIn: false,
-            admin: false,
-            name: "",
-            
-            getUsers: this.getUsers,
-            getUser: this.getUser,
-            updateUserInformation: this.updateUserInformation,
-            deleteUser: this.deleteUser,
+  constructor(props) {
+    super(props)
+    this.state = {
+      loggedIn: false,
+      admin: false,
+      name: "",
 
-            setUserInState: this.setUserInState,
-            clientRegisterUser: this.clientRegisterUser,
+      getUsers: this.getUsers,
+      getUser: this.getUser,
+      updateUserInformation: this.updateUserInformation,
+      deleteUser: this.deleteUser,
 
-            loginUser: this.loginUser,
-            logoutUser: this.logoutUser,
+      setUserInState: this.setUserInState,
+      clientRegisterUser: this.clientRegisterUser,
 
-            getAssignments: getAssignments,
-            postAssignment: postAssignment,
-            editAssignment: editAssignment,
-            deleteAssignment: deleteAssignment,
+      loginUser: this.loginUser,
+      logoutUser: this.logoutUser,
 
-            getSubtasks: getSubtasks,
-            postSubtask: postSubtask,
-            editSubtask: editSubtask,
-            deleteSubtask: deleteSubtask,
-        }
-      }
+      getAssignments: getAssignments,
+      postAssignment: postAssignment,
+      editAssignment: editAssignment,
+      deleteAssignment: deleteAssignment,
+
+      getSubtasks: getSubtasks,
+      postSubtask: postSubtask,
+      editSubtask: editSubtask,
+      deleteSubtask: deleteSubtask,
+    }
+  }
 
   getUsers = (setUsers) => {
     fetch(`${apiURL}users`, {
@@ -94,7 +94,7 @@ class UserContextProvider extends Component {
         if (data.err) {
           errCb(true);
         } else {
-          updateUsers(user, data);
+          if (this.state.admin) updateUsers(user, data);
           closeModal();
         }
       });
@@ -112,7 +112,11 @@ class UserContextProvider extends Component {
         return response.json();
       })
       .then((data) => {
-        updateUsers(data);
+        if (this.state.admin) {
+          updateUsers(data);
+        } else {
+          this.logoutUser()
+        }
         closeModal();
       });
   };
