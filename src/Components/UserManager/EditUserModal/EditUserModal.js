@@ -9,6 +9,7 @@ import {
   TextField,
   Typography,
   IconButton,
+  MenuItem
 } from "@material-ui/core/";
 import SettingsIcon from "@material-ui/icons/Settings";
 
@@ -254,19 +255,21 @@ function EditUserModal(props) {
           <Typography variant="overline">ID</Typography>
           <TextField disabled value={userInfo._id} />
         </Grid>
-        <Grid item xs={12} className={classes.role}>
-          <Typography variant="overline">user</Typography>
 
-          <FormControlLabel
-            tabIndex="4"
-            onClick={() => toggleAdmin()}
-            control={<Switch color="primary" checked={userInfo.admin} />}
-            label={<Typography variant="overline">role</Typography>}
-            labelPlacement="top"
-          />
+        {(props.userContext.admin &&
+          <Grid item xs={12} className={classes.role}>
+            <Typography variant="overline">user</Typography>
 
-          <Typography variant="overline">admin</Typography>
-        </Grid>
+            <FormControlLabel
+              onClick={() => toggleAdmin()}
+              control={<Switch color="primary" checked={userInfo.admin} />}
+              label={<Typography variant="overline">role</Typography>}
+              labelPlacement="top"
+            />
+
+            <Typography variant="overline">admin</Typography>
+          </Grid>
+        )}
         <Grid item xs={12} className={classes.btnWrapper}>
           {deleting ? (
             <>
@@ -318,9 +321,15 @@ function EditUserModal(props) {
 
   return (
     <div>
-      <IconButton onClick={() => handleOpen(props.userContext)}>
-        <SettingsIcon />
-      </IconButton>
+      {props.userContext.admin
+        ? <IconButton onClick={() => handleOpen(props.userContext)}>
+          <SettingsIcon />
+        </IconButton>
+        : <MenuItem onClick={() => handleOpen(props.userContext)}>
+          Settings
+          </MenuItem>
+      }
+
       <Modal
         open={open}
         onClose={handleClose}
