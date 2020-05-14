@@ -8,19 +8,19 @@ POST http://localhost:3000/api/users/
 Content-Type: application/json
 
 {
-    "name": "Filip",
-    "password": "123",
-    "admin": "false"
+    "name": "admin",
+    "password": "admin",
+    "admin": "true"
 }
 
 ###
 
-PUT http://localhost:3000/api/users/Filip
+PUT http://localhost:3000/api/users/admin
 Content-Type: application/json
 
 {
-    "name": "Fredrik",
-    "password": "1234",
+    "name": "admin",
+    "password": "admin",
     "admin": "true"
 }
 
