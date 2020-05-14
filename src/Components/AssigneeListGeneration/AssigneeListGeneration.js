@@ -124,7 +124,8 @@ function AssigneeListGeneration(props) {
 
     const handleClose = (event) => {
         if (event.currentTarget.id === 'delete') {
-            props.deleteAssignment(anchorEl.id, props.subtasks)
+            props.removeAssignment(anchorEl.id)
+            
         } else if (event.currentTarget.id === 'edit') {
             handleEdit()
         }
@@ -227,7 +228,7 @@ function AssigneeListGeneration(props) {
                                                         (shouldEdit) ?
                                                             <EditAssignment
                                                                 handleEditClose={handleEdit}
-                                                                editAssignment={props.editAssignment} 
+                                                                changeAssignment={props.changeAssignment} 
                                                                 open={shouldEdit}
                                                                 editSection={editSection}
                                                                 handleAlertClose={props.handleAlertClose}

@@ -1,5 +1,7 @@
 // @ts-nocheck
 import React, { createContext, Component } from "react";
+import {getAssignments, postAssignment, editAssignment, deleteAssignment} from './fetchAssignments'
+import { getSubtasks, postSubtask, deleteSubtask, editSubtask } from './fetchSubtasks'
 
 export const UserContext = createContext();
 
@@ -18,9 +20,19 @@ class UserContextProvider extends Component {
             clientRegisterUser: this.clientRegisterUser,
             loginUser: this.loginUser,
             logoutUser: this.logoutUser,
+            getAssignments: getAssignments,
+            postAssignment: postAssignment,
+            editAssignment: editAssignment,
+            getSubtasks: getSubtasks,
+            postSubtask: postSubtask,
+            deleteSubtask: deleteSubtask,
+            editSubtask: editSubtask,
+            deleteAssignment: deleteAssignment
         }
 
     }
+
+    
 
     getUsers = (setUsers) => {
         fetch(`${apiURL}users`, {
