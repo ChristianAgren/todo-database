@@ -36,13 +36,12 @@ function UserMenu(props) {
   };
 
   const handleSettingsClick = (props) => {
-    handleCloseMenu();
+    handleCloseMenu()
     if (props.user.admin) {
-      props.changeView("manage users");
-    } else {
-      console.log("Open user settings");
+      props.changeView('manage users')
     }
-  };
+  }
+
 
   const handleLogoutClick = (props) => {
     handleCloseMenu();
@@ -67,21 +66,18 @@ function UserMenu(props) {
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
       >
-        <p style={{ textAlign: "center" }}>{`Role: ${returnUserRole(
-          props.user.admin
-        )}`}</p>
-        {/* <MenuItem onClick={handleCloseMenu}>My Tasks</MenuItem> */}
+        <p style={{ textAlign: "center" }}>{`Role: ${returnUserRole(props.user.admin)}`}</p>
         {props.user.admin ? (
           <MenuItem onClick={() => handleSettingsClick(props)}>
             Manage users
           </MenuItem>
         ) : (
-          <EditUserModal
-            name={props.user.name}
-            closeUserMenu={handleCloseMenu}
-            userContext={props.user}
-          />
-        )}
+            <EditUserModal
+              name={props.user.name}
+              closeUserMenu={handleCloseMenu}
+              userContext={props.user}
+            />
+          )}
         <MenuItem onClick={() => handleLogoutClick(props)}> Logout </MenuItem>
       </Menu>
     </div>

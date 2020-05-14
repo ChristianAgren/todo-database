@@ -20,16 +20,18 @@ function Layout() {
     setView(view);
   };
 
-  return (
-    <UserContext.Consumer>
-      {(user) => (
-        <div className={classes.mainContainer}>
-          <Topbar changeView={handleChangeView} />
-          {view === "main" ? <Main /> : <UserManager user={user} />}
-        </div>
-      )}
-    </UserContext.Consumer>
-  );
+    return (
+        <UserContext.Consumer>
+            {user => (
+                <div className={classes.mainContainer}>
+                    <Topbar changeView={handleChangeView} />
+                    {view === 'main' ?
+                        <Main user={user} /> : <UserManager user={user} redirectToMain={setView} />
+                    }
+                </div>
+            )}
+        </UserContext.Consumer>
+    )
 }
 
 export default Layout;
