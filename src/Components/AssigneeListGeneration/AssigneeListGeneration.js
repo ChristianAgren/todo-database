@@ -227,7 +227,7 @@ function AssigneeListGeneration(props) {
                                                         (shouldEdit) ?
                                                             <EditAssignment
                                                                 handleEditClose={handleEdit}
-                                                                editAssignment={props.editAssignment} 
+                                                                changeAssignment={props.changeAssignment} 
                                                                 open={shouldEdit}
                                                                 editSection={editSection}
                                                                 handleAlertClose={props.handleAlertClose}

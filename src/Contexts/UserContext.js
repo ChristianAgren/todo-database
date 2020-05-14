@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { createContext, Component } from "react";
-import {getAssignments} from './fetchAssignments'
+import {getAssignments, postAssignment, editAssignment} from './fetchAssignments'
 
 export const UserContext = createContext();
 
@@ -19,7 +19,9 @@ class UserContextProvider extends Component {
             clientRegisterUser: this.clientRegisterUser,
             loginUser: this.loginUser,
             logoutUser: this.logoutUser,
-            getAssignments: getAssignments
+            getAssignments: getAssignments,
+            postAssignment: postAssignment,
+            editAssignment: editAssignment,
         }
 
     }

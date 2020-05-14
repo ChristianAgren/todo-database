@@ -32,20 +32,35 @@ function Main(props) {
   const [users, setUsers] = React.useState(null);
   const apiURL = "http://localhost:3000/api/";
 
+  useEffect(() => props.user.getAssignments(setAssignments), [props.user]);
+
+  const updateAssignmentsInState = (newAssignment) => {
+    const state = [...assignments];
+    state.push(newAssignment)
+    setAssignments(state);
+  };
+
+  const updateChangedAssignmentInState = (changedAssignment) => {
+    const state = [...assignments];
+    const assignmentIndex = state.findIndex((a) => a._id === changedAssignment._id);
+    state.splice(assignmentIndex, 1, changedAssignment);
+    setAssignments(state)
+  }
+
   //State for alert
-	const [openAlert, setopenAlert] = React.useState(false);
+  const [openAlert, setopenAlert] = React.useState(false);
 
-	const handleAlertClick = () => {
-		setopenAlert(true);
-	};
+  const handleAlertClick = () => {
+    setopenAlert(true);
+  };
 
-	const handleAlertClose = (event, reason) => {
-		if (reason === "clickaway") {
-			return;
-		}
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
 
-		setopenAlert(false);
-	};
+    setopenAlert(false);
+  };
 
   // async function getAssignments() {
   //   fetch(apiURL + "assignments", {
@@ -58,11 +73,31 @@ function Main(props) {
   // }
 
 
-  const updateAssignments = async () => {
-    const newAssigmentList = await props.user.getAssignments()   
-    console.log(newAssigmentList);
-    
+  const addAssignment = async (data) => {
+    const newAssignment = await props.user.postAssignment(data)
+
+    if (data.message === "Unauthorized") {
+      handleAlertClick()
+    } else {
+      // getAssignments()
+      updateAssignmentsInState(newAssignment);
+    }
   }
+
+  const changeAssignment = async (assignment, data) => {
+    console.log("in changeAssignment", data);
+
+    const changedAssignment = await props.user.editAssignment(assignment, data)
+    console.log("changed assignment", changedAssignment)
+
+    if (data.message === "Unauthorized") {
+      handleAlertClick()
+    } else {
+      // getAssignments()
+      updateChangedAssignmentInState(changedAssignment);
+    }
+  }
+
 
 
   async function getSubtasks() {
@@ -76,32 +111,34 @@ function Main(props) {
   }
   useEffect(() => {
     // getAssignments();
-    updateAssignments();
+    props.user.getAssignments(setAssignments)
     getSubtasks();
     props.user.getUsers(setUsers);
   }, []);
-  
-  async function assignmentToDb(data) {
-    fetch(apiURL + "assignments", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        console.log(data)
-        if (data.message === "Unauthorized") {
-          handleAlertClick()
-        } else {
-          // getAssignments()
-          updateAssignments();
-        }
-    })
-  }
+
+  // async function assignmentToDb(data) {
+  //   fetch(apiURL + "assignments", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(data),
+  //   })
+  //     .then((response) => {
+  //       return response.json()
+  //     })
+  //     .then((data) => {
+  //       console.log(data)
+  //       if (data.message === "Unauthorized") {
+  //         handleAlertClick()
+  //       } else {
+  //         // getAssignments()
+  //         updateAssignments();
+  //       }
+  //   })
+  // }
+
+
   async function subtaskToDb(data) {
     fetch(apiURL + "subtasks", {
       method: "POST",
@@ -120,7 +157,7 @@ function Main(props) {
         } else {
           getSubtasks()
         }
-    })
+      })
   }
   async function deleteAssignment(data, subtasks) {
     subtasks.forEach((subtask) => {
@@ -141,43 +178,22 @@ function Main(props) {
           handleAlertClick()
         } else {
           // getAssignments()
-          updateAssignments();
+          // updateAssignments();
+          updateAssignmentsInState()
           getSubtasks()
         }
-    })
+      })
   }
 
   async function deleteSubtasks(subtask, data) {
-        
-        fetch(apiURL + "subtasks/" + subtask._id, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data)
-          })
-          .then((response) => {
-            return response.json()
-          })
-          .then((data) => {
-            console.log(data)
-            if (data.message === "Unauthorized") {
-              handleAlertClick()
-            } else {
-              getSubtasks()
-            }
-        })
-    }
 
-    async function editSubtask(subtask, data) {
-      
-      fetch(apiURL + "subtasks/" + subtask._id, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
+    fetch(apiURL + "subtasks/" + subtask._id, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data)
+    })
       .then((response) => {
         return response.json()
       })
@@ -188,31 +204,53 @@ function Main(props) {
         } else {
           getSubtasks()
         }
-    })
-    }
+      })
+  }
 
-    async function editAssignment(assignment, data) {
-      fetch(apiURL + "assignments/" + assignment, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+  async function editSubtask(subtask, data) {
+
+    fetch(apiURL + "subtasks/" + subtask._id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        return response.json()
       })
-        .then((response) => {
-          return response.json()
-        })
-        .then((data) => {
-          console.log(data)
-          if (data.message === "Unauthorized") {
-            handleAlertClick()
-          } else {
-            // getAssignments()
-            updateAssignments();
-          }
+      .then((data) => {
+        console.log(data)
+        if (data.message === "Unauthorized") {
+          handleAlertClick()
+        } else {
+          getSubtasks()
+        }
       })
-        
-    }
+  }
+
+  // async function editAssignment(assignment, data) {
+  //   fetch(apiURL + "assignments/" + assignment, {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(data),
+  //   })
+  //     .then((response) => {
+  //       return response.json()
+  //     })
+  //     .then((data) => {
+  //       console.log(data)
+  //       if (data.message === "Unauthorized") {
+  //         handleAlertClick()
+  //       } else {
+  //         // getAssignments()
+  //         // updateAssignments();
+  //       }
+  //   })
+
+  // }
 
 
   //   async function editSubTask(url, target, subTarget, data) {
@@ -366,8 +404,9 @@ function Main(props) {
                     New assignment
                     <AddSection
                       name={user.name}
-                      assignmentToDb={assignmentToDb}
-                      // handleSaveClick={handleSaveClick}
+                      // assignmentToDb={assignmentToDb}
+                      addAssignment={addAssignment}
+                    // handleSaveClick={handleSaveClick}
                     />
                   </Paper>
                 </Grid>
@@ -386,14 +425,14 @@ function Main(props) {
                     >
                       {assignments != null
                         ? `Assignments${
-                            assignments.length !== undefined
-                              ? `: ${assignments.length}`
-                              : ``
-                          }`
+                        assignments.length !== undefined
+                          ? `: ${assignments.length}`
+                          : ``
+                        }`
                         : null}
                       <AssigneeListGeneration
                         assignments={assignments}
-                        editAssignment={editAssignment}
+                        changeAssignment={changeAssignment}
                         deleteAssignment={deleteAssignment}
                         users={users}
                         subtasks={subtasks}

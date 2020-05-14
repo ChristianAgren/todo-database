@@ -98,7 +98,7 @@ function AddSection(props) {
                             color="default"
                             className={classes.assignmentBtn}
                             disabled={!(inputValues.desc.length >= 3) ? true : false}
-                            onClick={() => props.assignmentToDb(
+                            onClick={() => props.addAssignment(
                                 {title: inputValues.desc}
                             )}
                         // onClick={() => props.handleSaveClick(inputValues)}
