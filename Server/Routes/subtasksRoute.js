@@ -51,7 +51,7 @@ router.put('/:id', checkLoginSession, getSubtask, validateAuthor, async (req, re
 router.delete('/:id', checkLoginSession, getSubtask, validateAuthor, async (req, res) => {
     try {
         await res.subtask.remove()
-        res.json({ message: 'Deleted subtask' })
+        res.json(res.subtask)
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
