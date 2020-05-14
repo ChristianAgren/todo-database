@@ -165,7 +165,7 @@ function Main() {
             if (data.message === "Unauthorized") {
               handleAlertClick()
             } else {
-              getAssignments()
+              getSubtasks()
             }
         })
     }
