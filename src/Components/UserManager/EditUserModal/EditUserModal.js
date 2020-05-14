@@ -1,27 +1,84 @@
 import React from "react";
-
-// MATERIAL UI
 import {
   Button,
   FormControlLabel,
   Switch,
   Grid,
+  makeStyles,
+  MenuItem,
   Modal,
   TextField,
   Typography,
   IconButton,
 } from "@material-ui/core/";
-
-//ICONS
 import SettingsIcon from "@material-ui/icons/Settings";
 
-// CONTEXTS
-import { UserContext } from "../../../Contexts/UserContext";
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    position: "absolute",
+    top: "52%",
+    left: "50%",
+    transform: "translateX(-50%) translateY(-50%)",
 
-// STYLES
-import useStyles from "./EditUserModalStyles";
+    width: "100%",
+    maxWidth: "40rem",
+    height: "auto",
 
-// -- -- --
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: ".4rem",
+    borderBottom: ".4rem solid rgb(17,82,147)",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4),
+    [theme.breakpoints.down(321)]: {
+      width: "100%",
+      borderRadius: 0,
+    },
+  },
+
+  header: {
+    color: "#3f51b5",
+  },
+
+  editUserContainer: {
+    position: "relative",
+    width: "100%",
+
+    "& > *": {
+      display: "flex",
+      flexDirection: "column",
+      margin: theme.spacing(1),
+    },
+  },
+
+  role: {
+    padding: theme.spacing(1),
+
+    border: "1px slid #0002",
+
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "baseline",
+  },
+
+  btnWrapper: {
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "center",
+
+    margin: "1rem auto .5rem",
+    width: "70%",
+
+    "& > *": {
+      margin: ".2rem",
+    },
+
+    "& .MuiTypography-overline": {
+      width: "100%",
+      textAlign: "center",
+    },
+  },
+}));
 
 function EditUserModal(props) {
   const classes = useStyles();
@@ -29,7 +86,10 @@ function EditUserModal(props) {
 
   const [open, setOpen] = React.useState(false);
 
-  const handleOpen = (event) => {
+  const handleOpen = () => {
+    if (props.closeUserMenu) {
+      props.closeUserMenu()
+    }
     getUser();
     setOpen(true);
   };
@@ -138,7 +198,9 @@ function EditUserModal(props) {
               admin: data.admin,
             });
           }
-          props.updateUsers(prevSettings, data);
+          if (props.updateUsers) {
+            props.updateUsers(prevSettings, data);
+          }
           handleClose();
         }
       });
@@ -155,7 +217,11 @@ function EditUserModal(props) {
         return response.json();
       })
       .then((data) => {
-        props.updateUsers(data);
+        if (props.updateUsers) {
+          props.updateUsers(data);
+        } else {
+          props.userContext.logoutUser()
+        }
         handleClose();
       });
   };
@@ -172,7 +238,10 @@ function EditUserModal(props) {
       <Grid container className={classes.editUserContainer} spacing={1}>
         <Grid item xs={12}>
           <Typography variant="h5" className={classes.header}>
-            Manage user
+            {props.userContext.admin
+              ? 'Manage user'
+              : 'Change settings'
+            }
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -206,18 +275,20 @@ function EditUserModal(props) {
           <Typography variant="overline">ID</Typography>
           <TextField disabled value={userInfo._id} />
         </Grid>
-        <Grid item xs={12} className={classes.role}>
-          <Typography variant="overline">user</Typography>
+        {(props.userContext.admin &&
+          <Grid item xs={12} className={classes.role}>
+            <Typography variant="overline">user</Typography>
 
-          <FormControlLabel
-            onClick={() => toggleAdmin()}
-            control={<Switch color="primary" checked={userInfo.admin} />}
-            label={<Typography variant="overline">role</Typography>}
-            labelPlacement="top"
-          />
+            <FormControlLabel
+              onClick={() => toggleAdmin()}
+              control={<Switch color="primary" checked={userInfo.admin} />}
+              label={<Typography variant="overline">role</Typography>}
+              labelPlacement="top"
+            />
 
-          <Typography variant="overline">admin</Typography>
-        </Grid>
+            <Typography variant="overline">admin</Typography>
+          </Grid>
+        )}
         <Grid item xs={12} className={classes.btnWrapper}>
           {deleting ? (
             <>
@@ -240,47 +311,48 @@ function EditUserModal(props) {
               </Button>
             </>
           ) : (
-            <>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={() => setDeleting(true)}
-              >
-                delete
+              <>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => setDeleting(true)}
+                >
+                  delete
               </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                disabled={disableSaveBtn()}
-                onClick={() => handleSaveClick()}
-              >
-                save
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  disabled={disableSaveBtn()}
+                  onClick={() => handleSaveClick()}
+                >
+                  save
               </Button>
-            </>
-          )}
+              </>
+            )}
         </Grid>
       </Grid>
     </div>
   );
 
   return (
-    <UserContext.Consumer>
-      {(user) => (
-        <div>
-          <IconButton onClick={(e) => handleOpen(e)}>
+    <>
+      {props.userContext.admin
+        ? <IconButton onClick={() => handleOpen()}>
             <SettingsIcon />
           </IconButton>
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-          >
-            {body}
-          </Modal>
-        </div>
-      )}
-    </UserContext.Consumer>
+        : <MenuItem onClick={() => handleOpen()}>
+            Settings
+          </MenuItem>
+      }
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        {body}
+      </Modal>
+    </>
   );
 }
 

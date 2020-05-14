@@ -2,6 +2,11 @@ const express = require('express')
 const router = express.Router()
 const Assignment = require('../Models/assignmentModel')
 
+//Middleware
+const checkLoginSession = require('../Middlewares/checkLoginSession')
+const getAssignment = require('../Middlewares/getAssignment')
+const validateAuthor = require('../Middlewares/validateAuthor')
+
 //Getting all 
 router.get('/', async (req, res) => {
     try {
@@ -17,32 +22,24 @@ router.get('/', async (req, res) => {
 // Skapa en getUsers för att hitta rätt user och för att få med det i respons så vi kan hitta den usern som är inloggad i res.body.id
 //Creating one
 
-router.post('/', async (req, res) => {
-    if (req.session.id) {
-        const assignment = new Assignment ({
-            _id: [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join(''),
-            parentId: req.session.id,
-            title: req.body.title 
-        })
-        try {
-            const newAssignment = await assignment.save()
-            res.status(201).json(newAssignment)
-        } catch (err) {
-            res.status(400).json( { message: err.message } )
-        }
-    } else {
-        res.status(401).json('Unauthorized')
+router.post('/', checkLoginSession, async (req, res) => {
+    const assignment = new Assignment({
+        _id: [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join(''),
+        parentId: req.session.id,
+        title: req.body.title
+    })
+    try {
+        const newAssignment = await assignment.save()
+        res.status(201).json(newAssignment)
+    } catch (err) {
+        res.status(400).json({ message: err.message })
     }
 })
 
 // Change whole object 
-router.put('/:id', getAssignment, async (req, res) => {
-    if(res.assignment.parentId !== req.session.id && !req.session.admin) {
-        return res.status(401).json({ message: 'Unauthorized' })
-    } else {
-        res.assignment.parentId = req.body.parentId
-        res.assignment.title = req.body.title
-    }
+router.put('/:id', checkLoginSession, getAssignment, validateAuthor, async (req, res) => {
+    res.assignment.parentId = req.body.parentId
+    res.assignment.title = req.body.title
     try {
         const updatedAssignment = await res.assignment.save()
         res.json(updatedAssignment)
@@ -52,37 +49,13 @@ router.put('/:id', getAssignment, async (req, res) => {
 })
 
 //Deleting One
-router.delete('/:id', getAssignment, async (req, res) => {
-    if(res.assignment.parentId !== req.session.id && !req.session.admin) {
-        return res.status(401).json({ message: 'Unauthorized' })
-    }
+router.delete('/:id', checkLoginSession, getAssignment, validateAuthor, async (req, res) => {
     try {
         await res.assignment.remove()
-        res.json({ message: 'Deleted Assignment'})
+        res.json({ message: 'Deleted Assignment' })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
 })
-
-// Find specific assignment
-async function getAssignment(req, res, next) {
-    let assignment
-    
-    try {
-        if(req.params.id) {
-            assignment = await Assignment.findById(req.params.id)
-        } else {
-            assignment = await Assignment.findById(req.body.id)
-        }
-        if(assignment == null) {
-            return res.status(404).json({ message: 'Cannot find assignment' })
-        }
-    } catch (err) {
-        return res.status(500).json({ message: err.message })
-    }
-
-    res.assignment = assignment
-    next()
-}
 
 module.exports = router

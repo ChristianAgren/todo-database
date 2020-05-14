@@ -1,21 +1,30 @@
 import React, { useEffect } from "react";
-
-//COMPONENTS
+import { Container, Typography, Paper, Grid } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import AssigneeListGeneration from "../AssigneeListGeneration/AssigneeListGeneration";
 import FilterSection from "../FilterSection/FilterSection";
 import AddSection from "../AddSection/AddSection";
-
-// MATERIAL UI
-import { Container, Typography, Paper, Grid } from "@material-ui/core";
-
-// CONTEXTS
 import { UserContext } from "../../Contexts/UserContext";
-
-// STYLES
-import useStyles from "./MainStyles";
-
-// -- -- --
-
+// temp database
+// import Users from "../database/Users.json"
+// import Assignments from "../database/Assignments.json"
+// import Subtasks from "../database/Subtasks.json"
+// - - - - - -
+const useStyles = makeStyles((theme) => ({
+  mainContainer: {
+    minHeight: "100vh",
+    height: "100%",
+    backgroundColor: "#F5F5F5",
+  },
+  title: {
+    padding: theme.spacing(2),
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  },
+}));
 function Main() {
   const classes = useStyles();
   const [assignments, setAssignments] = React.useState(null);
@@ -23,17 +32,33 @@ function Main() {
   const [users, setUsers] = React.useState(null);
   const apiURL = "http://localhost:3000/api/";
 
+  //State for alert
+	const [openAlert, setopenAlert] = React.useState(false);
+
+	const handleAlertClick = () => {
+		setopenAlert(true);
+	};
+
+	const handleAlertClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setopenAlert(false);
+	};
+
+
   async function getUsers() {
     fetch(apiURL + "users", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setUsers(data);
-      });
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setUsers(data);
+        });
   }
   async function getAssignments() {
     fetch(apiURL + "assignments", {
@@ -58,7 +83,7 @@ function Main() {
     getSubtasks();
     getUsers();
   }, []);
-
+  
   async function assignmentToDb(data) {
     fetch(apiURL + "assignments", {
       method: "POST",
@@ -67,8 +92,17 @@ function Main() {
       },
       body: JSON.stringify(data),
     })
-      .then((response) => response.json())
-      .then(getAssignments);
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data)
+        if (data.message === "Unauthorized") {
+          handleAlertClick()
+        } else {
+          getAssignments()
+        }
+    })
   }
   async function subtaskToDb(data) {
     fetch(apiURL + "subtasks", {
@@ -78,11 +112,20 @@ function Main() {
       },
       body: JSON.stringify(data),
     })
-      .then((response) => response.json())
-      .then(getSubtasks);
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data)
+        if (data.message === "Unauthorized") {
+          handleAlertClick()
+        } else {
+          getSubtasks()
+        }
+    })
   }
   async function deleteAssignment(data, subtasks) {
-    subtasks.map((subtask) => {
+    subtasks.forEach((subtask) => {
       if (subtask.parentId === data)
         fetch(apiURL + "subtasks/" + subtask._id, {
           method: "DELETE",
@@ -91,46 +134,86 @@ function Main() {
     fetch(apiURL + "assignments/" + data, {
       method: "DELETE",
     })
-      .then((response) => response.json())
-      .then(getAssignments)
-      .then(getSubtasks);
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data)
+        if (data.message === "Unauthorized") {
+          handleAlertClick()
+        } else {
+          getAssignments()
+          getSubtasks()
+        }
+    })
   }
 
   async function deleteSubtasks(subtask, data) {
-    fetch(apiURL + "subtasks/" + subtask._id, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then(getSubtasks);
-  }
+        
+        fetch(apiURL + "subtasks/" + subtask._id, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+          })
+          .then((response) => {
+            return response.json()
+          })
+          .then((data) => {
+            console.log(data)
+            if (data.message === "Unauthorized") {
+              handleAlertClick()
+            } else {
+              getSubtasks()
+            }
+        })
+    }
 
-  async function editSubtask(subtask, data) {
-    fetch(apiURL + "subtasks/" + subtask._id, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+    async function editSubtask(subtask, data) {
+      
+      fetch(apiURL + "subtasks/" + subtask._id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data)
+        if (data.message === "Unauthorized") {
+          handleAlertClick()
+        } else {
+          getSubtasks()
+        }
     })
-      .then((response) => response.json())
-      .then(getSubtasks);
-  }
+    }
 
-  async function editAssignment(assignment, data) {
-    fetch(apiURL + "assignments/" + assignment, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then(getAssignments);
-  }
+    async function editAssignment(assignment, data) {
+      fetch(apiURL + "assignments/" + assignment, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          console.log(data)
+          if (data.message === "Unauthorized") {
+            handleAlertClick()
+          } else {
+            getAssignments()
+          }
+      })
+        
+    }
+
 
   //   async function editSubTask(url, target, subTarget, data) {
   //     const response = await fetch(`${url + target}/${subTarget}`, {
@@ -318,6 +401,9 @@ function Main() {
                         subtaskToDb={subtaskToDb}
                         editSubtask={editSubtask}
                         deleteSubtasks={deleteSubtasks}
+                        handleAlertClose={handleAlertClose}
+                        handleAlertClick={handleAlertClick}
+                        openAlert={openAlert}
                       />
                     </Paper>
                   </Grid>

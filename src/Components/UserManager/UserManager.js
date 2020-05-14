@@ -22,7 +22,7 @@ function UserManager(props) {
   const classes = useStyles();
   const [users, setUsers] = React.useState([]);
 
-  useEffect(() => props.user.getUsers(setUsers), []);
+  useEffect(() => props.user.getUsers(setUsers), [props.user]);
 
   const updateUsersInState = (user, newUser) => {
     const state = [...users];
