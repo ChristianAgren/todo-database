@@ -90,7 +90,14 @@ function UserManager(props) {
   const classes = useStyles();
   const [users, setUsers] = React.useState([]);
 
-  useEffect(() => props.user.getUsers(setUsers), [props.user]);
+  useEffect(() => {
+    if (!props.user.admin) {
+      props.redirectToMain("main")
+      console.log("redirect to main");
+
+    }
+    props.user.getUsers(setUsers)
+  }, [props.user]);
 
   const updateUsersInState = (user, newUser) => {
     const state = [...users];
@@ -127,7 +134,7 @@ function UserManager(props) {
                 <ListItemText primary={user.admin ? "admin" : "user"} />
                 <ListItemText primary={user._id} />
 
-                <ListItemIcon className={classes.editBtn}>
+                <ListItemIcon className={classes.editBtn} tabIndex={user.index}>
                   <EditUserModal
                     name={user.name}
                     updateUsers={updateUsersInState}
