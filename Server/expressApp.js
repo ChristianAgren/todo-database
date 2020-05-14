@@ -34,7 +34,13 @@ app.use(express.json());
 app.use(cookieSession({
     name: 'LoginSession',
     secret: 'GuppB4Lyf3-1337',
-    maxAge: 1000 /* millisekunder */ * 60 /* minut */ * 60, // 1 timme
+    // maxAge: 24 * 60 * 60 * 1000, //24 hours
+    maxAge: 60 * 60 * 1000, //1 hour
+    // maxAge: 30 * 60 * 1000, //30 minutes
+    // maxAge: 60 * 1000, //1 minute
+    // maxAge: 15 * 1000, //15 seconds
+    // maxAge: 10 * 1000, //10 seconds
+    // maxAge: 5 * 1000, //5 seconds
     sameSite: 'strict',
     httpOnly: true,
     secure: false,
