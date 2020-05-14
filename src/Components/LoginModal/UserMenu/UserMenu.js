@@ -44,8 +44,6 @@ function UserMenu(props) {
         handleCloseMenu()
         if (props.user.admin) {
             props.changeView('manage users')
-        } else {
-            console.log('Open user settings');
         }
     }
 
