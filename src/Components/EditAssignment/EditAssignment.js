@@ -48,7 +48,7 @@ function EditAssignment(props) {
     const [inputValues, setInputValues] = React.useState(props.editSection)
 
     const shouldSaveEdit = () => {
-        props.editAssignment(props.editSection._id, inputValues)
+        props.changeAssignment(props.editSection._id, inputValues)
         props.handleEditClose()
     }
 

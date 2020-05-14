@@ -1,5 +1,7 @@
 // @ts-nocheck
 import React, { createContext, Component } from "react";
+import {getAssignments, postAssignment, editAssignment, deleteAssignment} from './fetchAssignments'
+import { getSubtasks, postSubtask, deleteSubtask, editSubtask } from './fetchSubtasks'
 
 export const UserContext = createContext();
 
@@ -7,26 +9,35 @@ const apiURL = "http://localhost:3000/api/";
 const sessionURL = "http://localhost:3000/session/";
 
 class UserContextProvider extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      loggedIn: false,
-      admin: false,
-      name: "",
+    constructor(props) {
+        super(props)
+        this.state = {
+            loggedIn: false,
+            admin: false,
+            name: "",
+            
+            getUsers: this.getUsers,
+            getUser: this.getUser,
+            updateUserInformation: this.updateUserInformation,
+            deleteUser: this.deleteUser,
 
-      getUsers: this.getUsers,
-      getUser: this.getUser,
-      updateUserInformation: this.updateUserInformation,
-      deleteUser: this.deleteUser,
+            setUserInState: this.setUserInState,
+            clientRegisterUser: this.clientRegisterUser,
 
-      setUserInState: this.setUserInState,
+            loginUser: this.loginUser,
+            logoutUser: this.logoutUser,
 
-      clientRegisterUser: this.clientRegisterUser,
-      loginUser: this.loginUser,
-      logoutUser: this.logoutUser,
-    }
+            getAssignments: getAssignments,
+            postAssignment: postAssignment,
+            editAssignment: editAssignment,
+            deleteAssignment: deleteAssignment,
 
-  }
+            getSubtasks: getSubtasks,
+            postSubtask: postSubtask,
+            editSubtask: editSubtask,
+            deleteSubtask: deleteSubtask,
+        }
+      }
 
   getUsers = (setUsers) => {
     fetch(`${apiURL}users`, {
