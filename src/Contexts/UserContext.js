@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { createContext, Component } from "react";
 import {getAssignments, postAssignment, editAssignment} from './fetchAssignments'
+import { getSubtasks, postSubtask, deleteSubtask, editSubtask } from './fetchSubtasks'
 
 export const UserContext = createContext();
 
@@ -22,6 +23,10 @@ class UserContextProvider extends Component {
             getAssignments: getAssignments,
             postAssignment: postAssignment,
             editAssignment: editAssignment,
+            getSubtasks: getSubtasks,
+            postSubtask: postSubtask,
+            deleteSubtask: deleteSubtask,
+            editSubtask: editSubtask,
         }
 
     }
