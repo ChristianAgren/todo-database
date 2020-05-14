@@ -109,10 +109,10 @@ function AssigneeListGeneration(props) {
     };
 
     const handleEdit = () => {
-        
-        
+
+
         const editThis = getAssignment()
-        
+
         if (editThis) {
             setEditSection(editThis)
         } else {
@@ -125,7 +125,7 @@ function AssigneeListGeneration(props) {
     const handleClose = (event) => {
         if (event.currentTarget.id === 'delete') {
             props.removeAssignment(anchorEl.id)
-            
+
         } else if (event.currentTarget.id === 'edit') {
             handleEdit()
         }
@@ -133,7 +133,7 @@ function AssigneeListGeneration(props) {
     };
 
     const getAssignment = () => {
-        if (anchorEl != null) {          
+        if (anchorEl != null) {
             return props.assignments.find(assignment => assignment._id === anchorEl.id)
         } else {
             return undefined
@@ -155,15 +155,15 @@ function AssigneeListGeneration(props) {
 
     const findAssignee = (assignment) => {
         let userName;
-        if(props.users !== null) {
+        if (props.users !== null) {
             props.users.forEach(user => {
-                if(assignment.parentId === user._id) {
+                if (assignment.parentId === user._id) {
                     userName = user.name
-                    
+
                 }
             })
-        }  
-        return userName            
+        }
+        return userName
     }
 
     const vertical = 'top'
@@ -171,9 +171,9 @@ function AssigneeListGeneration(props) {
 
     return (
         <div className={classes.removeScrollbar}>
-            <Snackbar style={{ marginTop: '3rem' }} anchorOrigin={{ vertical, horizontal }} open={props.openAlert} autoHideDuration={1250} onClose={props.handleAlertClose}>
+            <Snackbar style={{ marginTop: '3rem' }} anchorOrigin={{ vertical, horizontal }} open={props.openAlert.open} autoHideDuration={1250} onClose={props.handleAlertClose}>
                 <Alert style={{ minWidth: '15rem' }} color="error" onClose={props.handleAlertClose} severity="error">
-                    You can't edit other users assignments!
+                    {props.openAlert.message}
                 </Alert>
             </Snackbar>
             <List className={classes.root} subheader={<li />}>
@@ -198,7 +198,7 @@ function AssigneeListGeneration(props) {
                                                 <span className={classes.userName}>{`Assignee: ${findAssignee(assignment)}`}</span>
                                                 <span className={classes.userNameMobile}>{`${findAssignee(assignment)}`}</span>
                                                 <span>{`${assignment.title}`}</span>
-                                                
+
                                                 <IconButton
                                                     id={assignment._id}
                                                     aria-controls="menu"
@@ -228,13 +228,13 @@ function AssigneeListGeneration(props) {
                                                         (shouldEdit) ?
                                                             <EditAssignment
                                                                 handleEditClose={handleEdit}
-                                                                changeAssignment={props.changeAssignment} 
+                                                                changeAssignment={props.changeAssignment}
                                                                 open={shouldEdit}
                                                                 editSection={editSection}
                                                                 handleAlertClose={props.handleAlertClose}
                                                                 handleAlertClick={props.handleAlertClick}
                                                                 openAlert={props.openAlert}
-                                                                />
+                                                            />
                                                             : null
                                                     }
                                                     <MenuItem id="delete" onClick={(event) => handleClose(event)}>Delete</MenuItem>
