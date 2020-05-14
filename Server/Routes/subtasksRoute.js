@@ -18,21 +18,17 @@ router.get('/', async (req, res) => {
 })
 
 //Creating one
-router.post('/', checkLoginSession, async (req, res) => {
-    if (req.session.id !== req.body.assignmentparentId && !req.session.admin) {
-        return res.status(401).json({ message: 'Unauthorized' })
-    } else {
-        const subtask = new Subtask({
-            parentId: req.body.parentId,
-            desc: req.body.desc,
-            status: req.body.status
-        })
-        try {
-            const newSubtask = await subtask.save()
-            res.status(201).json(newSubtask)
-        } catch (err) {
-            res.status.apply(400).json({ message: err.message })
-        }
+router.post('/', checkLoginSession, validateAuthor, async (req, res) => {
+    const subtask = new Subtask({
+        parentId: req.body.parentId,
+        desc: req.body.desc,
+        status: req.body.status
+    })
+    try {
+        const newSubtask = await subtask.save()
+        res.status(201).json(newSubtask)
+    } catch (err) {
+        res.status.apply(400).json({ message: err.message })
     }
 })
 
