@@ -5,7 +5,6 @@ import {
   Switch,
   Grid,
   makeStyles,
-  MenuItem,
   Modal,
   TextField,
   Typography,
@@ -88,6 +87,8 @@ function EditUserModal(props) {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = async (user) => {
+
+    // GET request to server
     const data = await user.getUser(props.name);
 
     setPrevSettings({
@@ -119,6 +120,7 @@ function EditUserModal(props) {
     confirmNewPassword: "",
     admin: true,
   });
+
   const [prevSettings, setPrevSettings] = React.useState({
     name: "",
     password: "",
@@ -129,32 +131,6 @@ function EditUserModal(props) {
 
   const [deleting, setDeleting] = React.useState(null);
 
-  async function getUser() {
-    await fetch(apiURL + props.name, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setPrevSettings({
-          name: data.name,
-          password: data.password,
-          admin: data.admin,
-        });
-
-        setUserInfo({
-          _id: data._id,
-          name: data.name,
-          newPassword: "",
-          confirmNewPassword: "",
-          admin: data.admin,
-        });
-      });
-  }
 
   const changeUserInfo = (event, anchor) => {
     if (anchor === "name") {
@@ -210,20 +186,12 @@ function EditUserModal(props) {
     }
   };
 
-  const handleDeleteClick = async () => {
-    await fetch(apiURL + props.name, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        props.updateUsers(data);
-        handleClose();
-      });
+  const handleDeleteClick = async (user) => {
+    user.deleteUser(
+      props.name,
+      props.updateUsers,
+      handleClose
+    )
   };
 
   const toggleAdmin = () => {
@@ -234,146 +202,134 @@ function EditUserModal(props) {
   };
 
   const body = (
-    <UserContext.Consumer>
-      {(user) => (
-        <div className={classes.paper}>
-          <Grid container className={classes.editUserContainer} spacing={1}>
-            <Grid item xs={12}>
-              <Typography variant="h5" className={classes.header}>
-                Manage user
+    <div className={classes.paper}>
+      <Grid container className={classes.editUserContainer} spacing={1}>
+        <Grid item xs={12}>
+          <Typography variant="h5" className={classes.header}>
+            Manage user
               </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="overline">name</Typography>
-              <TextField
-                tabIndex="1"
-                error={inputError}
-                helperText={
-                  inputError
-                    ? "Username is unavailable"
-                    : userInfo.name.length > 20
-                    ? "Username can't be over 20 characters"
-                    : null
-                }
-                value={userInfo.name}
-                onChange={(e) => changeUserInfo(e, "name")}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="overline">new password</Typography>
-              <TextField
-                tabIndex="2"
-                type="password"
-                helperText={
-                  userInfo.newPassword.length > 20
-                    ? "Password can't be over 20 characters"
-                    : null
-                }
-                value={userInfo.newPassword}
-                onChange={(e) => changeUserInfo(e, "newPassword")}
-              />
-            </Grid>
-            {userInfo.newPassword !== "" && (
-              <Grid item xs={12}>
-                <Typography variant="overline">confirm new password</Typography>
-                <TextField
-                  tabIndex="3"
-                  type="password"
-                  value={userInfo.confirmNewPassword}
-                  onChange={(e) => changeUserInfo(e, "confirmNewPassword")}
-                />
-              </Grid>
-            )}
-            <Grid item xs={12}>
-              <Typography variant="overline">ID</Typography>
-              <TextField disabled value={userInfo._id} />
-            </Grid>
-            <Grid item xs={12} className={classes.role}>
-              <Typography variant="overline">user</Typography>
-
-              <FormControlLabel
-                tabIndex="4"
-                onClick={() => toggleAdmin()}
-                control={<Switch color="primary" checked={userInfo.admin} />}
-                label={<Typography variant="overline">role</Typography>}
-                labelPlacement="top"
-              />
-
-              <Typography variant="overline">admin</Typography>
-            </Grid>
-            <Grid item xs={12} className={classes.btnWrapper}>
-              {deleting ? (
-                <>
-                  <Typography variant="overline" className={classes.sure}>
-                    are you sure?
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() =>
-                      user.deleteUser(
-                        props.name,
-                        props.updateUsers,
-                        handleClose
-                      )
-                    }
-                  >
-                    yes
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => setDeleting(false)}
-                  >
-                    no
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    tabIndex="6"
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => setDeleting(true)}
-                  >
-                    delete
-                  </Button>
-                  <Button
-                    tabIndex="5"
-                    variant="outlined"
-                    color="primary"
-                    disabled={disableSaveBtn()}
-                    onClick={() => handleSaveClick(user)}
-                  >
-                    save
-                  </Button>
-                </>
-              )}
-            </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="overline">name</Typography>
+          <TextField
+            tabIndex="1"
+            error={inputError}
+            helperText={
+              inputError
+                ? "Username is unavailable"
+                : userInfo.name.length > 20
+                  ? "Username can't be over 20 characters"
+                  : null
+            }
+            value={userInfo.name}
+            onChange={(e) => changeUserInfo(e, "name")}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="overline">new password</Typography>
+          <TextField
+            tabIndex="2"
+            type="password"
+            helperText={
+              userInfo.newPassword.length > 20
+                ? "Password can't be over 20 characters"
+                : null
+            }
+            value={userInfo.newPassword}
+            onChange={(e) => changeUserInfo(e, "newPassword")}
+          />
+        </Grid>
+        {userInfo.newPassword !== "" && (
+          <Grid item xs={12}>
+            <Typography variant="overline">confirm new password</Typography>
+            <TextField
+              tabIndex="3"
+              type="password"
+              value={userInfo.confirmNewPassword}
+              onChange={(e) => changeUserInfo(e, "confirmNewPassword")}
+            />
           </Grid>
-        </div>
-      )}
-    </UserContext.Consumer>
+        )}
+        <Grid item xs={12}>
+          <Typography variant="overline">ID</Typography>
+          <TextField disabled value={userInfo._id} />
+        </Grid>
+        <Grid item xs={12} className={classes.role}>
+          <Typography variant="overline">user</Typography>
+
+          <FormControlLabel
+            tabIndex="4"
+            onClick={() => toggleAdmin()}
+            control={<Switch color="primary" checked={userInfo.admin} />}
+            label={<Typography variant="overline">role</Typography>}
+            labelPlacement="top"
+          />
+
+          <Typography variant="overline">admin</Typography>
+        </Grid>
+        <Grid item xs={12} className={classes.btnWrapper}>
+          {deleting ? (
+            <>
+              <Typography variant="overline" className={classes.sure}>
+                are you sure?
+                  </Typography>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() =>
+                  handleDeleteClick(props.userContext)
+                }
+              >
+                yes
+                  </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => setDeleting(false)}
+              >
+                no
+                  </Button>
+            </>
+          ) : (
+              <>
+                <Button
+                  tabIndex="6"
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => setDeleting(true)}
+                >
+                  delete
+                  </Button>
+                <Button
+                  tabIndex="5"
+                  variant="outlined"
+                  color="primary"
+                  disabled={disableSaveBtn()}
+                  onClick={() => handleSaveClick(props.userContext)}
+                >
+                  save
+                  </Button>
+              </>
+            )}
+        </Grid>
+      </Grid>
+    </div>
   );
 
   return (
-    <UserContext.Consumer>
-      {(user) => (
-        <div>
-          <IconButton onClick={() => handleOpen(user)}>
-            <SettingsIcon />
-          </IconButton>
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-          >
-            {body}
-          </Modal>
-        </div>
-      )}
-    </UserContext.Consumer>
+    <div>
+      <IconButton onClick={() => handleOpen(props.userContext)}>
+        <SettingsIcon />
+      </IconButton>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        {body}
+      </Modal>
+    </div>
   );
 }
 

@@ -90,7 +90,7 @@ function UserManager(props) {
   const classes = useStyles();
   const [users, setUsers] = React.useState([]);
 
-  useEffect(() => props.user.getUsers(setUsers), []);
+  useEffect(() => props.user.getUsers(setUsers), [props.user]);
 
   const updateUsersInState = (user, newUser) => {
     const state = [...users];
@@ -106,7 +106,7 @@ function UserManager(props) {
     <Container maxWidth="md" className={classes.mainContainer}>
       <Typography variant="h4" className={classes.header}>
         Manage users
-      </Typography>
+          </Typography>
 
       <List dense className={classes.userList}>
         <ListItem className={classes.user}>
@@ -121,22 +121,22 @@ function UserManager(props) {
             </Typography>
           </ListItem>
         ) : (
-          users.map((user) => (
-            <ListItem className={classes.user} key={user._id}>
-              <ListItemText primary={user.name} />
-              <ListItemText primary={user.admin ? "admin" : "user"} />
-              <ListItemText primary={user._id} />
+            users.map((user) => (
+              <ListItem className={classes.user} key={user._id}>
+                <ListItemText primary={user.name} />
+                <ListItemText primary={user.admin ? "admin" : "user"} />
+                <ListItemText primary={user._id} />
 
-              <ListItemIcon className={classes.editBtn} tabIndex={user.index}>
-                <EditUserModal
-                  name={user.name}
-                  updateUsers={updateUsersInState}
-                  userContext={props.user}
-                />
-              </ListItemIcon>
-            </ListItem>
-          ))
-        )}
+                <ListItemIcon className={classes.editBtn} tabIndex={user.index}>
+                  <EditUserModal
+                    name={user.name}
+                    updateUsers={updateUsersInState}
+                    userContext={props.user}
+                  />
+                </ListItemIcon>
+              </ListItem>
+            ))
+          )}
       </List>
     </Container>
   );
