@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
 }));
-function Main() {
+function Main(props) {
   const classes = useStyles();
   const [assignments, setAssignments] = React.useState(null);
   const [subtasks, setSubtasks] = React.useState(null);
@@ -47,28 +47,24 @@ function Main() {
 		setopenAlert(false);
 	};
 
+  // async function getAssignments() {
+  //   fetch(apiURL + "assignments", {
+  //     method: "GET",
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setAssignments(data);
+  //     });
+  // }
 
-  async function getUsers() {
-    fetch(apiURL + "users", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setUsers(data);
-        });
+
+  const updateAssignments = async () => {
+    const newAssigmentList = await props.user.getAssignments()   
+    console.log(newAssigmentList);
+    
   }
-  async function getAssignments() {
-    fetch(apiURL + "assignments", {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setAssignments(data);
-      });
-  }
+
+
   async function getSubtasks() {
     fetch(apiURL + "subtasks", {
       method: "GET",
@@ -79,9 +75,10 @@ function Main() {
       });
   }
   useEffect(() => {
-    getAssignments();
+    // getAssignments();
+    updateAssignments();
     getSubtasks();
-    getUsers();
+    props.user.getUsers(setUsers);
   }, []);
   
   async function assignmentToDb(data) {
@@ -100,7 +97,8 @@ function Main() {
         if (data.message === "Unauthorized") {
           handleAlertClick()
         } else {
-          getAssignments()
+          // getAssignments()
+          updateAssignments();
         }
     })
   }
@@ -142,7 +140,8 @@ function Main() {
         if (data.message === "Unauthorized") {
           handleAlertClick()
         } else {
-          getAssignments()
+          // getAssignments()
+          updateAssignments();
           getSubtasks()
         }
     })
@@ -208,7 +207,8 @@ function Main() {
           if (data.message === "Unauthorized") {
             handleAlertClick()
           } else {
-            getAssignments()
+            // getAssignments()
+            updateAssignments();
           }
       })
         

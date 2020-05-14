@@ -27,7 +27,7 @@ function Layout() {
                 <div className={classes.mainContainer}>
                     <Topbar changeView={handleChangeView} />
                     {view === 'main' ?
-                        <Main /> : <UserManager user={user} />
+                        <Main user={user} /> : <UserManager user={user} />
                     }
                 </div>
             )}
