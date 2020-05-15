@@ -24,7 +24,9 @@ to install dependencies.
 
 ### Starting the project
 
-The following command line is used in the project directory to start the backend part of the project.
+The following command line is used in the projects server directory to start the backend part of the project
+(cd server).
+
 
 #### `node expressApp.js`
 
