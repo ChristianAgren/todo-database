@@ -38,6 +38,7 @@ function Topbar(props) {
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
           <IconButton
+            onClick={() => props.changeView("main")}
             edge="start"
             className={classes.menuButton}
             color="inherit"
@@ -70,6 +71,7 @@ function Topbar(props) {
                 points="78.71 80.76 61.31 80.76 62.23 77.72 62.29 77.52 70.09 51.59 77.73 77.52 78.71 80.76"
               />
             </svg>
+
           </IconButton>
           <LoginModal changeView={props.changeView} />
         </Toolbar>
