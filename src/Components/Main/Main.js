@@ -113,12 +113,13 @@ function Main(props) {
     }
   }
 
-  async function editSubtask(subtask, authorId) {
+  async function editSubtask(subtask, authorId, updateProgressCB) {
     const editSubtask = await props.user.editSubtask(apiURL, subtask, authorId)
     if (editSubtask.err) {
       handleErrors(editSubtask.err)
     } else {
       editSubtasksInState(editSubtask)
+      updateProgressCB(editSubtask)
     }
   }
 

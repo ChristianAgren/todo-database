@@ -30,18 +30,22 @@ function SubTaskItem(props) {
         })
     }
 
-    const handleProgressClick = (anchor) => {
+    const progressStatusInState = (subtask) => {
+        setInputValues({
+            ...inputValues,
+            status: subtask.status
+        })
+    }
+
+    const handleProgressClick = () => {
         let newStatus;
         if (inputValues.status === 'new') {
             newStatus = 'ongoing'
-        } else {
+            handleUpdateSubTaskValues(newStatus)
+        } else if (inputValues.status === 'ongoing') {
             newStatus = 'done'
+            handleUpdateSubTaskValues(newStatus)
         }
-        handleUpdateSubTaskValues(newStatus)
-        setInputValues({
-            ...inputValues,
-            [anchor]: newStatus
-        })
     }
     
     useEffect(() => {
@@ -49,7 +53,7 @@ function SubTaskItem(props) {
 
     const handleUpdateSubTaskValues = (newStatus) => {
         if(newStatus) {
-            props.editSubtask(props.subtask, { desc: inputValues.desc, status: newStatus, assignmentParentId: props.assignmentParentId })
+            props.editSubtask(props.subtask, { desc: inputValues.desc, status: newStatus, assignmentParentId: props.assignmentParentId }, progressStatusInState)
         } else {
             props.editSubtask(props.subtask, {desc: inputValues.desc, status: inputValues.status, assignmentParentId: props.assignmentParentId})
         }
@@ -112,7 +116,7 @@ function SubTaskItem(props) {
                     </IconButton>
                     :
                     <>
-                        <IconButton onClick={() => handleProgressClick('status')} edge="end" aria-label="complete">
+                        <IconButton onClick={() => handleProgressClick()} edge="end" aria-label="complete">
                             <DoneIcon />
                         </IconButton>
                         <IconButton onClick={handleEditClick} edge="end" aria-label="edit">
