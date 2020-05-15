@@ -1,5 +1,6 @@
-// const apiURL = "http://localhost:3000/api/";
-export function getAssignments(apiURL, setAssignments) {
+
+
+export function getAssignments(apiURL) {
 
   const assignmentsList = fetch(apiURL + "assignments", {
     method: "GET",
@@ -7,9 +8,22 @@ export function getAssignments(apiURL, setAssignments) {
     .then((response) => response.json())
     .then((data) => {
       return data
-      // setAssignments(data)
     })
   return assignmentsList
+}
+
+export async function filterAssignments(apiURL, searchObject) {
+  console.log(searchObject);
+  
+  const search = JSON.stringify(searchObject)
+  const filteredAssignments = await fetch(`${apiURL}/assignments/${search}`, {
+    method: "GET",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      return data
+    })
+  return filteredAssignments
 }
 
 export async function postAssignment(apiURL, data) {
@@ -58,3 +72,4 @@ export async function deleteAssignment(apiURL, assignment) {
     })
   return delAssignment
 }
+

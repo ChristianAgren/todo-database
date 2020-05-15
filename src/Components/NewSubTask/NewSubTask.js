@@ -4,7 +4,6 @@ import {
     List,
     ListItem,
     TextField,
-    makeStyles,
     Collapse,
     Button,
     Typography,
@@ -15,26 +14,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { UserContext } from "../../Contexts/UserContext";
 
-const useStyles = makeStyles((theme) => ({
-    inputWrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-    },
-    nested: {
-        width: '80%',
-    },
-    addAssignmentBtn: {
-        margin: theme.spacing(0, 2, 3),
-        display: 'flex',
-        justifyContent: 'center',
-        '& .MuiTypography-overline': {
-            fontSize: '.9rem',
-            marginLeft: '.4rem',
-            color: 'rgba(0, 0, 0, 0.54)'
-        },
-        color: 'rgb(92,182,96)'
-    },
-}))
+import useStyles from "./NewSubTaskStyles"
 
 function NewSubTask(props) {
     const classes = useStyles()
@@ -51,6 +31,7 @@ function NewSubTask(props) {
 
     const handleSubTaskSave = () => {   
         props.subtaskToDb({ parentId: props.sectionId, desc: inputValue.desc, status: 'new', assignmentParentId: props.assignment.parentId })
+        setInputValue("")
         handleClick()
     }
 

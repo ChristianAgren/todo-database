@@ -38,6 +38,13 @@ function AddSection(props) {
     });
   };
 
+  const handleAddAssignment = () => {
+    props.addAssignment(
+      { title: inputValues.desc }
+    )
+    handleClearClick()
+  }
+
   return (
     <div className={classes.newAssignmentWrapper}>
       <FormControl className={classes.inputWrapper} fullWidth>
@@ -64,9 +71,7 @@ function AddSection(props) {
           color="default"
           className={classes.assignmentBtn}
           disabled={!(inputValues.desc.length >= 3) ? true : false}
-          onClick={() => props.addAssignment(
-            { title: inputValues.desc }
-          )}
+          onClick={() => handleAddAssignment()}
         >
           <SaveIcon fontSize="small" />
           <Typography variant="overline">Save</Typography>

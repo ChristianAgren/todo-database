@@ -1,34 +1,11 @@
 // @ts-nocheck
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import LoginModal from "../LoginModal/LoginModal";
-import { UserContext } from "../../Contexts/UserContext";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-  toolbar: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  logo: {
-    width: "6rem",
-    fill: "#e7e7e7",
-  },
-  logoThing: {
-    fill: "#22fa66",
-  },
-}));
+import useStyles from "./TopbarStyles"
 
 function Topbar(props) {
   const classes = useStyles();
@@ -38,6 +15,7 @@ function Topbar(props) {
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
           <IconButton
+            onClick={() => props.changeView("main")}
             edge="start"
             className={classes.menuButton}
             color="inherit"
@@ -70,6 +48,7 @@ function Topbar(props) {
                 points="78.71 80.76 61.31 80.76 62.23 77.72 62.29 77.52 70.09 51.59 77.73 77.52 78.71 80.76"
               />
             </svg>
+
           </IconButton>
           <LoginModal changeView={props.changeView} />
         </Toolbar>
