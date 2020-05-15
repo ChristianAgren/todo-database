@@ -1,15 +1,17 @@
 # Assignment REST-API with MongoDB
 
-Link to [github repo](https://github.com/ChristianAgren/rest-api).
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app),
+Link to [github repo](https://github.com/ChristianAgren/todo-database).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 and built using [Material-UI](https://material-ui.com/getting-started/installation/).
 The server is built using [Node.js](https://nodejs.org/en/).
+The database is built with [MongoDB](https://docs.mongodb.com/guides/).
 
 ## Project description
 
-The assignment is to build a RESTful API, based on CRUD. The API may contain data of your choosing, as long as there are 4 endpoints (GET, POST, PUT, DELETE) for your resource. The datapoints must have 4 attributes, where one of them is *id*.
+The assignment is to build a a site with a server, database and front-end, based on CRUD.
 
-I've built a simple, highly editable, assignment list/ ToDo app.
+We've built a simple, highly editable, assignment list/ ToDo app.
+You can login and edit users role, name and delete users.
 You can continually add new assignments and assign them, aswell as add subtasks to the assignments you've created.
 
 ## Installation
@@ -24,7 +26,7 @@ to install dependencies.
 
 The following command line is used in the project directory to start the backend part of the project.
 
-#### `node server.js`
+#### `node expressApp.js`
 
 If you intend to run the frontend part side by side, open a new terminal window and run:
 
@@ -69,17 +71,19 @@ This part is only for our teacher's reference, not the actual grading of the ass
 
 ### Passing grades:
 
-- Project uses 4 endpoints (GET, POST, PUT & DELETE) for a resource. (Completed)
-- All endpoints can be used by a .rest file. (Completed)
-- The API data is saved locally in the server file (See below)
-- Git & GitHub is used for the project. (Completed)
-- The Project contains a README.md file. (Completed)
-- The assignment is turned in on time. (Completed)
+- Git & GitHub have been used (Completed)
+- The project has a README.md file (look above for more info) (Completed)
+- The project is handed in on time! (Completed)
+- It needs to be atleast two resources with CRUD-Endpoints (Completed)
+- You should be able to register, log in and create content that is related to the user, that's logged in. (Completed)
+- Only logged in users should be able to perform C_UD operations on their content. (Completed)
+- All content should be saved in MongoDB. (Completed)
+
 
 ### Extra credits
 
 - All of the passing grades are completed. (Completed)
-- The API data is saved in a .JSON file instead of locally in the server file. (Completed)
-- The API data is updated when something is added, updated or removed. (Completed)
-- A simple frontend UI is built to fetch the endpoints and modify the API data, aswell as presenting the result via GET. (Completed)
-- An additional GET endpoint is added so that the user can fetch a specific data point. (Completed)
+- There should be an admin role that has admin privileges for all CRUD operations on all content. (Completed)
+- The admin should have access to a user interface that lists all users and their roles. The admin should be able to use the user interface to remove users and change their roles. (Completed)
+
+
