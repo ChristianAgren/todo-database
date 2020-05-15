@@ -56,8 +56,6 @@ function Main(props) {
 
   }
 
-
-
   const addSubtasksInState = (newSubtask) => {
     const state = [...subtasks];
     state.push(newSubtask)
@@ -75,10 +73,6 @@ function Main(props) {
     state.splice(subtasksIndex, 1);
     setSubtasks(state)
   }
-
-
-
-
 
   const addAssignment = async (data) => {
     const newAssignment = await props.user.postAssignment(apiURL, data)
@@ -107,9 +101,6 @@ function Main(props) {
     const subtasks = await props.user.getSubtasks(apiURL)
     setSubtasks(subtasks)
   }
-
-
-
 
   async function subtaskToDb(subtask) {
     const newSubtask = await props.user.postSubtask(apiURL, subtask)
@@ -147,15 +138,12 @@ function Main(props) {
     }
   }
 
-  
-
   // search  
-  const handleSearch = (condition) => {
-    console.log(condition);
-    
+  const handleSearch = async (searchObject) => {
+    const filteredAssignments = await props.user.filterAssignments(apiURL, searchObject)
+    console.log(filteredAssignments);
+    setAssignments(filteredAssignments)
   }
-
-
 
   //State for alert
   const [openAlert, setopenAlert] = React.useState({
@@ -207,7 +195,6 @@ function Main(props) {
                     <AddSection
                     name={user.name}
                     addAssignment={addAssignment}
-                  // handleSaveClick={handleSaveClick}
                   />
                 </Paper>
               </Grid>
@@ -215,6 +202,7 @@ function Main(props) {
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={12}>
                     <FilterSection
+                      getAll={setupAssignments}
                       search={handleSearch}
                     />
                   </Grid>

@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Assignment = require('../Models/assignmentModel')
 const Subtask = require('../Models/subtaskModel')
+const Users = require('../Models/userModel')
 
 //Middleware
 const checkLoginSession = require('../Middlewares/checkLoginSession')
@@ -18,9 +19,24 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.get('/:search', async (req, res) => {
+    const values = JSON.parse(req.params.search)
+    const key = values.key
+    let value = values.value
+    if (key.actual === "parentId") {
+        await Users.findOne({name: value }, function(err, obj) {
+            if (err) res.status(500).json({ message: err.message })
+            value = obj._id;
+        })
+    }
+    try {
+        const assignments = await Assignment.find( { [key.actual]: value } )
+        res.json(assignments)
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+})
 
-
-// Skapa en getUsers för att hitta rätt user och för att få med det i respons så vi kan hitta den usern som är inloggad i res.body.id
 //Creating one
 
 router.post('/', checkLoginSession, async (req, res) => {
