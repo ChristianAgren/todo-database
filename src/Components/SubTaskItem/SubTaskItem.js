@@ -1,7 +1,6 @@
 // @ts-nocheck
 import React, { useEffect } from 'react'
 import {
-    makeStyles,
     Typography,
     FormControl,
     TextField,
@@ -14,19 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
 
-
-const useStyles = makeStyles((theme) => ({
-    inline: {
-        // display: 'inline',
-        padding: theme.spacing(0, 0, 0, 5)
-    },
-    listItemSecondary: {
-        margin: theme.spacing(0, 2, 0, 0),
-        '& > button': {
-            margin: theme.spacing(0, 1, 0, 0)
-        }
-    }
-}))
+import useStyles from "./SubTaskItemStyles"
 
 function SubTaskItem(props) {
     const classes = useStyles()

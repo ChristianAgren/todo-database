@@ -1,26 +1,11 @@
 import React, { useEffect } from "react";
 import { Container, Typography, Paper, Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import AssigneeListGeneration from "../AssigneeListGeneration/AssigneeListGeneration";
 import FilterSection from "../FilterSection/FilterSection";
 import AddSection from "../AddSection/AddSection";
 import { UserContext } from "../../Contexts/UserContext";
+import useStyles from "./MainStyles"
 
-const useStyles = makeStyles((theme) => ({
-  mainContainer: {
-    height: "100%",
-    paddingTop: theme.spacing(6),
-    backgroundColor: "#F5F5F5",
-  },
-  title: {
-    padding: theme.spacing(2),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-}));
 function Main(props) {
   const classes = useStyles();
   const [assignments, setAssignments] = React.useState(null);
