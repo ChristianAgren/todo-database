@@ -51,6 +51,7 @@ function NewSubTask(props) {
 
     const handleSubTaskSave = () => {   
         props.subtaskToDb({ parentId: props.sectionId, desc: inputValue.desc, status: 'new', assignmentParentId: props.assignment.parentId })
+        setInputValue("")
         handleClick()
     }
 
