@@ -123,10 +123,10 @@ class UserContextProvider extends Component {
       });
   };
 
-  clientRegisterUser = async (user, closeModal, cbErr) => {
+  clientRegisterUser = async (user, closeModal, cbErr, setUsers) => {
     const newUser = await this.registerUser(user)
     if (!newUser.message) {
-      this.loginUser(newUser, closeModal)
+      this.loginUser(newUser, closeModal, null, setUsers)
     } else {
       cbErr('user')
     }
@@ -154,7 +154,7 @@ class UserContextProvider extends Component {
   }
 
 
-  loginUser = async (user, closeModal, cbErr) => {
+  loginUser = async (user, closeModal, cbErr, setUsers) => {
     //Create a session
     await fetch(`${sessionURL}login`, {
       method: "POST",
@@ -174,6 +174,9 @@ class UserContextProvider extends Component {
           cbErr('login')
         } else {
           this.setUserInState(data)
+          if (setUsers) {
+              this.getUsers(setUsers)
+          }
           closeModal()
         }
       })

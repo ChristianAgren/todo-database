@@ -148,7 +148,8 @@ function LoginModal(props) {
         user.clientRegisterUser(
           { name: loginInput.username, password: loginInput.password },
           handleCloseModal,
-          handleSetError
+          handleSetError,
+          props.setUsers
         );
         clearPasswordField();
       } else {

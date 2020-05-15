@@ -10,7 +10,6 @@ function Main(props) {
   const classes = useStyles();
   const [assignments, setAssignments] = React.useState(null);
   const [subtasks, setSubtasks] = React.useState(null);
-  const [users, setUsers] = React.useState(null);
   const apiURL = "http://localhost:3000/api/";
 
   const addAssignmentsInState = (newAssignment) => {
@@ -70,8 +69,8 @@ function Main(props) {
 
   const changeAssignment = async (assignment, data) => {
     const changedAssignment = await props.user.editAssignment(apiURL, assignment, data)
-    if (changeAssignment.err) {
-      handleErrors(changeAssignment.err)
+    if (changedAssignment.err) {
+      handleErrors(changedAssignment.err)
     } else {
       editAssignmentInState(changedAssignment);
     }
@@ -163,7 +162,7 @@ function Main(props) {
   useEffect(() => {
     setupAssignments()
     setupSubtasks()
-    props.user.getUsers(setUsers);
+    props.user.getUsers(props.setUsers);
   }, []);
 
 
@@ -207,7 +206,7 @@ function Main(props) {
                         assignments={assignments}
                         changeAssignment={changeAssignment}
                         removeAssignment={removeAssignment}
-                        users={users}
+                        users={props.usersList}
                         subtasks={subtasks}
                         subtaskToDb={subtaskToDb}
                         editSubtask={editSubtask}

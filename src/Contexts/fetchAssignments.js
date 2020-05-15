@@ -1,8 +1,8 @@
 
 
-export function getAssignments(apiURL) {
+export async function getAssignments(apiURL) {
 
-  const assignmentsList = fetch(apiURL + "assignments", {
+  const assignmentsList = await fetch(apiURL + "assignments", {
     method: "GET",
   })
     .then((response) => response.json())
@@ -13,8 +13,6 @@ export function getAssignments(apiURL) {
 }
 
 export async function filterAssignments(apiURL, searchObject) {
-  console.log(searchObject);
-  
   const search = JSON.stringify(searchObject)
   const filteredAssignments = await fetch(`${apiURL}/assignments/${search}`, {
     method: "GET",
@@ -28,7 +26,7 @@ export async function filterAssignments(apiURL, searchObject) {
 
 export async function postAssignment(apiURL, data) {
 
-  const newAssignment = fetch(apiURL + "assignments", {
+  const newAssignment = await fetch(apiURL + "assignments", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -46,16 +44,14 @@ export async function postAssignment(apiURL, data) {
 
 
 export async function editAssignment(apiURL, assignment, data) {
-  const assignmentToEdit = fetch(apiURL + "assignments/" + assignment, {
+  const assignmentToEdit = await fetch(apiURL + "assignments/" + assignment, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
   })
-    .then((response) => {
-      return response.json()
-    })
+    .then((response) => response.json())
     .then((data) => {
       return data
     })

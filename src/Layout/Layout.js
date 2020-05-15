@@ -16,6 +16,7 @@ import useStyles from "./LayoutStyles";
 function Layout() {
   const classes = useStyles();
   const [view, setView] = React.useState("main");
+  const [users, setUsers] = React.useState(null);
   const handleChangeView = (view) => {
     setView(view);
   };
@@ -24,9 +25,9 @@ function Layout() {
         <UserContext.Consumer>
             {user => (
                 <div className={classes.mainContainer}>
-                    <Topbar changeView={handleChangeView} />
+                    <Topbar changeView={handleChangeView} setUsers={setUsers} />
                     {view === 'main' ?
-                        <Main user={user} /> : <UserManager user={user} redirectToMain={setView} />
+                        <Main user={user} usersList={users} setUsers={setUsers} /> : <UserManager user={user} redirectToMain={setView} />
                     }
                 </div>
             )}

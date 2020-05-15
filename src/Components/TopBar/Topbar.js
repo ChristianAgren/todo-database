@@ -50,7 +50,7 @@ function Topbar(props) {
             </svg>
 
           </IconButton>
-          <LoginModal changeView={props.changeView} />
+          <LoginModal changeView={props.changeView} setUsers={props.setUsers} />
         </Toolbar>
       </AppBar>
     </div>
