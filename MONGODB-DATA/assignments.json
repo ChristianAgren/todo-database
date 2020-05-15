@@ -1,0 +1,17 @@
+[{
+  "_id": "6p42n",
+  "parentId": "5ebc34b91e27171890a20f05",
+  "title": "Skapa assignments",
+  "assignmentDate": {
+    "$date": "2020-05-15T10:09:07.970Z"
+  },
+  "__v": 0
+},{
+  "_id": "u4pey",
+  "parentId": "5ebe8b7a710dae082082eb69",
+  "title": "Lämna in projekt",
+  "assignmentDate": {
+    "$date": "2020-05-15T12:30:56.499Z"
+  },
+  "__v": 0
+}]

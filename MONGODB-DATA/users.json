@@ -1,0 +1,25 @@
+[{
+  "_id": {
+    "$oid": "5eb81bfef7218b2d0cb0882b"
+  },
+  "name": "admin",
+  "password": "$2b$10$gvenMC75NKaVV7lhtPZv0uJNQkwwZtxXmnbxeogwUeCfOpHk4VEeq",
+  "admin": true,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5ebc34b91e27171890a20f05"
+  },
+  "name": "user",
+  "password": "$2b$10$5s19ebi9bx2QKnzaTuof/etYvZGwKdaZTTSs1tGZODtyFJ0GxJy2.",
+  "admin": false,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5ebe8b7a710dae082082eb69"
+  },
+  "name": "Filip",
+  "password": "$2b$10$O6DVJr0exc0QWDYmUz6xd.3bbSZDpYpSWxli0nxlBJmM702az9jZ6",
+  "admin": false,
+  "__v": 0
+}]

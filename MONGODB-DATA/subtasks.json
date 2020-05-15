@@ -1,0 +1,9 @@
+[{
+  "_id": {
+    "$oid": "5ebe6a54fd420c3900f82077"
+  },
+  "parentId": "6p42n",
+  "desc": "Säg hej till gruppen",
+  "status": "new",
+  "__v": 0
+}]
