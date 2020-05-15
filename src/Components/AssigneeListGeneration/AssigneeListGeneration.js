@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
         left: '50%',
         transform: 'translateX(calc(-50% + 8px))',
         overflowY: 'scroll',
-        maxHeight: 'calc(100vh - 18rem)',
+        maxHeight: 'calc(100vh - 15rem)',
     },
     listSection: {
         backgroundColor: 'inherit',

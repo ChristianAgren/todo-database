@@ -8,8 +8,8 @@ import { UserContext } from "../../Contexts/UserContext";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
-    minHeight: "100vh",
     height: "100%",
+    paddingTop: theme.spacing(6),
     backgroundColor: "#F5F5F5",
   },
   title: {

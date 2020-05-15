@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
-    height: "100%",
+    paddingTop: theme.spacing(8),
 
     "& .MuiList-padding": {
       padding: 0,
