@@ -1,0 +1,14 @@
+== ADMIN ==
+
+användare: admin 
+pw: admin 
+
+== USERS ==
+
+användare: user 
+pw: user
+
+-----------
+
+användare: Filip 
+pw: 123
