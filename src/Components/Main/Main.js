@@ -33,18 +33,11 @@ function Main(props) {
     state.push(newAssignment)
     setAssignments(state);
   };
-
-  const addSubtasksInState = (newSubtask) => {
-    const state = [...subtasks];
-    state.push(newSubtask)
-    setSubtasks(state);
-  };
-
-  const deleteSubtasksInState = (deletedSubtask) => {
-    const state = [...subtasks];
-    const subtasksIndex = state.findIndex((a) => a._id === deletedSubtask._id);
-    state.splice(subtasksIndex, 1);
-    setSubtasks(state)
+  const editAssignmentInState = (changedAssignment) => {
+    const state = [...assignments];
+    const assignmentIndex = state.findIndex((a) => a._id === changedAssignment._id);
+    state.splice(assignmentIndex, 1, changedAssignment);
+    setAssignments(state)
   }
   const deleteAssignmentsInState = (deletedAssignment) => {
     const assignmentsState = [...assignments]
@@ -63,52 +56,28 @@ function Main(props) {
 
   }
 
-  const editAssignmentInState = (changedAssignment) => {
-    const state = [...assignments];
-    const assignmentIndex = state.findIndex((a) => a._id === changedAssignment._id);
-    state.splice(assignmentIndex, 1, changedAssignment);
-    setAssignments(state)
-  }
 
 
+  const addSubtasksInState = (newSubtask) => {
+    const state = [...subtasks];
+    state.push(newSubtask)
+    setSubtasks(state);
+  };
   const editSubtasksInState = (changedSubtask) => {
     const state = [...subtasks];
     const subtasksIndex = state.findIndex((s) => s._id === changedSubtask._id);
     state.splice(subtasksIndex, 1, changedSubtask);
     setSubtasks(state)
   }
-
-  //State for alert
-  const [openAlert, setopenAlert] = React.useState({
-    open: false,
-    message: ""
-  });
-
-  const handleAlertClick = (reason) => {
-    setopenAlert({
-      open: true,
-      message: reason
-    });
-  };
-
-  const handleAlertClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setopenAlert({
-      open: false,
-      message: ""
-    });
-  };
-
-  const handleErrors = (error) => {
-    if (error.login) {
-      handleAlertClick(error.login)
-      props.user.logoutUser()
-    } else if (error.invalid) {
-      handleAlertClick(error.invalid)
-    }
+  const deleteSubtasksInState = (deletedSubtask) => {
+    const state = [...subtasks];
+    const subtasksIndex = state.findIndex((a) => a._id === deletedSubtask._id);
+    state.splice(subtasksIndex, 1);
+    setSubtasks(state)
   }
+
+
+
 
 
   const addAssignment = async (data) => {
@@ -139,12 +108,8 @@ function Main(props) {
     setSubtasks(subtasks)
   }
 
-  useEffect(() => {
-    setupAssignments()
-    setupSubtasks()
-    // props.user.getSubtasks(apiURL, setSubtasks)
-    props.user.getUsers(setUsers);
-  }, []);
+
+
 
   async function subtaskToDb(subtask) {
     const newSubtask = await props.user.postSubtask(apiURL, subtask)
@@ -182,6 +147,53 @@ function Main(props) {
     }
   }
 
+  
+
+  // search  
+  const handleSearch = (condition) => {
+    console.log(condition);
+    
+  }
+
+
+
+  //State for alert
+  const [openAlert, setopenAlert] = React.useState({
+    open: false,
+    message: ""
+  });
+  const handleAlertClick = (reason) => {
+    setopenAlert({
+      open: true,
+      message: reason
+    });
+  };
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setopenAlert({
+      open: false,
+      message: ""
+    });
+  };
+  const handleErrors = (error) => {
+    if (error.login) {
+      handleAlertClick(error.login)
+      props.user.logoutUser()
+    } else if (error.invalid) {
+      handleAlertClick(error.invalid)
+    }
+  }
+
+
+  useEffect(() => {
+    setupAssignments()
+    setupSubtasks()
+    props.user.getUsers(setUsers);
+  }, []);
+
+
   return (
     <UserContext.Consumer>
       {(user) => (
@@ -203,7 +215,7 @@ function Main(props) {
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={12}>
                     <FilterSection
-                    // handleSearch={getAssignmentsFromJson}
+                      search={handleSearch}
                     />
                   </Grid>
                   <Grid item xs={12} md={12}>
