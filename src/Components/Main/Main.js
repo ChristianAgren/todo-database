@@ -49,22 +49,18 @@ function Main(props) {
   const deleteAssignmentsInState = (deletedAssignment) => {
     const assignmentsState = [...assignments]
     const subtasksState = [...subtasks];
-    // const subtaskIndex = state.findIndex((a) => a._id === deletedSubtask._id);
     const assignmentIndex = assignmentsState.findIndex((a) => a._id === deletedAssignment._id);
 
-    for (let i = subtasksState.length -1 ; i > 0; i--) {
-      if(subtasksState[i].parentId === deletedAssignment._id) {
+    for (let i = subtasksState.length - 1; i > 0; i--) {
+      if (subtasksState[i].parentId === deletedAssignment._id) {
         subtasksState.splice(i, 1)
       }
     }
 
-    
-    
-
     assignmentsState.splice(assignmentIndex, 1)
     setSubtasks(subtasksState)
     setAssignments(assignmentsState)
-    
+
   }
 
   const editAssignmentInState = (changedAssignment) => {
@@ -73,7 +69,7 @@ function Main(props) {
     state.splice(assignmentIndex, 1, changedAssignment);
     setAssignments(state)
   }
- 
+
 
   const editSubtasksInState = (changedSubtask) => {
     const state = [...subtasks];
@@ -83,26 +79,42 @@ function Main(props) {
   }
 
   //State for alert
-  const [openAlert, setopenAlert] = React.useState(false);
+  const [openAlert, setopenAlert] = React.useState({
+    open: false,
+    message: ""
+  });
 
-  const handleAlertClick = () => {
-    setopenAlert(true);
+  const handleAlertClick = (reason) => {
+    setopenAlert({
+      open: true,
+      message: reason
+    });
   };
 
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-
-    setopenAlert(false);
+    setopenAlert({
+      open: false,
+      message: ""
+    });
   };
+
+  const handleErrors = (error) => {
+    if (error.login) {
+      handleAlertClick(error.login)
+      props.user.logoutUser()
+    } else if (error.invalid) {
+      handleAlertClick(error.invalid)
+    }
+  }
 
 
   const addAssignment = async (data) => {
     const newAssignment = await props.user.postAssignment(apiURL, data)
-
-    if (data.message === "Unauthorized") {
-      handleAlertClick()
+    if (newAssignment.err) {
+      handleErrors(newAssignment.err)
     } else {
       addAssignmentsInState(newAssignment);
     }
@@ -110,23 +122,24 @@ function Main(props) {
 
   const changeAssignment = async (assignment, data) => {
     const changedAssignment = await props.user.editAssignment(apiURL, assignment, data)
-    if (data.message === "Unauthorized") {
-      handleAlertClick()
+    if (changeAssignment.err) {
+      handleErrors(changeAssignment.err)
     } else {
       editAssignmentInState(changedAssignment);
     }
   }
 
-  const  setupAssignments = async ()  => {
+  const setupAssignments = async () => {
     const assignments = await props.user.getAssignments(apiURL)
     setAssignments(assignments)
   }
-  const  setupSubtasks = async ()  => {
+
+  const setupSubtasks = async () => {
     const subtasks = await props.user.getSubtasks(apiURL)
     setSubtasks(subtasks)
   }
 
-  useEffect( () => {
+  useEffect(() => {
     setupAssignments()
     setupSubtasks()
     // props.user.getSubtasks(apiURL, setSubtasks)
@@ -135,38 +148,35 @@ function Main(props) {
 
   async function subtaskToDb(subtask) {
     const newSubtask = await props.user.postSubtask(apiURL, subtask)
-    if (newSubtask.message === "Unauthorized") {
-      handleAlertClick()
+    if (newSubtask.err) {
+      handleErrors(newSubtask.err)
     } else {
       addSubtasksInState(newSubtask)
     }
   }
-  
+
   async function removeAssignment(assignment) {
     const deletedAssignment = await props.user.deleteAssignment(apiURL, assignment)
-      if (deletedAssignment.message === "Unauthorized") {
-        handleAlertClick()
-      } else {
-        // getAssignments()
-        // updateAssignments();
-        deleteAssignmentsInState(deletedAssignment)
-        // updateSubtasks()
-      }
+    if (deletedAssignment.err) {
+      handleErrors(deletedAssignment.err)
+    } else {
+      deleteAssignmentsInState(deletedAssignment)
+    }
   }
 
-  async function deleteSubtasks(subtask, authorId) {   
+  async function deleteSubtasks(subtask, authorId) {
     const deleteSubtask = await props.user.deleteSubtask(apiURL, subtask, authorId)
-    if (deleteSubtask.message === "Unauthorized") {
-      handleAlertClick()
+    if (deleteSubtask.err) {
+      handleErrors(deleteSubtask.err)
     } else {
       deleteSubtasksInState(deleteSubtask)
     }
   }
+
   async function editSubtask(subtask, authorId) {
     const editSubtask = await props.user.editSubtask(apiURL, subtask, authorId)
-    
-    if (editSubtask.message === "Unauthorized") {
-      handleAlertClick()
+    if (editSubtask.err) {
+      handleErrors(editSubtask.err)
     } else {
       editSubtasksInState(editSubtask)
     }
@@ -179,18 +189,16 @@ function Main(props) {
           <Container maxWidth="lg">
             <Typography className={classes.title} variant="h4"></Typography>
             <Grid container spacing={2}>
-              {user.loggedIn ? (
-                <Grid item xs={12} md={4}>
-                  <Paper className={classes.paper}>
-                    New assignment
+              <Grid item xs={12} md={4}>
+                <Paper className={classes.paper}>
+                  New assignment
                     <AddSection
-                      name={user.name}
-                      addAssignment={addAssignment}
-                    // handleSaveClick={handleSaveClick}
-                    />
-                  </Paper>
-                </Grid>
-              ) : null}
+                    name={user.name}
+                    addAssignment={addAssignment}
+                  // handleSaveClick={handleSaveClick}
+                  />
+                </Paper>
+              </Grid>
               <Grid item xs={12} md={8}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={12}>

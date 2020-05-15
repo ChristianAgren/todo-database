@@ -11,7 +11,7 @@ module.exports = function (req, res, next) {
             next()
         } else {
             console.log('invalid user');
-            res.status(401).json({ message: 'Unauthorized' })
+            res.status(401).json({ err: { invalid: "You can't edit other users assignments!" }})
         }
     } else if (req.body.assignmentParentId) {
         console.log('found subtask');
@@ -21,10 +21,10 @@ module.exports = function (req, res, next) {
             next()
         } else {
             console.log('invalid user');
-            res.status(401).json({ message: 'Unauthorized' })
+            res.status(401).json({ err: { invalid: "You can't edit other users assignments!" }})
         }
     } else {
         console.log('No assignment/subtask found');
-        res.status(400).json({ message: 'No item found' })
+        res.status(404).json({ message: 'No item found' })
     }
 }
