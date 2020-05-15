@@ -58,3 +58,15 @@ export async function deleteAssignment(apiURL, assignment) {
     })
   return delAssignment
 }
+
+export async function filterAssignments(apiURL, assignment) {
+
+  const delAssignment = await fetch(apiURL + "assignments/", {
+    method: "GET",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      return data
+    })
+  return delAssignment
+}

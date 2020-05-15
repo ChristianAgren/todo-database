@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { createContext, Component } from "react";
-import { getAssignments, postAssignment, editAssignment, deleteAssignment } from './fetchAssignments'
+import { getAssignments, postAssignment, editAssignment, deleteAssignment, filterAssignments } from './fetchAssignments'
 import { getSubtasks, postSubtask, deleteSubtask, editSubtask } from './fetchSubtasks'
 
 export const UserContext = createContext();
@@ -31,11 +31,13 @@ class UserContextProvider extends Component {
       postAssignment: postAssignment,
       editAssignment: editAssignment,
       deleteAssignment: deleteAssignment,
+      filterAssignments: filterAssignments,
 
       getSubtasks: getSubtasks,
       postSubtask: postSubtask,
       editSubtask: editSubtask,
       deleteSubtask: deleteSubtask,
+
     }
   }
 

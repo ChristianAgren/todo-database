@@ -47,7 +47,7 @@ function FilterSection(props) {
           />
         </div>
         <IconButton
-          // onClick={() => props.handleSearch(searchInput)}
+          onClick={() => props.search(searchInput)}
           className={classes.searchIcon}
           edge="end"
           aria-label="search"
