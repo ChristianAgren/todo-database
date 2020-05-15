@@ -5,11 +5,14 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import LoginModal from "../LoginModal/LoginModal";
-import { UserContext } from "../../Contexts/UserContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    position: 'fixed',
+    right: 0,
+    left: 0,
+    top: 0,
   },
   menuButton: {
     marginRight: theme.spacing(2),
